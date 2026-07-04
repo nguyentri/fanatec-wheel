@@ -1,0 +1,79 @@
+MCU Pin,Function,Direction,Category,Notes
+PA9,UART1_TX,Out,Excluded,On-board Debug/Shell
+PA10,UART1_RX,In,Excluded,On-board Debug/Shell
+PA11,USB_DM,In/Out,Excluded,On-board USB OTG HS
+PA12,USB_DP,In/Out,Excluded,On-board USB OTG HS
+PC8,SDMMC_D0,In/Out,Excluded,On-board SDMMC
+PC9,SDMMC_D1,In/Out,Excluded,On-board SDMMC
+PC10,SDMMC_D2,In/Out,Excluded,On-board SDMMC
+PC11,SDMMC_D3,In/Out,Excluded,On-board SDMMC
+PC12,SDMMC_CK,Out,Excluded,On-board SDMMC
+PD2,SDMMC_CMD,Out,Excluded,On-board SDMMC
+PF6,OSPI_IO3,In/Out,Excluded,On-board OctoSPI Flash
+PF7,OSPI_IO2,In/Out,Excluded,On-board OctoSPI Flash
+PF8,OSPI_IO0,In/Out,Excluded,On-board OctoSPI Flash
+PF9,OSPI_IO1,In/Out,Excluded,On-board OctoSPI Flash
+PF10,OSPI_CLK,Out,Excluded,On-board OctoSPI Flash
+PG6,OSPI_NCS,Out,Excluded,On-board OctoSPI Flash
+PG7,HEARTBEAT_LED,Out,Excluded,On-board User LED
+PA4,LINK_NSS,In,Rim Link,Hardware slave-select (SPI1_NSS)
+PA5,LINK_SCK,In,Rim Link,SPI clock (SPI1_SCK). Requires 100 ohm series
+PA6,LINK_MISO,Out,Rim Link,Tri-state output (SPI1_MISO). High-Z when unselected
+PB5,LINK_MOSI,In,Rim Link,SPI data input (SPI1_MOSI)
+PG14,CS_SENSE,In,Rim Link,EXTI tap on CS line to re-arm DMA
+PF3,LINK_READY,Out,Test Points,Asserts when a valid response is armed for DMA
+PD15,SNAPSHOT_TICK,Out,Test Points,Toggles on each input snapshot publish
+PA3,CLUTCH_L_AIN,Analog,Input Fabric,ADC1_IN15 ratiometric
+PA7,CLUTCH_R_AIN,Analog,Input Fabric,ADC1_IN3 ratiometric
+PE0,BTN1,In,Input Fabric,Active low direct GPIO
+PE1,BTN2,In,Input Fabric,Active low direct GPIO
+PE2,BTN3,In,Input Fabric,Active low direct GPIO
+PE3,BTN4,In,Input Fabric,Active low direct GPIO
+PE4,BTN5,In,Input Fabric,Active low direct GPIO
+PE5,BTN6,In,Input Fabric,Active low direct GPIO
+PE6,BTN7,In,Input Fabric,Active low direct GPIO
+PE7,BTN8,In,Input Fabric,Active low direct GPIO
+PE8,BTN9,In,Input Fabric,Active low direct GPIO
+PE9,BTN10,In,Input Fabric,Active low direct GPIO
+PE10,BTN11,In,Input Fabric,Active low direct GPIO
+PE11,BTN12,In,Input Fabric,Active low direct GPIO
+PE12,PADDLE_L,In,Input Fabric,Magnetic shift paddle
+PE13,PADDLE_R,In,Input Fabric,Magnetic shift paddle
+PD3,ENC1_A,In,Input Fabric,Thumb encoder 1
+PD4,ENC1_B,In,Input Fabric,Thumb encoder 1
+PD5,ENC2_A,In,Input Fabric,Thumb encoder 2
+PD6,ENC2_B,In,Input Fabric,Thumb encoder 2
+PD7,ENC3_A,In,Input Fabric,Thumb encoder 3
+PD8,ENC3_B,In,Input Fabric,Thumb encoder 3
+PD9,ENC4_A,In,Input Fabric,Thumb encoder 4
+PD10,ENC4_B,In,Input Fabric,Thumb encoder 4
+PB0,ROT1_A,In,Input Fabric,Front rotary 1
+PB1,ROT1_B,In,Input Fabric,Front rotary 1
+PB2,ROT2_A,In,Input Fabric,Front rotary 2
+PB3,ROT2_B,In,Input Fabric,Front rotary 2
+PB4,ROT3_A,In,Input Fabric,Front rotary 3
+PB6,ROT3_B,In,Input Fabric,Front rotary 3
+PB7,ROT4_A,In,Input Fabric,Front rotary 4
+PB8,ROT4_B,In,Input Fabric,Front rotary 4
+PB9,ROT5_A,In,Input Fabric,Front rotary 5
+PB10,ROT5_B,In,Input Fabric,Front rotary 5
+PC0,FUNKY1_UP,In,Input Fabric,Funky Switch 1
+PC1,FUNKY1_DN,In,Input Fabric,Funky Switch 1
+PC2,FUNKY1_LT,In,Input Fabric,Funky Switch 1
+PC3,FUNKY1_RT,In,Input Fabric,Funky Switch 1
+PC4,FUNKY1_PUSH,In,Input Fabric,Funky Switch 1
+PC5,FUNKY1_ENCA,In,Input Fabric,Funky Switch 1
+PC6,FUNKY1_ENCB,In,Input Fabric,Funky Switch 1
+PF11,FUNKY2_UP,In,Input Fabric,Funky Switch 2
+PF12,FUNKY2_DN,In,Input Fabric,Funky Switch 2
+PF13,FUNKY2_LT,In,Input Fabric,Funky Switch 2
+PF14,FUNKY2_RT,In,Input Fabric,Funky Switch 2
+PF15,FUNKY2_PUSH,In,Input Fabric,Funky Switch 2
+PG0,FUNKY2_ENCA,In,Input Fabric,Funky Switch 2
+PG1,FUNKY2_ENCB,In,Input Fabric,Funky Switch 2
+PA8,OUTPUT_EN,Out,Output Subsystem,Controls 3.3V load switch for LEDs and LRAs
+PA15,LED_DATA,Out,Output Subsystem,DMA-fed timer PWM or SPI MOSI for RGB chain
+PB14,I2C_SCL,Out,Output Subsystem,I2C1_SCL for DRV2605L Haptic drivers
+PB15,I2C_SDA,Out,Output Subsystem,I2C1_SDA for DRV2605L Haptic drivers
+PG2,LRA_EN_L,Out,Output Subsystem,Hardware enable for Left DRV2605L
+PG3,LRA_EN_R,Out,Output Subsystem,Hardware enable for Right DRV2605L
