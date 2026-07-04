@@ -1,0 +1,58 @@
+# Default: auto-detect text, normalize line endings to LF in repo.
+* text=auto eol=lf
+
+# Source code — always LF, treated as text
+*.c           text eol=lf
+*.h           text eol=lf
+*.cpp         text eol=lf
+*.hpp         text eol=lf
+*.rs          text eol=lf
+*.py          text eol=lf
+*.sh          text eol=lf
+*.js          text eol=lf
+*.ts          text eol=lf
+*.json        text eol=lf
+
+# Zephyr / build configuration — must be LF, no BOM (kconfiglib rejects BOM)
+*.dts         text eol=lf
+*.dtsi        text eol=lf
+*.overlay     text eol=lf
+*.conf        text eol=lf
+*.yaml        text eol=lf
+*.yml         text eol=lf
+*.cmake       text eol=lf
+CMakeLists.txt text eol=lf
+Kconfig*      text eol=lf
+*_defconfig   text eol=lf
+prj.conf      text eol=lf
+west.yml      text eol=lf
+
+# Windows scripts — keep CRLF
+*.bat         text eol=crlf
+*.cmd         text eol=crlf
+*.ps1         text eol=crlf
+
+# Markdown / docs — LF
+*.md          text eol=lf
+*.txt         text eol=lf
+
+# Binary — never touch
+*.png         binary
+*.jpg         binary
+*.jpeg        binary
+*.gif         binary
+*.ico         binary
+*.pdf         binary
+*.PDF         binary
+*.docx        binary
+*.zip         binary
+*.bin         binary
+*.elf         binary
+*.hex         binary
+*.a           binary
+*.o           binary
+*.obj         binary
+*.so          binary
+*.dll         binary
+*.exe         binary
+*.pickle      binary

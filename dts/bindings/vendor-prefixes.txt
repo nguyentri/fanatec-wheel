@@ -1,0 +1,9 @@
+# Copyright (c) 2025 BLULEAP
+# SPDX-License-Identifier: Apache-2.0
+#
+# Device tree vendor prefixes
+# This file contains vendor prefixes used in device tree compatible strings
+
+ayr	AYR Energy
+blu	BLULEAP
+ublox	u-blox

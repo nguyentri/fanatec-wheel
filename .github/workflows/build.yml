@@ -1,0 +1,66 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build app and tests
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04]
+        board:
+          - fk723m1_zgt6
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+          cache: pip
+
+      - name: Setup Zephyr project
+        uses: zephyrproject-rtos/action-zephyr-setup@v1
+        with:
+          app-path: .
+          toolchains: arm-zephyr-eabi
+          ccache-cache-key: ${{ matrix.os }}
+
+      - name: Build rim firmware
+        shell: bash
+        run: west build -b ${{ matrix.board }} app -p always
+
+      - name: Build base simulator
+        shell: bash
+        run: west build -b ${{ matrix.board }} app/sim -p always
+
+      - name: Unit tests (twister, host-native)
+        shell: bash
+        run: west twister -T tests/unit -v --inline-logs --integration
+
+      - name: Build functional tests
+        shell: bash
+        run: |
+          tests=(
+            "tests/func/example_sensor"
+          )
+          fail=0
+          for t in "${tests[@]}"; do
+            echo "# Building $t"
+            west build -b ${{ matrix.board }} "$t" -p always || fail=1
+          done
+          exit $fail

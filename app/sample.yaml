@@ -1,0 +1,10 @@
+# Twister entry for the Phase 1 rim firmware.
+sample:
+  description: Rim-side Phase 1 firmware (legacy 33-byte SPI link)
+  name: rim-app
+common:
+  build_only: true
+  integration_platforms:
+    - fk723m1_zgt6
+tests:
+  app.rim.default: {}

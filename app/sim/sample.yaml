@@ -1,0 +1,9 @@
+sample:
+  description: Base-side simulator (33-byte Mode-1 controller)
+  name: sim-app
+common:
+  build_only: true
+  integration_platforms:
+    - fk723m1_zgt6
+tests:
+  app.sim.default: {}

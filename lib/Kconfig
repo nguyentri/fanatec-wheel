@@ -1,0 +1,8 @@
+# Copyright (c) 2026 Fanatec Wheel Project Contributors
+# SPDX-License-Identifier: Apache-2.0
+
+menu "Custom libraries"
+
+rsource "rimlink/Kconfig"
+
+endmenu

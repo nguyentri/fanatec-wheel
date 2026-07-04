@@ -1,0 +1,47 @@
+/*
+ * Copyright (c) 2026 Fanatec Wheel Project Contributors
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Phase 1 rim firmware overlay for FK723M1-ZGT6 (STM32H723ZGT6).
+ * Pin plan follows the Phase 1 hardware spec; adjust to the actual
+ * bench wiring before bring-up.
+ */
+
+/* Legacy rim link: SPI1 peripheral (slave), Mode 1, hardware NSS. */
+&spi1 {
+	status = "okay";
+	pinctrl-0 = <&spi1_sck_pa5 &spi1_miso_pa6
+		     &spi1_mosi_pb5 &spi1_nss_pa4>;
+	pinctrl-names = "default";
+	/* TODO(phase1): DMA channels for full-frame transfers
+	 * dmas = <&dmamux1 ...>, <&dmamux1 ...>;
+	 * dma-names = "tx", "rx";
+	 */
+};
+
+/ {
+	rim_pins {
+		compatible = "gpio-keys";
+
+		/* CS-sense EXTI for re-arm at CS rising edge */
+		cs_sense: cs_sense {
+			gpios = <&gpiog 14 GPIO_ACTIVE_LOW>;
+		};
+
+		/* Six DUT buttons, active-low with internal pull-ups
+		 * (hardware spec section 5.2) */
+		btn1: btn1 { gpios = <&gpioc 0 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
+		btn2: btn2 { gpios = <&gpioc 1 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
+		btn3: btn3 { gpios = <&gpioc 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
+		btn4: btn4 { gpios = <&gpioc 3 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
+		btn5: btn5 { gpios = <&gpiod 0 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
+		btn6: btn6 { gpios = <&gpiod 1 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
+	};
+
+	/* Timing test points (spec section 10) */
+	timing_pins {
+		compatible = "gpio-leds";
+		link_ready: link_ready { gpios = <&gpiof 3 GPIO_ACTIVE_HIGH>; };
+		snap_tick: snap_tick { gpios = <&gpiod 15 GPIO_ACTIVE_HIGH>; };
+	};
+};

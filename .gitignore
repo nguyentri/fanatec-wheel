@@ -1,0 +1,32 @@
+# python
+.venv
+
+# Trash
+.dist
+.backup
+.refs
+.temp
+.github/*
+!.github/workflows/
+
+# build
+**/build
+__pycache__/
+
+# JLink debug logs
+.vscode/*.log
+
+# docs
+/doc/_build*
+log/
+logs/
+!3rd_party/*
+!/3rd_party/.gitkeep
+**.exe
+.claude
+.opencode
+**/*plans
+release-manifest.json
+AGENTS.md
+CLAUDE.md
+.repomixignore

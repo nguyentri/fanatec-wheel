@@ -1,0 +1,28 @@
+# Copyright (c) 2026 Fanatec Wheel Project Contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# Application Kconfig entry point.
+
+menu "Zephyr"
+source "Kconfig.zephyr"
+endmenu
+
+module = APP
+module-str = APP
+source "subsys/logging/Kconfig.template.log_config"
+
+config RIM_TM1637
+	bool "Mirror display bytes to a TM1637 module"
+	default n
+	help
+	  Optional Phase 1 display mirror (spec section 7). Requires the
+	  TM1637 wired per the hardware spec; decode-to-shell works
+	  without it.
+
+config RIM_SHELL
+	bool "Rim diagnostic shell"
+	default y
+	select SHELL
+	help
+	  Shell commands (rim mosi/miso/disp/btn/id/stats) reproducing the
+	  reference sketch's serial command feature (spec section 4).

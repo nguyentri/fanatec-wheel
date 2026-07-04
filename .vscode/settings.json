@@ -1,0 +1,77 @@
+{
+    "editor.tabSize": 4,
+    "editor.detectIndentation": false,
+    "editor.rulers": [
+        80,
+        120
+    ],
+    "editor.formatOnSave": true,
+    "editor.bracketPairColorization.enabled": true,
+    "editor.inlineSuggest.enabled": true,
+    "editor.quickSuggestionsDelay": 50,
+    "editor.suggestSelection": "first",
+    "editor.minimap.enabled": false,
+    "editor.folding": true,
+    "editor.renderWhitespace": "boundary",
+    "workbench.editor.enablePreview": false,
+    "workbench.startupEditor": "none",
+    "workbench.colorTheme": "Dark+",
+    "files.associations": {
+        "*.tpp": "cpp",
+        "zephyr_cfg.h": "c"
+    },
+    "terminal.integrated.fontSize": 12,
+    "terminal.integrated.scrollback": 10000,
+    "git.autofetch": true,
+    "git.enableSmartCommit": true,
+    "breadcrumbs.enabled": true,
+    "extensions.ignoreRecommendations": false,
+    "trailing-spaces.trimOnSave": true,
+    "github-actions.workflows.pinned.workflows": [
+        ".github/workflows/build.yml"
+    ],
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell"
+        },
+        "MSYS2 (MINGW64)": {
+            "path": "C:\\msys64\\usr\\bin\\bash.exe",
+            "args": [
+                "-l",
+                "-i"
+            ],
+            "env": {
+                "MSYSTEM": "MINGW64",
+                "CHERE_INVOKING": "1"
+            }
+        },
+        "MSYS2 (MSYS)": {
+            "path": "C:\\msys64\\usr\\bin\\bash.exe",
+            "args": [
+                "-l",
+                "-i"
+            ],
+            "env": {
+                "MSYSTEM": "MSYS",
+                "CHERE_INVOKING": "1"
+            }
+        }
+    },
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "cortex-debug.JLinkGDBServerPath": "C:/Users/LENOVO/Program/JLink_V850/JLinkGDBServerCL.exe",
+    "cortex-debug.armToolchainPath": "C:/Users/LENOVO/Program/zephyr-sdk-0.17.4/arm-zephyr-eabi/bin",
+    "cortex-debug.gdbPath": "C:/Users/LENOVO/Program/zephyr-sdk-0.17.4/arm-zephyr-eabi/bin/arm-zephyr-eabi-gdb.exe",
+    "nrf-connect.applications": [
+        "${workspaceFolder}\\app\\cm7"
+    ],
+    "nrf-connect.debugging.bindings": {
+        "${workspaceFolder}/tests/func/adc_ads8688/build": "Debug MIMXRT1165 - ADC ADS8688"
+    },
+    "chat.tools.terminal.autoApprove": {
+        "/^& d:\\\\workspace\\\\01_avr_energy\\\\01_tms\\\\grid_sentry\\\\\\.venv\\\\Scripts\\\\Activate\\.ps1; west build -b ayr_evt/mimxrt1166/cm4 tests/func/multiple_core/cm4 -p always --force --sysbuild$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

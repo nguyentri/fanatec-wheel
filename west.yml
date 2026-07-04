@@ -1,0 +1,28 @@
+# Copyright (c) 2026 Fanatec Wheel Project Contributors
+# SPDX-License-Identifier: Apache-2.0
+#
+# West manifest for the Zephyr Rim-Link firmware (Phase 1).
+# Target board: fk723m1_zgt6 (STM32H723ZGT6), upstream Zephyr board.
+
+manifest:
+  self:
+    west-commands: scripts/west-commands.yml
+    path: .
+
+  remotes:
+    - name: zephyrproject
+      url-base: https://github.com/zephyrproject-rtos
+
+  projects:
+    - name: zephyr
+      remote: zephyrproject
+      revision: v4.4.0
+      clone-depth: 1
+      import:
+        # Clone only the modules strictly needed for the STM32H7 target.
+        path-prefix: 3rd_party/zephyr
+        name-allowlist:
+          - cmsis_6
+          - hal_stm32
+          - picolibc
+          - segger

@@ -1,0 +1,28 @@
+# Copyright (c) 2026 Fanatec Wheel Project Contributors
+# SPDX-License-Identifier: Apache-2.0
+
+config RIMLINK_LEGACY_SPI
+	bool "Rim-Link adapter v1 (legacy-spi)"
+	help
+	  Versioned adapter that isolates every observed protocol constant
+	  of the legacy 33-byte SPI rim link (frame build/parse, CRC-8,
+	  identity). Higher layers see logical inputs/outputs only; no
+	  other module may reference frame offsets.
+	  Reference: docs/phase1-software-spec.md, section 5.
+
+if RIMLINK_LEGACY_SPI
+
+config RIM_IDENTITY
+	int "Default rim identity byte"
+	range 1 4
+	default 3
+	help
+	  Rim identity presented in frame byte 1:
+	  1 = BMW GT2, 2 = ClubSport Formula,
+	  3 = Porsche 918 RSR (reference default), 4 = UniHub.
+
+module = RIMLINK
+module-str = rimlink
+source "subsys/logging/Kconfig.template.log_config"
+
+endif # RIMLINK_LEGACY_SPI

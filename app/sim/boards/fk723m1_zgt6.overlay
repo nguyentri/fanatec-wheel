@@ -1,0 +1,15 @@
+/*
+ * Copyright (c) 2026 Fanatec Wheel Project Contributors
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Base-side simulator overlay for FK723M1-ZGT6: SPI1 as controller,
+ * software-driven CS so fault injection (min CS gap, truncation)
+ * stays under application control.
+ */
+
+&spi1 {
+	status = "okay";
+	pinctrl-0 = <&spi1_sck_pa5 &spi1_miso_pa6 &spi1_mosi_pb5>;
+	pinctrl-names = "default";
+	cs-gpios = <&gpioa 4 GPIO_ACTIVE_LOW>;
+};
