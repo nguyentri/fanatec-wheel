@@ -2,7 +2,7 @@
  * Copyright (c) 2026 Fanatec Wheel Project Contributors
  * SPDX-License-Identifier: Apache-2.0
  *
- * MCUboot view of the rim flash layout (Phase 5, spec 5-S1) -
+ * MCUboot view of the rim flash layout (spec 5-S1) -
  * must stay identical to app/boards/fk723m1_zgt6.overlay.
  * STM32H723ZG: 8 x 128 KiB sectors.
  */

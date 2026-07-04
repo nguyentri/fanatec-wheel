@@ -33,7 +33,7 @@ struct rim_settings {
 	/* rim/mode subtree */
 	uint8_t clutch_mode;    /* enum clutch_mode */
 	uint8_t bite_point;
-	/* rim/lock (Phase 5, spec 5-S5) */
+	/* rim/lock (spec 5-S5) */
 	bool locked;
 };
 

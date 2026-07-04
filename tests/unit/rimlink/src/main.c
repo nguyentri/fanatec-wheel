@@ -238,7 +238,7 @@ ZTEST(rimlink_link, test_rx_paths)
 }
 
 
-/* ---- Phase 2: capture ring (spec 2-S1 / 2-M2) ---- */
+/* ---- capture ring (spec 2-S1 / 2-M2) ---- */
 
 ZTEST(rimlink_cap, test_arm_record_wrap_freeze_drain)
 {
@@ -294,7 +294,7 @@ ZTEST(rimlink_cap, test_arm_record_wrap_freeze_drain)
 
 ZTEST_SUITE(rimlink, NULL, NULL, NULL, NULL, NULL);
 
-/* ---- Phase 5: health counters (spec 5-S3) ---- */
+/* ---- health counters (spec 5-S3) ---- */
 
 ZTEST(health, test_boot_count_and_accumulation)
 {

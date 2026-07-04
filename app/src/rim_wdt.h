@@ -7,12 +7,12 @@
 #define APP_SRC_RIM_WDT_H_
 
 /**
- * Watchdog (Phase 4, spec 4-S6): fed exclusively from the input
+ * Watchdog (spec 4-S6): fed exclusively from the input
  * thread's 1 kHz tick - a hung acquisition path resets the rim.
  * IWDG on STM32H7 (window lower bound 0 - a true windowed WDT is a
  * PCB rev A / part-selection item, deviation documented in
- * docs/dma-irq-budget.md). Reset cause surfaces via hwinfo into the
- * session header and Phase 5 health counters.
+ * docs/specs/dma-irq-budget.md). Reset cause surfaces via hwinfo into the
+ * session header and the persisted health counters.
  */
 
 int rim_wdt_init(void);

@@ -28,7 +28,7 @@ source "subsys/logging/Kconfig.template.log_config"
 endif # RIMLINK_LEGACY_SPI
 
 config RIMLINK_CAPTURE
-	bool "Transaction capture ring (Phase 2 instrumentation)"
+	bool "Transaction capture ring (link instrumentation)"
 	depends on RIMLINK_LEGACY_SPI
 	default y
 	help

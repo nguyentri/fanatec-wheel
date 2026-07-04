@@ -10,7 +10,7 @@
 #include <stdint.h>
 
 /**
- * LRA haptics service (Phase 4, spec 4-S2): two channels driven only
+ * LRA haptics service (spec 4-S2): two channels driven only
  * through bounded cue primitives - duration-capped, cooldown-enforced,
  * never raw pass-through. The rumble[2] frame source stays DISABLED
  * until real-base captures show the base populating those bytes for

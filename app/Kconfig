@@ -15,7 +15,7 @@ config RIM_TM1637
 	bool "Mirror display bytes to a TM1637 module"
 	default n
 	help
-	  Optional Phase 1 display mirror (spec section 7). Requires the
+	  Optional display mirror (spec section 7). Requires the
 	  TM1637 wired per the hardware spec; decode-to-shell works
 	  without it.
 
@@ -31,7 +31,7 @@ config RIM_FASTBOOT
 	bool "Boot-deadline mode: link-first init, deferred services"
 	default y
 	help
-	  Phase 2 (spec 2-S2): main() initializes only the fast path
+	  (spec 2-S2): main() initializes only the fast path
 	  (adapter seal -> SPI arm -> LINK_READY) and defers input/
 	  output/diagnostic service init behind link readiness via the
 	  system workqueue. Boot-to-ready is timestamped and reported
@@ -39,7 +39,7 @@ config RIM_FASTBOOT
 	  measured base first-poll deadline (>= 2x margin required).
 
 config RIM_WATCHDOG
-	bool "Watchdog fed from the input thread (Phase 4)"
+	bool "Watchdog fed from the input thread"
 	select WATCHDOG
 	help
 	  Arms the hardware watchdog (100 ms) fed exclusively by the

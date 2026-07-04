@@ -10,7 +10,7 @@
 #include <stdint.h>
 
 /**
- * LED service (Phase 4, spec 4-S1): consumes the validated 16-bit
+ * LED service (spec 4-S1): consumes the validated 16-bit
  * leds field + disp bytes from output_svc, renders 15 RGB rev LEDs
  * and 8 flag LEDs. Change-driven at <= 60 Hz; link stale > 200 ms
  * drops to the quiet state (spec 4.1 isolation posture).

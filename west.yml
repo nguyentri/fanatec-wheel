@@ -1,7 +1,7 @@
 # Copyright (c) 2026 Fanatec Wheel Project Contributors
 # SPDX-License-Identifier: Apache-2.0
 #
-# West manifest for the Zephyr Rim-Link firmware (Phase 1).
+# West manifest for the Zephyr Rim-Link firmware.
 # Target board: fk723m1_zgt6 (STM32H723ZGT6), upstream Zephyr board.
 
 manifest:

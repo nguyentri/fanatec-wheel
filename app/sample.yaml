@@ -1,6 +1,6 @@
-# Twister entry for the Phase 1 rim firmware.
+# Twister entry for the rim firmware.
 sample:
-  description: Rim-side Phase 1 firmware (legacy 33-byte SPI link)
+  description: Rim-side firmware (legacy 33-byte SPI link)
   name: rim-app
 common:
   build_only: true

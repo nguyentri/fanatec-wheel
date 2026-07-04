@@ -6,7 +6,7 @@
  * refreshAlphanumericDisplays(): only CRC-valid frames reach this
  * code (adapter gate), and only frames whose disp[3] differs from the
  * previous valid value cause a decode/refresh. LED and rumble fields
- * are accumulated into counters only - Phase 4 evidence collection.
+ * are accumulated into counters only - output evidence collection.
  */
 
 #include <stdio.h>
@@ -82,7 +82,7 @@ void output_svc_rx(const struct base_outputs *out)
 	}
 	k_spin_unlock(&osvc.lock, key);
 
-	/* Phase 4 consumers (workqueue context, spec 4-S1/4-S2/4-S3):
+	/* Output consumers (workqueue context, spec 4-S1/4-S2/4-S3):
 	 * every frame reaching here already passed CRC validation. */
 	power_mgr_note_valid_rx();
 	led_svc_submit(out->leds, out->disp);

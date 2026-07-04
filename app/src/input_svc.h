@@ -10,7 +10,7 @@
 #include <stdint.h>
 
 /**
- * @brief Input service v2 (Phase 3, spec s.3): 1 kHz full-fabric
+ * @brief Input service v2 (spec s.3): 1 kHz full-fabric
  * acquisition - 6 debounced buttons, analog D-pad, 4 quadrature
  * encoders, funky switch, 2 Hall clutch channels with dual-clutch
  * logic - composed into the unchanged adapter snapshot (buttons/

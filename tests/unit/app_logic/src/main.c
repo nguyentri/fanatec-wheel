@@ -132,7 +132,7 @@ ZTEST(dpad, test_apply_bits_reference_map)
 }
 
 
-/* ---- Phase 3: quadrature encoder (spec 3-S1) ---- */
+/* ---- quadrature encoder (spec 3-S1) ---- */
 
 /* Gray sequence CW: 00 -> 01 -> 11 -> 10 -> 00 (one detent at div 4). */
 static const uint8_t cw[] = { 0, 1, 3, 2 };
@@ -185,7 +185,7 @@ ZTEST(encoder, test_saturating_delta)
 	zassert_equal(encoder_consume(&e), INT8_MAX, "saturates at +127");
 }
 
-/* ---- Phase 3: funky switch (spec 3-S2) ---- */
+/* ---- funky switch (spec 3-S2) ---- */
 
 ZTEST(funky, test_direction_and_push_independent_debounce)
 {
@@ -222,7 +222,7 @@ ZTEST(funky, test_opposite_chord_is_fault_not_input)
 	zassert_false(f.fault, "fault clears with contacts");
 }
 
-/* ---- Phase 3: Hall clutch pipeline (spec 3-S3) ---- */
+/* ---- Hall clutch pipeline (spec 3-S3) ---- */
 
 static struct clutch_cal test_cal = {
 	.min = 400, .max = 3700, .guard = 50, .deadzone = 8,
@@ -293,7 +293,7 @@ ZTEST(clutch, test_plausibility_flags)
 		     c.out <= 3 * c.rate_limit, "rate limited");
 }
 
-/* ---- Phase 3: dual-clutch logic (spec 3-S4) ---- */
+/* ---- dual-clutch logic (spec 3-S4) ---- */
 
 ZTEST(clutch, test_dual_clutch_bite_point_launch)
 {
@@ -332,7 +332,7 @@ ZTEST(clutch, test_dual_clutch_other_modes)
 }
 
 
-/* ---- Phase 4: LED renderer (spec 4-S1, pure) ---- */
+/* ---- LED renderer (spec 4-S1, pure) ---- */
 
 static bool led_lit(const struct led_frame *f, int i)
 {
@@ -381,7 +381,7 @@ ZTEST(led, test_render_interpolation_and_flags)
 	zassert_false(f.flags & BIT(7), "flag 7 reserved (pending)");
 }
 
-/* ---- Phase 4: LRA cue gate (spec 4-S2, pure) ---- */
+/* ---- LRA cue gate (spec 4-S2, pure) ---- */
 
 ZTEST(lra, test_gate_caps_duration_and_enforces_cooldown)
 {

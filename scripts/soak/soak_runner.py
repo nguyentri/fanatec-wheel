@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Soak automation (Phase 5, spec 5-S4 / Phase 4 isolation proof).
+"""Soak automation (spec 5-S4 / output isolation proof).
 
 Drives the DUT and the base-simulator consoles over serial for N
 hours, polls counters, enforces thresholds, freezes the DUT capture

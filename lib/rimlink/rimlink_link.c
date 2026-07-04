@@ -114,7 +114,7 @@ const uint8_t *rimlink_tx_acquire(void)
 
 	k_spin_unlock(&lnk.lock, key);
 
-	/* Phase 2 capture hook (2-S1): armed MISO frame. */
+	/* Capture hook (spec 2-S1): armed MISO frame. */
 	rimlink_cap_record(RIMLINK_CAP_TX, frame, true, last_cs_gap_us);
 	return frame;
 }
@@ -135,7 +135,7 @@ void rimlink_rx_submit(const uint8_t *frame, size_t len)
 	struct base_outputs out;
 	bool crc_ok = rimlink_frame_validate(frame, &out);
 
-	/* Phase 2 capture hook (2-S1): received MOSI frame. */
+	/* Capture hook (spec 2-S1): received MOSI frame. */
 	rimlink_cap_record(RIMLINK_CAP_RX, frame, crc_ok, last_cs_gap_us);
 
 	if (!crc_ok) {

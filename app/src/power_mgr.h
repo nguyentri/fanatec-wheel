@@ -10,7 +10,7 @@
 #include <stdint.h>
 
 /**
- * Output power manager (Phase 4, spec 4-S3): LED/haptic rail behind
+ * Output power manager (spec 4-S3): LED/haptic rail behind
  * a load switch, enabled only after LINK_READY + first valid
  * transaction, disabled on stale link or fault so a peripheral
  * event can never load the link supply during enumeration.

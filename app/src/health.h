@@ -9,7 +9,7 @@
 #include <stdint.h>
 
 /**
- * Persisted health counters (Phase 5, spec 5-S3): power cycles, mate
+ * Persisted health counters (spec 5-S3): power cycles, mate
  * events, transaction/error totals, watchdog resets, thermal
  * excursions. Accumulated in RAM at runtime; committed to settings
  * periodically from the diag workqueue context only - never the fast

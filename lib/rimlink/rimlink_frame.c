@@ -30,7 +30,7 @@ enum rim_id rimlink_identity_get(void)
 
 void rimlink_button_bit_change(uint32_t *buttons, uint8_t bit, bool on)
 {
-	/* Reference buttonBitChange(): valid bits are 1..24; Phase 1
+	/* Reference buttonBitChange(): valid bits are 1..24; this build
 	 * uses 1..22. Bit 1 = LSB of byte A. */
 	if (bit < 1U || bit > 24U) {
 		return;
@@ -59,8 +59,8 @@ void rimlink_frame_build_id(uint8_t frame[RIMLINK_FRAME_LEN],
 	frame[RIMLINK_OFF_AXIS_Y] = in->axis_y;
 	frame[RIMLINK_OFF_ENCODER] = (uint8_t)in->encoder;
 
-	/* btnHub, btnPS, reserved (12-30), fwvers (31) stay 0x00 in
-	 * Phase 1, matching the reference returnData init. */
+	/* btnHub, btnPS, reserved (12-30), fwvers (31) stay 0x00,
+	 * matching the reference returnData init. */
 
 	frame[RIMLINK_OFF_CRC] = rimlink_crc8(frame, RIMLINK_OFF_CRC);
 }

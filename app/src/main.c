@@ -4,7 +4,7 @@
  *
  * Rim firmware entry point.
  *
- * Boot order (Phase 1 spec fig. 10-1, Phase 2 spec 2-S2): fast path
+ * Boot order (spec fig. 10-1, spec 2-S2): fast path
  * first - adapter frames sealed, SPI armed, LINK_READY raised - then
  * all non-link services. With CONFIG_RIM_FASTBOOT the non-link init
  * is deferred to the system workqueue so main() reaches link

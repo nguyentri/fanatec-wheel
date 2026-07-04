@@ -2,7 +2,7 @@
  * Copyright (c) 2026 Fanatec Wheel Project Contributors
  * SPDX-License-Identifier: Apache-2.0
  *
- * Input service v2 (Phase 3).
+ * Input service v2.
  *
  * The 1 kHz tick acquires the full input fabric and composes one
  * immutable snapshot (spec 3-S6 budget: <= 250 us worst case,
@@ -261,7 +261,7 @@ static int adc_sample(unsigned int idx, uint16_t *raw)
 #endif
 
 /* Funky direction -> logical bits: directions ride the D-pad bits,
- * push = D-pad button (Phase 1 s.2.4 map). Chord fault -> no input. */
+ * push = D-pad button (spec s.2.4 map). Chord fault -> no input. */
 static void funky_apply(uint32_t *buttons)
 {
 #if HAVE_FUNKY

@@ -1,47 +1,122 @@
 # Fanatec Steering Wheel — Zephyr Rim-Link Firmware
 
-Zephyr 4.4.0 workspace for the Phase 1 rim-side prototype: a port of the
-`Arduino_Fanatec_Wheel` behavior (legacy 33-byte SPI exchange, CRC-8,
-identity, button snapshots) behind the versioned `rimlink` adapter, plus
-the base-side simulator. Specifications live in [`docs/`](docs/).
+Clean-room firmware for an advanced Fanatec-compatible steering-wheel **rim**,
+built on **Zephyr 4.4.0** for the **STM32H723ZGT6**. The rim presents itself to
+a Fanatec wheel base as an SPI peripheral over the quick-release link, acquires
+the full GT input fabric, renders its own LEDs and haptics, and hardens the
+product with verified boot, persisted health telemetry, and a watchdog — while
+keeping the base's force feedback untouched.
+
+Protocol behavior is derived from public community implementations and bench
+evidence (a port of `Arduino_Fanatec_Wheel`), never from proprietary assets. The
+rim produces **no torque**; it is an input/display peripheral.
 
 **Target board:** [FK723M1-ZGT6](https://docs.zephyrproject.org/latest/boards/fanke/fk723m1_zgt6/doc/index.html)
 (STM32H723ZGT6, upstream Zephyr board `fk723m1_zgt6`).
 
+---
+
+## Highlights
+
+- **Legacy rim link** — 33-byte SPI-peripheral frames sealed with CRC-8, identity
+  presentation, TX double-buffering with a freshness swap, a 50 ms stale-input
+  safety clear, and a validated RX path handed off to a workqueue. All protocol
+  constants live in exactly one versioned adapter (`lib/rimlink`).
+- **Full input fabric @ 1 kHz** — debounced buttons, an analog D-pad ladder, four
+  quadrature encoders (transition-table decode, illegal-transition counters), a
+  funky switch with independent debounce and chord-fault detection, and two Hall
+  clutch channels (median-of-3 -> IIR -> calibration -> deadzone -> plausibility)
+  with dual-clutch bite-point / two-axis / mappable modes. Worst-case compose
+  time is measured, not assumed (`rim stats`).
+- **Local output rendering** — a 16-bit LED field interpolated across 15 RGB rev
+  LEDs plus 8 flag LEDs (change-driven <= 60 Hz, quiet after 200 ms of link
+  silence), and bounded haptic cues (duration cap + cooldown; the frame rumble
+  source is disabled by default pending real-base evidence). Both back-ends are
+  devicetree-guarded, so the same binary runs on the bench board (counters-only)
+  and on custom hardware.
+- **Configuration & persistence** — a versioned settings schema (NVS) for
+  calibration, mapping, and clutch mode, with a field write-lock. Commits happen
+  only from the diagnostic context, never the fast path.
+- **Instrumentation & evidence** — a 256-entry transaction capture ring that
+  freezes on anomaly, a boot-to-ready measurement, a session-attribution header
+  (firmware, git hash, identity, config, base-under-test), and a host toolkit
+  that reconciles a device capture against a logic-analyzer export.
+- **Product hardening** — MCUboot verified boot (ED25519, dual-slot swap with
+  automatic revert), persisted health counters, an IWDG watchdog fed only by the
+  input thread, a soak runner, and a defined release process.
+- **Base simulator** — a second-board application that drives the link from a
+  configurable base-twin profile (clock, cadence, jitter, flush behavior) with
+  fault injectors, so the rim is exercised end-to-end without hardware.
+
+---
+
 ## Repository layout
 
 ```
-app/                 Rim firmware (DUT): main + link_spi / input_svc /
-                     output_svc / diag_svc templates (phase1 spec section 3)
-app/sim/             Base-side simulator application (spec section 8)
-lib/rimlink/         Adapter v1 legacy-spi: frames, CRC-8, identity
-                     (only place protocol constants may appear)
-drivers/blink/       Custom driver class template (reusable)
-drivers/example_sensor/  Out-of-tree sensor driver template (reusable)
-dts/bindings/        Bindings for the kept drivers
-boards/              Workspace board root (common helpers; no custom boards)
-tests/unit/rimlink/  Host-native ztest: CRC vectors, frame round-trip
-tests/func/example_sensor/  Reference functional build (fk723m1_zgt6)
-docs/                Roadmap + Phase 1..6 hardware/software specifications
-scripts/             Reusable west/build helper scripts
-west.yml             Zephyr v4.4.0 manifest (hal_stm32, cmsis_6, picolibc, segger)
+lib/rimlink/          Link adapter v1 "legacy-spi": frame build/parse, CRC-8,
+                      identity, TX double-buffer, RX queue, stats, capture ring.
+                      The ONLY place protocol offsets and constants appear.
+app/                  Rim firmware (device under test)
+  src/
+    main.c            Boot ordering: fast path first, services deferred
+    link_spi.c        SPI1 slave glue, CS-sense EXTI re-arm, LINK_READY
+    input_svc.c       1 kHz acquisition -> immutable snapshot
+    encoder|funky|clutch|debounce|dpad|seg7|tm1637.c   pure decoders + helpers
+    output_svc.c      validated-frame fan-out + display decode
+    led_svc.c         15 RGB + 8 flag renderer, quiet state
+    lra_svc.c         bounded haptic cue service (source gated)
+    power_mgr.c       output-rail sequencing state machine
+    rim_wdt.c         IWDG fed by the input thread
+    rim_settings.c    settings schema (NVS) + config lock
+    health.c          persisted health counters
+    diag_svc.c        `rim ...` shell, session header
+  boards/...overlay   pins, ADC channels, flash partitions
+  sysbuild.conf +     MCUboot verified-boot configuration (signed image)
+    sysbuild/
+  prj.conf / Kconfig  RIM_FASTBOOT, RIM_WATCHDOG, RIM_TM1637, ...
+app/sim/              Base-side simulator + base-twin profile (`sim` shell)
+scripts/
+  capture/            LA decode, device-ring diff, link stats, field activity,
+                      matrix renderer, and fixtures (host toolkit)
+  soak/soak_runner.py thresholded dual-console soak with capture-freeze
+  pin_registry.py     overlay -> pin table for schematic cross-checks
+drivers/              Reusable out-of-tree driver-class templates (blink,
+                      example_sensor) + bindings under dts/bindings/
+tests/unit/rimlink    adapter, capture, link, and health suites (native_sim)
+tests/unit/app_logic  decoder + LED/LRA pure-logic suites (native_sim)
+tests/func/example_sensor   on-target functional build
+docs/                 System roadmap + hardware/software specifications
+west.yml              Zephyr v4.4.0 manifest (hal_stm32, cmsis_6, picolibc,
+                      segger, mcuboot)
 ```
+
+---
 
 ## Getting started
 
 ```shell
 # one-time
 pip install west
-west init -l .          # if .west/ not present
-west update
-west packages pip --install   # or: pip install -r 3rd_party/zephyr/zephyr/scripts/requirements-base.txt
+west init -l .          # if .west/ is not present
+west update             # fetches Zephyr and modules into 3rd_party/
+west packages pip --install
 ```
 
 ### Build
 
 ```shell
-# Rim firmware (DUT)
+# Rim firmware (device under test)
 west build -p -b fk723m1_zgt6 app
+
+# Rim firmware with the verified-boot chain (MCUboot + ED25519-signed image)
+pip install cbor2
+west build -p -b fk723m1_zgt6 app --sysbuild
+#   -> build/mcuboot/zephyr/zephyr.bin    (flash at 0x08000000)
+#   -> build/app/zephyr/zephyr.signed.bin (slot0 at 0x08020000)
+
+# Optional variants
+west build -p -b fk723m1_zgt6 app -- -DCONFIG_RIM_TM1637=y   # TM1637 display mirror
+west build -p -b fk723m1_zgt6 app -- -DCONFIG_RIM_WATCHDOG=y # IWDG enabled
 
 # Base-side simulator (second board)
 west build -p -b fk723m1_zgt6 app/sim
@@ -50,76 +125,108 @@ west build -p -b fk723m1_zgt6 app/sim
 west build -p -b fk723m1_zgt6 tests/func/example_sensor
 ```
 
-### Test
-
-```shell
-# Host-native unit tests (CRC-8 reference vector A5 03 00x30 -> 0x5A, etc.)
-west build -p -b native_sim/native/64 tests/unit/rimlink
-./build/zephyr/zephyr.exe
-# or: west twister -T tests/unit --integration
-```
-
 ### Flash
 
 ```shell
-west flash    # ST-Link / OpenOCD per the upstream board docs
+west flash    # on-board ST-Link / OpenOCD per the upstream board docs
 ```
 
-## Phase 1 scope
+### Test
 
-Implemented as templates with `TODO(phase1)` markers, per
-`docs/phase1-software-spec.md`:
+```shell
+# Host-native unit suites (native_sim)
+west build -p -b native_sim/native/64 tests/unit/rimlink && ./build/zephyr/zephyr.exe
+west build -p -b native_sim/native/64 tests/unit/app_logic && ./build/zephyr/zephyr.exe
+# or the whole set:
+west twister -T tests/unit --integration
 
-- `lib/rimlink` — CRC-8 (implemented + ztest-verified), frame
-  build/seal/validate (implemented), stats/state machine (TODO)
-- `app/src/link_spi.c` — SPI slave transceive thread; CS-EXTI re-arm,
-  double-buffer swap, DMA + nocache buffers (TODO)
-- `app/src/input_svc.c` — 1 kHz tick skeleton; debounce, D-pad ladder,
-  snapshot publish (TODO)
-- `app/src/output_svc.c` — 7-seg decode (partial table), TM1637 mirror (TODO)
-- `app/src/diag_svc.c` — `rim id` / `rim stats` shell; mosi/miso/btn (TODO)
+# Host toolkit smoke test (from a device capture / LA export)
+cd scripts/capture
+python3 la_decode.py fixtures/sample_la.csv > /tmp/la.jsonl
+python3 field_activity.py /tmp/la.jsonl
+python3 ring_diff.py fixtures/sample_ring_dump.txt /tmp/la.jsonl
+```
 
-## Phase 1 implementation status
+The CRC-8 reference vector `A5 03` + 30 zero bytes -> `0x5A` is asserted by the
+adapter suite, alongside a 200-vector equivalence check against the reference
+table.
 
-Implemented (Phase 1 complete, pending hardware bring-up):
+---
 
-- `lib/rimlink` - adapter v1 (`legacy-spi`): verbatim reference CRC-8 table
-  (verified vector `A5 03 00x30 -> 0x5A` + 200-random-vector equivalence),
-  33-byte frame build/validate, 22-bit logical button map, TX double buffer
-  with freshness swap, 50 ms stale-input clearing, RX validation queue with
-  workqueue callback, full statistics (txn/crc/short/rearm/overrun/cs-gap).
-- `app` (DUT rim firmware): SPI1 slave Mode 1 link thread with CS-sense EXTI
-  re-arm and LINK_READY/err-LED indicators; 1 kHz input service (6 debounced
-  buttons + analog D-pad ladder with reference thresholds and hysteresis,
-  SNAPSHOT_TICK, publish-latency P99/max); output service with the verbatim
-  7-segment decode table, change/CRC gating, LED/rumble evidence counters
-  and optional TM1637 mirror (`CONFIG_RIM_TM1637`, `rAcE` boot banner);
-  `rim` shell (mosi/miso/disp/btn/map/id/dpad/stats/reset) reproducing the
-  reference serial commands.
-- `app/sim` (base-side simulator): Mode-1 controller at 500 kHz / 2 ms
-  cadence with software CS, MOSI CRC sealing, MISO header+CRC verification,
-  fault injectors (crc / trunc / extra clocks / jitter), display-text
-  encoding and per-second statistics via the `sim` shell.
-- Unit tests (`native_sim/native/64`): 5 suites, 14 tests - CRC vectors and
-  equivalence, frame layout/round-trip, all-22-bit map, buffer swap + stale
-  rule, RX paths, 7-seg decode/encode, debounce, D-pad windows/hysteresis.
+## Diagnostic shell
 
-Deferred with `TODO(phase2-perf)` markers: SPI DMA + non-cacheable link
-buffers, and the LL-level transfer fallback (only if measured re-arm latency
-misses Gate G1, software spec section 10).
+The rim exposes a `rim` command tree over the Zephyr shell; the simulator exposes
+`sim`.
 
-## Implementation status
+| Command | Purpose |
+|---|---|
+| `rim mosi` / `rim miso` / `rim disp` | Inspect the last base->rim frame, the armed rim->base frame, and the decoded display text |
+| `rim btn <set\|clr\|toggle> <1..22>` | Force a logical button bit for testing |
+| `rim map [idx bit]` / `rim id [1..4]` | Show or set the button map and rim identity |
+| `rim dpad [t1..t7 hyst]` | Show or calibrate the D-pad ladder |
+| `rim input` | Dump the v2 fabric state (encoders, funky, clutches) |
+| `rim clutch [mode bite]` | Show or set the dual-clutch mode and bite point |
+| `rim save <cal\|map\|mode>` | Persist a settings subtree (rejected while locked) |
+| `rim lock <on\|off\|status>` | Engage or release the configuration write-lock |
+| `rim session [base <str>]` | Emit the session header; tag the base under test |
+| `rim boot` | Report boot-to-ready (us from reset to first armed transfer) |
+| `rim cap <start\|stop\|freeze\|dump\|status\|auto>` | Drive the transaction capture ring |
+| `rim stats` / `rim reset` | Link statistics (CRC/short/overrun/re-arm, CS-gap, latency P99/max) |
+| `rim health` | Persisted counters (power cycles, transactions, errors, watchdog resets) |
+| `sim start\|stop\|rate\|profile\|fault\|disp\|leds` | Drive and perturb the base simulator |
 
-| Phase | Scope | Status |
-|---|---|---|
-| 1 | Legacy-SPI adapter, input/output/diag services, simulator | done |
-| 2 | Capture ring + `rim cap`, fastboot, session header, host toolkit, compat matrix, sim base-twin profile | done (real-base captures pending hardware) |
-| 3 | input_svc v2: encoders, funky, Hall clutch + dual-clutch, settings schema v2, frame axis/encoder enablement | done (full-fabric P99 pending hardware) |
-| 4 | led_svc, lra_svc (disabled source), power manager, watchdog, DMA/IRQ budget, pin registry | done (PCB rev A ports pending) |
-| 5 | MCUboot verified boot (ED25519 sysbuild), health counters, soak runner, config lock, release definition | done (24 h soak + interrupted-update pending hardware) |
+---
 
-Build the signed pair: `west build -b fk723m1_zgt6 app --sysbuild`.
-Shell tour: `rim session|boot|cap|input|clutch|save|lock|health|stats`,
-`sim profile|rate|fault`. Host tooling: `scripts/capture/README.md`,
-`scripts/soak/soak_runner.py`, `scripts/pin_registry.py`.
-Plans + outcome: `plans/260704-phases2-5/plan.md`.
+## Host tooling
+
+- `scripts/capture/` — turn a logic-analyzer SPI export into the frame model,
+  diff it against a device `rim cap dump`, extract clock/cadence/CS-gap
+  statistics to feed the simulator's base-twin profile, and report per-field
+  output activity from a donor wheel. See `scripts/capture/README.md`.
+- `scripts/soak/soak_runner.py` — drive the rim and simulator consoles for hours,
+  enforce zero-tolerance thresholds, and freeze the capture ring on the first
+  anomaly. Runs offline against recorded logs with `--replay`.
+- `scripts/pin_registry.py` — generate a pin table from the board overlay for
+  schematic cross-checks; reports conflicts.
+
+---
+
+## Documentation
+
+- [`docs/fanatec-wheel-roadmap-and-system-spec.md`](docs/fanatec-wheel-roadmap-and-system-spec.md)
+  — system architecture and long-form roadmap.
+- [`docs/phase1-software-spec.md`](docs/phase1-software-spec.md) ·
+  [`docs/phase1-hardware-spec.md`](docs/phase1-hardware-spec.md) — the link
+  adapter, core services, and simulator.
+- [`docs/phases2-6-software-spec.md`](docs/phases2-6-software-spec.md) ·
+  [`docs/phases2-6-hardware-spec.md`](docs/phases2-6-hardware-spec.md) — the
+  instrumentation, input fabric, output rendering, and hardening work.
+
+The specification documents use a stable requirement-ID scheme (`2-S1`, `3-S3`,
+`5-S5`, ...) that source comments cite, so any module can be traced back to the
+requirement it satisfies.
+
+---
+
+## Status
+
+The firmware is feature-complete on the bench board and builds clean (zero
+warnings) across all targets: the rim application, the TM1637 and watchdog
+variants, the MCUboot-signed sysbuild pair, the simulator, and the functional
+example. The host unit suites (adapter, capture, link, health, encoder, funky,
+clutch, LED, LRA, debounce, D-pad, seg7) all pass on `native_sim`.
+
+Items that require a real base or custom hardware are wired and instrumented but
+marked **measurement pending** in the code and specs: real-base link captures and
+the boot-margin measurement, the full-fabric latency report, the 24-hour output
+isolation soak, and the interrupted-update torture test. Devicetree guards keep
+the LED chain, haptic driver, output-rail load switch, and windowed-watchdog part
+as drop-in points on a future PCB without code changes.
+
+---
+
+## License
+
+Apache-2.0. See [`LICENSE`](LICENSE). This project redistributes no vendor
+firmware or proprietary assets and claims no official compatibility,
+certification, or endorsement.

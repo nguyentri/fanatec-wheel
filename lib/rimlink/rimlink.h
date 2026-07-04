@@ -7,7 +7,7 @@
  * Isolates every observed protocol constant of the legacy 33-byte SPI
  * exchange (docs/phase1-software-spec.md sections 2 and 5), ported from
  * lshachar/Arduino_Fanatec_Wheel (`Community implementation`). All
- * protocol facts are `observed`, re-verified on real hardware in Phase 2.
+ * protocol facts are `observed`, re-verified on real hardware.
  * No module outside lib/rimlink may reference frame offsets.
  */
 
@@ -35,7 +35,7 @@ extern "C" {
 enum rim_id {
 	RIM_ID_BMW_GT2 = 0x01,
 	RIM_ID_CLUBSPORT_FORMULA = 0x02,
-	RIM_ID_PORSCHE_918_RSR = 0x03, /* Phase 1 default (reference parity) */
+	RIM_ID_PORSCHE_918_RSR = 0x03, /* default identity (reference parity) */
 	RIM_ID_UNIHUB = 0x04,
 };
 
@@ -88,16 +88,16 @@ enum rim_button_bit {
 /** Logical input snapshot published by input_svc (spec section 5.1). */
 struct rim_inputs {
 	uint32_t buttons;   /* logical bitset: BIT(n-1) = button bit n */
-	uint8_t axis_x;     /* 0x00 neutral in Phase 1 */
-	uint8_t axis_y;     /* 0x00 neutral in Phase 1 */
-	int8_t encoder;     /* int8 delta; 0 in Phase 1 (no encoder) */
+	uint8_t axis_x;     /* analog axis (clutch/axis map); 0 when unmapped */
+	uint8_t axis_y;     /* analog axis (clutch/axis map); 0 when unmapped */
+	int8_t encoder;     /* int8 saturating detent delta of the selected encoder */
 	uint32_t timestamp; /* cycle-counter timestamp of acquisition */
 };
 
 /** Validated base outputs delivered via the RX callback. */
 struct base_outputs {
 	uint8_t disp[3];   /* raw 7-segment characters, bit 7 = dot */
-	uint16_t leds;     /* LED bitfield - counted/logged only in Phase 1 */
+	uint16_t leds;     /* 16-bit LED bitfield rendered by led_svc */
 	uint8_t rumble[2]; /* rumble channels - counted/logged only */
 };
 

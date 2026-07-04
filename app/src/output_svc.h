@@ -23,7 +23,7 @@ void output_svc_rx(const struct base_outputs *out);
 /** Current decoded display text (3 chars + NUL) - shell `rim disp`. */
 void output_svc_disp_text(char text[16]);
 
-/** Evidence counters for the Phase 4 output decision. */
+/** Evidence counters for the output subsystem. */
 struct output_stats {
 	uint16_t leds_last;
 	uint8_t rumble_last[2];

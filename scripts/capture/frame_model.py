@@ -1,4 +1,4 @@
-"""Shared frame model for the Phase 2 capture toolkit (spec 2-S4).
+"""Shared frame model for the capture toolkit (spec 2-S4).
 
 Single source of protocol knowledge on the host side, mirroring
 lib/rimlink (offsets stay confined to adapter-equivalents).

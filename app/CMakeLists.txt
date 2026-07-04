@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-# Rim firmware (DUT) - Phase 1 Zephyr Rim-Link implementation
+# Rim firmware (DUT) - Zephyr Rim-Link implementation
 #
 # Copyright (c) 2026 Fanatec Wheel Project Contributors
 # SPDX-License-Identifier: Apache-2.0

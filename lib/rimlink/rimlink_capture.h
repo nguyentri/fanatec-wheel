@@ -2,7 +2,7 @@
  * Copyright (c) 2026 Fanatec Wheel Project Contributors
  * SPDX-License-Identifier: Apache-2.0
  *
- * Phase 2 capture hooks (spec 2-S1): interface-neutral transaction
+ * Capture hooks (spec 2-S1): interface-neutral transaction
  * ring for real-base evidence gathering. Armed/drained only from
  * diag_svc; zero fast-path cost when disabled (compile-time gate
  * CONFIG_RIMLINK_CAPTURE + runtime atomic gate).

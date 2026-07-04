@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-# Base-side simulator - Phase 1 (spec section 8)
+# Base-side simulator (spec section 8)
 #
 # Copyright (c) 2026 Fanatec Wheel Project Contributors
 # SPDX-License-Identifier: Apache-2.0
