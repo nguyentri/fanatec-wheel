@@ -1,0 +1,11 @@
+# Compatibility matrix (spec 2-S5). One row per {base, firmware, identity}
+# session. capture_refs point at archived LA exports / ring dumps.
+# Row 1 is a placeholder: real-base session pending (Phase 2 bench).
+matrix:
+  - base_model: CSL DD 8 Nm
+    base_fw: "pending"
+    qr_gen: QR2
+    rim_identity: "0x03"
+    result: pending-hardware
+    capture_refs: []
+    date: 2026-07-04

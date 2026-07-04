@@ -7,4 +7,5 @@ zephyr_library_sources(
 	rimlink_frame.c
 	rimlink_link.c
 )
+zephyr_library_sources_ifdef(CONFIG_RIMLINK_CAPTURE rimlink_capture.c)
 zephyr_include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../..)

@@ -69,6 +69,7 @@ static uint8_t rx_frame[RIMLINK_FRAME_LEN];
 /* armed==1 while a transceive is submitted with a sealed frame. */
 static atomic_t armed;
 static uint32_t last_cs_rise_cyc;
+static uint32_t boot_ready_cyc; /* first LINK_READY assertion (2-S2) */
 static K_SEM_DEFINE(link_run, 0, 1);
 
 static void err_led_set(bool on)
@@ -151,6 +152,10 @@ static void link_thread(void *a, void *b, void *c)
 
 		atomic_set(&armed, 1);
 		link_ready_set(true);
+		if (boot_ready_cyc == 0U) {
+			/* t1: first armed transfer (spec fig. 10-1). */
+			boot_ready_cyc = k_cycle_get_32() | 1U;
+		}
 
 		int ret = spi_transceive(spi_dev, &cfg, &tx, &rx);
 
@@ -232,4 +237,12 @@ int link_spi_init(void)
 	k_sem_give(&link_run);
 
 	return ret;
+}
+
+uint32_t link_spi_boot_ready_us(void)
+{
+	if (boot_ready_cyc == 0U) {
+		return 0;
+	}
+	return (uint32_t)k_cyc_to_us_floor64(boot_ready_cyc);
 }

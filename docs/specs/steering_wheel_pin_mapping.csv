@@ -1,79 +1,80 @@
-Instance,Port,Pad,Signal_Name,Direction,End_Device,Connector,Function,Notes
-USART1,GPIOA,PA9,UART1_TX,Output,Debug Console,On-board,On-board Debug/Shell,Excluded
-USART1,GPIOA,PA10,UART1_RX,Input,Debug Console,On-board,On-board Debug/Shell,Excluded
-USB_OTG_HS,GPIOA,PA11,USB_DM,In/Out,USB OTG,On-board,On-board USB OTG HS,Excluded
-USB_OTG_HS,GPIOA,PA12,USB_DP,In/Out,USB OTG,On-board,On-board USB OTG HS,Excluded
-SDMMC1,GPIOC,PC8,SDMMC_D0,In/Out,SDMMC,On-board,On-board SDMMC,Excluded
-SDMMC1,GPIOC,PC9,SDMMC_D1,In/Out,SDMMC,On-board,On-board SDMMC,Excluded
-SDMMC1,GPIOC,PC10,SDMMC_D2,In/Out,SDMMC,On-board,On-board SDMMC,Excluded
-SDMMC1,GPIOC,PC11,SDMMC_D3,In/Out,SDMMC,On-board,On-board SDMMC,Excluded
-SDMMC1,GPIOC,PC12,SDMMC_CK,Output,SDMMC,On-board,On-board SDMMC,Excluded
-SDMMC1,GPIOD,PD2,SDMMC_CMD,Output,SDMMC,On-board,On-board SDMMC,Excluded
-OCTOSPI1,GPIOF,PF6,OSPI_IO3,In/Out,Flash Memory,On-board,On-board OctoSPI Flash,Excluded
-OCTOSPI1,GPIOF,PF7,OSPI_IO2,In/Out,Flash Memory,On-board,On-board OctoSPI Flash,Excluded
-OCTOSPI1,GPIOF,PF8,OSPI_IO0,In/Out,Flash Memory,On-board,On-board OctoSPI Flash,Excluded
-OCTOSPI1,GPIOF,PF9,OSPI_IO1,In/Out,Flash Memory,On-board,On-board OctoSPI Flash,Excluded
-OCTOSPI1,GPIOF,PF10,OSPI_CLK,Output,Flash Memory,On-board,On-board OctoSPI Flash,Excluded
-OCTOSPI1,GPIOG,PG6,OSPI_NCS,Output,Flash Memory,On-board,On-board OctoSPI Flash,Excluded
-GPIOG,GPIOG,PG7,HEARTBEAT_LED,Output,User LED,On-board,On-board User LED,Excluded
-SPI1,GPIOA,PA4,LINK_NSS,Input,Fanatec Base,QR2,Hardware slave-select (SPI1_NSS),Rim Link
-SPI1,GPIOA,PA5,LINK_SCK,Input,Fanatec Base,QR2,SPI clock (SPI1_SCK). Requires 100 ohm series,Rim Link
-SPI1,GPIOA,PA6,LINK_MISO,Output,Fanatec Base,QR2,Tri-state output (SPI1_MISO). High-Z when unselected,Rim Link
-SPI1,GPIOB,PB5,LINK_MOSI,Input,Fanatec Base,QR2,SPI data input (SPI1_MOSI),Rim Link
-EXTI,GPIOG,PG14,CS_SENSE,Input,Fanatec Base,QR2,EXTI tap on CS line to re-arm DMA,Rim Link
-GPIOF,GPIOF,PF3,LINK_READY,Output,Test Point,TBD,Asserts when a valid response is armed for DMA,Test Points
-GPIOD,GPIOD,PD15,SNAPSHOT_TICK,Output,Test Point,TBD,Toggles on each input snapshot publish,Test Points
-ADC1,GPIOA,PA3,CLUTCH_L_AIN,Analog,Left Clutch,TBD,ADC1_IN15 ratiometric,Input Fabric
-ADC1,GPIOA,PA7,CLUTCH_R_AIN,Analog,Right Clutch,TBD,ADC1_IN3 ratiometric,Input Fabric
-GPIOE,GPIOE,PE0,BTN1,Input,Button 1,TBD,Active low direct GPIO,Input Fabric
-GPIOE,GPIOE,PE1,BTN2,Input,Button 2,TBD,Active low direct GPIO,Input Fabric
-GPIOE,GPIOE,PE2,BTN3,Input,Button 3,TBD,Active low direct GPIO,Input Fabric
-GPIOE,GPIOE,PE3,BTN4,Input,Button 4,TBD,Active low direct GPIO,Input Fabric
-GPIOE,GPIOE,PE4,BTN5,Input,Button 5,TBD,Active low direct GPIO,Input Fabric
-GPIOE,GPIOE,PE5,BTN6,Input,Button 6,TBD,Active low direct GPIO,Input Fabric
-GPIOE,GPIOE,PE6,BTN7,Input,Button 7,TBD,Active low direct GPIO,Input Fabric
-GPIOE,GPIOE,PE7,BTN8,Input,Button 8,TBD,Active low direct GPIO,Input Fabric
-GPIOE,GPIOE,PE8,BTN9,Input,Button 9,TBD,Active low direct GPIO,Input Fabric
-GPIOE,GPIOE,PE9,BTN10,Input,Button 10,TBD,Active low direct GPIO,Input Fabric
-GPIOE,GPIOE,PE10,BTN11,Input,Button 11,TBD,Active low direct GPIO,Input Fabric
-GPIOE,GPIOE,PE11,BTN12,Input,Button 12,TBD,Active low direct GPIO,Input Fabric
-GPIOE,GPIOE,PE12,PADDLE_L,Input,Left Shifter,TBD,Magnetic shift paddle,Input Fabric
-GPIOE,GPIOE,PE13,PADDLE_R,Input,Right Shifter,TBD,Magnetic shift paddle,Input Fabric
-GPIOD,GPIOD,PD3,ENC1_A,Input,Thumb Encoder 1,TBD,Thumb encoder 1,Input Fabric
-GPIOD,GPIOD,PD4,ENC1_B,Input,Thumb Encoder 1,TBD,Thumb encoder 1,Input Fabric
-GPIOD,GPIOD,PD5,ENC2_A,Input,Thumb Encoder 2,TBD,Thumb encoder 2,Input Fabric
-GPIOD,GPIOD,PD6,ENC2_B,Input,Thumb Encoder 2,TBD,Thumb encoder 2,Input Fabric
-GPIOD,GPIOD,PD7,ENC3_A,Input,Thumb Encoder 3,TBD,Thumb encoder 3,Input Fabric
-GPIOD,GPIOD,PD8,ENC3_B,Input,Thumb Encoder 3,TBD,Thumb encoder 3,Input Fabric
-GPIOD,GPIOD,PD9,ENC4_A,Input,Thumb Encoder 4,TBD,Thumb encoder 4,Input Fabric
-GPIOD,GPIOD,PD10,ENC4_B,Input,Thumb Encoder 4,TBD,Thumb encoder 4,Input Fabric
-GPIOB,GPIOB,PB0,ROT1_A,Input,Front Rotary 1,TBD,Front rotary 1,Input Fabric
-GPIOB,GPIOB,PB1,ROT1_B,Input,Front Rotary 1,TBD,Front rotary 1,Input Fabric
-GPIOB,GPIOB,PB2,ROT2_A,Input,Front Rotary 2,TBD,Front rotary 2,Input Fabric
-GPIOB,GPIOB,PB3,ROT2_B,Input,Front Rotary 2,TBD,Front rotary 2,Input Fabric
-GPIOB,GPIOB,PB4,ROT3_A,Input,Front Rotary 3,TBD,Front rotary 3,Input Fabric
-GPIOB,GPIOB,PB6,ROT3_B,Input,Front Rotary 3,TBD,Front rotary 3,Input Fabric
-GPIOB,GPIOB,PB7,ROT4_A,Input,Front Rotary 4,TBD,Front rotary 4,Input Fabric
-GPIOB,GPIOB,PB8,ROT4_B,Input,Front Rotary 4,TBD,Front rotary 4,Input Fabric
-GPIOB,GPIOB,PB9,ROT5_A,Input,Front Rotary 5,TBD,Front rotary 5,Input Fabric
-GPIOB,GPIOB,PB10,ROT5_B,Input,Front Rotary 5,TBD,Front rotary 5,Input Fabric
-GPIOC,GPIOC,PC0,FUNKY1_UP,Input,Funky Switch 1,TBD,Funky Switch 1,Input Fabric
-GPIOC,GPIOC,PC1,FUNKY1_DN,Input,Funky Switch 1,TBD,Funky Switch 1,Input Fabric
-GPIOC,GPIOC,PC2,FUNKY1_LT,Input,Funky Switch 1,TBD,Funky Switch 1,Input Fabric
-GPIOC,GPIOC,PC3,FUNKY1_RT,Input,Funky Switch 1,TBD,Funky Switch 1,Input Fabric
-GPIOC,GPIOC,PC4,FUNKY1_PUSH,Input,Funky Switch 1,TBD,Funky Switch 1,Input Fabric
-GPIOC,GPIOC,PC5,FUNKY1_ENCA,Input,Funky Switch 1,TBD,Funky Switch 1,Input Fabric
-GPIOC,GPIOC,PC6,FUNKY1_ENCB,Input,Funky Switch 1,TBD,Funky Switch 1,Input Fabric
-GPIOF,GPIOF,PF11,FUNKY2_UP,Input,Funky Switch 2,TBD,Funky Switch 2,Input Fabric
-GPIOF,GPIOF,PF12,FUNKY2_DN,Input,Funky Switch 2,TBD,Funky Switch 2,Input Fabric
-GPIOF,GPIOF,PF13,FUNKY2_LT,Input,Funky Switch 2,TBD,Funky Switch 2,Input Fabric
-GPIOF,GPIOF,PF14,FUNKY2_RT,Input,Funky Switch 2,TBD,Funky Switch 2,Input Fabric
-GPIOF,GPIOF,PF15,FUNKY2_PUSH,Input,Funky Switch 2,TBD,Funky Switch 2,Input Fabric
-GPIOG,GPIOG,PG0,FUNKY2_ENCA,Input,Funky Switch 2,TBD,Funky Switch 2,Input Fabric
-GPIOG,GPIOG,PG1,FUNKY2_ENCB,Input,Funky Switch 2,TBD,Funky Switch 2,Input Fabric
-GPIOA,GPIOA,PA8,OUTPUT_EN,Output,Power Switch,TBD,Controls 3.3V load switch for LEDs and LRAs,Output Subsystem
-TIM_SPI,GPIOA,PA15,LED_DATA,Output,Addressable LEDs,TBD,DMA-fed timer PWM or SPI MOSI for RGB chain,Output Subsystem
-I2C1,GPIOB,PB14,I2C_SCL,Output,Haptic Drivers,TBD,I2C1_SCL for DRV2605L Haptic drivers,Output Subsystem
-I2C1,GPIOB,PB15,I2C_SDA,Output,Haptic Drivers,TBD,I2C1_SDA for DRV2605L Haptic drivers,Output Subsystem
-GPIOG,GPIOG,PG2,LRA_EN_L,Output,Haptic LRA L,TBD,Hardware enable for Left DRV2605L,Output Subsystem
-GPIOG,GPIOG,PG3,LRA_EN_R,Output,Haptic LRA R,TBD,Hardware enable for Right DRV2605L,Output Subsystem
+Instance,Port,Pad,Signal_Name,Direction,End_Device,Connector,Function,Status,Notes
+USART1,GPIOA,PA9,UART1_TX,Output,Debug Console,On-board,On-board Debug/Shell,Reserved,Excluded (board fixed)
+USART1,GPIOA,PA10,UART1_RX,Input,Debug Console,On-board,On-board Debug/Shell,Reserved,Excluded (board fixed)
+USB_OTG_HS,GPIOA,PA11,USB_DM,In/Out,USB OTG,On-board,On-board USB OTG HS,Reserved,Excluded (board fixed)
+USB_OTG_HS,GPIOA,PA12,USB_DP,In/Out,USB OTG,On-board,On-board USB OTG HS,Reserved,Excluded (board fixed)
+SDMMC1,GPIOC,PC8,SDMMC_D0,In/Out,SDMMC,On-board,On-board SDMMC,Reserved,Excluded (board fixed)
+SDMMC1,GPIOC,PC9,SDMMC_D1,In/Out,SDMMC,On-board,On-board SDMMC,Reserved,Excluded (board fixed)
+SDMMC1,GPIOC,PC10,SDMMC_D2,In/Out,SDMMC,On-board,On-board SDMMC,Reserved,Excluded (board fixed)
+SDMMC1,GPIOC,PC11,SDMMC_D3,In/Out,SDMMC,On-board,On-board SDMMC,Reserved,Excluded (board fixed)
+SDMMC1,GPIOC,PC12,SDMMC_CK,Output,SDMMC,On-board,On-board SDMMC,Reserved,Excluded (board fixed)
+SDMMC1,GPIOD,PD2,SDMMC_CMD,In/Out,SDMMC,On-board,On-board SDMMC,Reserved,Excluded (board fixed)
+QSPI,GPIOF,PF6,QSPI_IO3,In/Out,Winbond NOR,On-board,On-board QSPI flash,Reserved,Excluded (board fixed)
+QSPI,GPIOF,PF7,QSPI_IO2,In/Out,Winbond NOR,On-board,On-board QSPI flash,Reserved,Excluded (board fixed)
+QSPI,GPIOF,PF8,QSPI_IO0,In/Out,Winbond NOR,On-board,On-board QSPI flash,Reserved,Excluded (board fixed)
+QSPI,GPIOF,PF9,QSPI_IO1,In/Out,Winbond NOR,On-board,On-board QSPI flash,Reserved,Excluded (board fixed)
+QSPI,GPIOG,PG6,QSPI_NCS,Output,Winbond NOR,On-board,On-board QSPI flash chip select,Reserved,Excluded (board fixed)
+SPI1,GPIOA,PA4,LINK_NSS,Input,Fanatec Base,QR2,Hardware slave-select (SPI1_NSS),Implemented,Rim Link (app/boards/fk723m1_zgt6.overlay)
+SPI1,GPIOA,PA5,LINK_SCK,Input,Fanatec Base,QR2,SPI clock (SPI1_SCK). Requires 100 ohm series,Implemented,Rim Link
+SPI1,GPIOA,PA6,LINK_MISO,Output,Fanatec Base,QR2,Tri-state output (SPI1_MISO). High-Z when unselected,Implemented,Rim Link
+SPI1,GPIOB,PB5,LINK_MOSI,Input,Fanatec Base,QR2,SPI data input (SPI1_MOSI),Implemented,Rim Link
+EXTI,GPIOG,PG14,CS_SENSE,Input,Fanatec Base,QR2,EXTI tap on CS line for re-arm and CS-gap timing,Implemented,Rim Link
+GPIOF,GPIOF,PF3,LINK_READY,Output,Test Point,TBD,Asserts when a valid response is armed,Implemented,Test Points
+GPIOD,GPIOD,PD15,SNAPSHOT_TICK,Output,Test Point,TBD,Toggles on each input snapshot publish,Implemented,Test Points
+GPIOB,GPIOB,PB14,ERR_LED,Output,Status LED,On-board,Board status/error LED,Implemented,Was wrongly listed as I2C1_SCL (PB14 is not I2C1-capable)
+ADC1,GPIOA,PA3,DPAD_AIN,Analog,D-pad ladder,TBD,ADC1_INP15 resistor-ladder D-pad,Implemented,Was wrongly listed as CLUTCH_L
+ADC1,GPIOA,PA0,CLUTCH_L_AIN,Analog,Left Clutch,TBD,ADC1_INP16 ratiometric Hall,Implemented,Input Fabric
+ADC1,GPIOA,PA1,CLUTCH_R_AIN,Analog,Right Clutch,TBD,ADC1_INP17 ratiometric Hall,Implemented,Input Fabric
+GPIOF,GPIOF,PF10,BTN1,Input,Button 1,TBD,Active low direct GPIO,Implemented,Shares QSPI CLK net with on-board NOR (NOR NCS idles high so benign on bench; relocate on PCB rev A)
+GPIOC,GPIOC,PC2,BTN2,Input,Button 2,TBD,Active low direct GPIO,Implemented,Input Fabric
+GPIOB,GPIOB,PB1,BTN3,Input,Button 3,TBD,Active low direct GPIO,Implemented,Input Fabric
+GPIOC,GPIOC,PC3,BTN4,Input,Button 4,TBD,Active low direct GPIO,Implemented,Input Fabric
+GPIOE,GPIOE,PE9,BTN5,Input,Button 5,TBD,Active low direct GPIO,Implemented,Input Fabric
+GPIOE,GPIOE,PE11,BTN6,Input,Button 6,TBD,Active low direct GPIO,Implemented,Input Fabric
+GPIOE,GPIOE,PE1,BTN7,Input,Button 7,TBD,Active low direct GPIO,Planned,PCB rev A; verify against schematic
+GPIOE,GPIOE,PE7,BTN8,Input,Button 8,TBD,Active low direct GPIO,Planned,PCB rev A
+GPIOE,GPIOE,PE8,BTN9,Input,Button 9,TBD,Active low direct GPIO,Planned,PCB rev A
+GPIOE,GPIOE,PE10,BTN10,Input,Button 10,TBD,Active low direct GPIO,Planned,PCB rev A
+GPIOE,GPIOE,PE14,BTN11,Input,Button 11,TBD,Active low direct GPIO,Planned,PCB rev A
+GPIOE,GPIOE,PE15,BTN12,Input,Button 12,TBD,Active low direct GPIO,Planned,PCB rev A
+GPIOE,GPIOE,PE12,PADDLE_L,Input,Left Shifter,TBD,Magnetic shift paddle,Planned,PCB rev A
+GPIOE,GPIOE,PE13,PADDLE_R,Input,Right Shifter,TBD,Magnetic shift paddle,Planned,PCB rev A
+GPIOD,GPIOD,PD0,ENC1_A,Input,Thumb Encoder 1,TBD,Quadrature A,Implemented,Was listed on PD3
+GPIOD,GPIOD,PD1,ENC1_B,Input,Thumb Encoder 1,TBD,Quadrature B,Implemented,Was listed on PD4
+GPIOD,GPIOD,PD3,ENC2_A,Input,Thumb Encoder 2,TBD,Quadrature A,Implemented,Input Fabric
+GPIOD,GPIOD,PD4,ENC2_B,Input,Thumb Encoder 2,TBD,Quadrature B,Implemented,Input Fabric
+GPIOD,GPIOD,PD5,ENC3_A,Input,Thumb Encoder 3,TBD,Quadrature A,Implemented,Input Fabric
+GPIOD,GPIOD,PD6,ENC3_B,Input,Thumb Encoder 3,TBD,Quadrature B,Implemented,Input Fabric
+GPIOD,GPIOD,PD7,ENC4_A,Input,Thumb Encoder 4,TBD,Quadrature A,Implemented,Input Fabric
+GPIOE,GPIOE,PE0,ENC4_B,Input,Thumb Encoder 4,TBD,Quadrature B,Implemented,Was listed as BTN1
+GPIOE,GPIOE,PE2,FUNKY1_UP,Input,Funky Switch 1,TBD,7-way direction contact,Implemented,Was listed on PC0
+GPIOE,GPIOE,PE3,FUNKY1_DN,Input,Funky Switch 1,TBD,7-way direction contact,Implemented,Was listed on PC1
+GPIOE,GPIOE,PE4,FUNKY1_LT,Input,Funky Switch 1,TBD,7-way direction contact,Implemented,Was listed on PC2
+GPIOE,GPIOE,PE5,FUNKY1_RT,Input,Funky Switch 1,TBD,7-way direction contact,Implemented,Was listed on PC3
+GPIOE,GPIOE,PE6,FUNKY1_PUSH,Input,Funky Switch 1,TBD,Centre push,Implemented,Was listed on PC4
+GPIOC,GPIOC,PC0,FUNKY1_ENCA,Input,Funky Switch 1,TBD,Funky encoder ring A,Planned,PCB rev A; feeds a spare encoder channel
+GPIOC,GPIOC,PC1,FUNKY1_ENCB,Input,Funky Switch 1,TBD,Funky encoder ring B,Planned,PCB rev A
+GPIOF,GPIOF,PF11,FUNKY2_UP,Input,Funky Switch 2,TBD,7-way direction contact,Planned,PCB rev A
+GPIOF,GPIOF,PF12,FUNKY2_DN,Input,Funky Switch 2,TBD,7-way direction contact,Planned,PCB rev A
+GPIOF,GPIOF,PF13,FUNKY2_LT,Input,Funky Switch 2,TBD,7-way direction contact,Planned,PCB rev A
+GPIOF,GPIOF,PF14,FUNKY2_RT,Input,Funky Switch 2,TBD,7-way direction contact,Planned,PCB rev A
+GPIOF,GPIOF,PF15,FUNKY2_PUSH,Input,Funky Switch 2,TBD,Centre push,Planned,PCB rev A
+GPIOG,GPIOG,PG0,FUNKY2_ENCA,Input,Funky Switch 2,TBD,Funky encoder ring A,Planned,PCB rev A
+GPIOG,GPIOG,PG1,FUNKY2_ENCB,Input,Funky Switch 2,TBD,Funky encoder ring B,Planned,PCB rev A
+GPIOB,GPIOB,PB0,ROT1_A,Input,Front Rotary 1,TBD,Front rotary 1,Planned,PCB rev A
+GPIOB,GPIOB,PB2,ROT1_B,Input,Front Rotary 1,TBD,Front rotary 1,Planned,Was PB1 (now BTN3)
+GPIOB,GPIOB,PB3,ROT2_A,Input,Front Rotary 2,TBD,Front rotary 2,Planned,PCB rev A
+GPIOB,GPIOB,PB4,ROT2_B,Input,Front Rotary 2,TBD,Front rotary 2,Planned,PCB rev A
+GPIOB,GPIOB,PB6,ROT3_A,Input,Front Rotary 3,TBD,Front rotary 3,Planned,PCB rev A
+GPIOB,GPIOB,PB7,ROT3_B,Input,Front Rotary 3,TBD,Front rotary 3,Planned,PCB rev A
+GPIOD,GPIOD,PD8,ROT4_A,Input,Front Rotary 4,TBD,Front rotary 4,Planned,Was PB7/PB8 block; PD8-PD11 freed by encoder re-pin
+GPIOD,GPIOD,PD9,ROT4_B,Input,Front Rotary 4,TBD,Front rotary 4,Planned,PCB rev A
+GPIOD,GPIOD,PD10,ROT5_A,Input,Front Rotary 5,TBD,Front rotary 5,Planned,PCB rev A
+GPIOD,GPIOD,PD11,ROT5_B,Input,Front Rotary 5,TBD,Front rotary 5,Planned,PCB rev A
+GPIOA,GPIOA,PA8,OUTPUT_EN,Output,Power Switch,TBD,Controls 3.3V load switch for LEDs and LRAs (power_mgr `out_rail` node),Planned,PCB rev A; guarded stub in power_mgr.c
+TIM_SPI,GPIOA,PA15,LED_DATA,Output,Addressable LEDs,TBD,DMA-fed timer PWM or SPI MOSI for RGB chain (`led-strip` alias),Planned,PCB rev A; guarded stub in led_svc.c
+I2C1,GPIOB,PB8,I2C1_SCL,Output,Haptic Drivers,TBD,I2C1_SCL for DRV2605L (AF4),Planned,Was wrongly PB14 (not I2C1-capable on H723)
+I2C1,GPIOB,PB9,I2C1_SDA,In/Out,Haptic Drivers,TBD,I2C1_SDA for DRV2605L (AF4),Planned,Was wrongly PB15
+GPIOG,GPIOG,PG2,LRA_EN_L,Output,Haptic LRA L,TBD,Hardware enable for Left DRV2605L (bus-share: both DRV2605L answer 0x5A; EN pins select the active device),Planned,PCB rev A
+GPIOG,GPIOG,PG3,LRA_EN_R,Output,Haptic LRA R,TBD,Hardware enable for Right DRV2605L,Planned,PCB rev A
+IWDG,-,-,WATCHDOG,-,Internal,-,IWDG fed by input thread (CONFIG_RIM_WATCHDOG),Implemented,No pin; 100 ms timeout; window lower bound 0 (deviation note in rim_wdt.h)

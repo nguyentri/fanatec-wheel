@@ -19,6 +19,7 @@
 #include <zephyr/spinlock.h>
 
 #include "rimlink.h"
+#include "rimlink_capture.h"
 
 /* Stale-input safety rule: momentary bits cleared when no snapshot for
  * more than this long (spec section 5.4 / system spec). */
@@ -35,6 +36,8 @@ static struct {
 	struct rimlink_cfg cfg;
 	struct k_spinlock lock;
 } lnk;
+
+static uint32_t last_cs_gap_us; /* capture metadata (2-S1) */
 
 K_MSGQ_DEFINE(rimlink_rx_msgq, sizeof(struct base_outputs), 4, 4);
 
@@ -110,6 +113,9 @@ const uint8_t *rimlink_tx_acquire(void)
 	const uint8_t *frame = lnk.buf[lnk.armed];
 
 	k_spin_unlock(&lnk.lock, key);
+
+	/* Phase 2 capture hook (2-S1): armed MISO frame. */
+	rimlink_cap_record(RIMLINK_CAP_TX, frame, true, last_cs_gap_us);
 	return frame;
 }
 
@@ -119,6 +125,7 @@ void rimlink_rx_submit(const uint8_t *frame, size_t len)
 		/* CS rose before 33 bytes: discard, count, resync
 		 * happens by resubmission (spec section 5.4). */
 		lnk.stats.short_frame++;
+		rimlink_cap_note_anomaly(); /* 2-M2 post-mortem freeze */
 		return;
 	}
 
@@ -126,11 +133,16 @@ void rimlink_rx_submit(const uint8_t *frame, size_t len)
 	memcpy(lnk.last_rx, frame, RIMLINK_FRAME_LEN);
 
 	struct base_outputs out;
+	bool crc_ok = rimlink_frame_validate(frame, &out);
 
-	if (!rimlink_frame_validate(frame, &out)) {
+	/* Phase 2 capture hook (2-S1): received MOSI frame. */
+	rimlink_cap_record(RIMLINK_CAP_RX, frame, crc_ok, last_cs_gap_us);
+
+	if (!crc_ok) {
 		/* Mismatch: counter + frame dropped for output decode;
 		 * TX is unaffected (reference behavior). */
 		lnk.stats.crc_err_rx++;
+		rimlink_cap_note_anomaly(); /* 2-M2 post-mortem freeze */
 		return;
 	}
 
@@ -148,6 +160,7 @@ void rimlink_rx_submit(const uint8_t *frame, size_t len)
 
 void rimlink_note_cs_gap(uint32_t gap_us)
 {
+	last_cs_gap_us = gap_us;
 	if (gap_us < lnk.stats.cs_gap_min_us) {
 		lnk.stats.cs_gap_min_us = gap_us;
 	}

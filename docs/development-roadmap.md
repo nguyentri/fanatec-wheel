@@ -1,95 +1,63 @@
 # Development Roadmap
 
-> Version: 1.0
-> Reviewed: 2026-07-02
-> Purpose: sequence implementation and bring-up in dependency order, using the per-subsystem validation gates from [study/tools.md](./study/tools.md) as milestones.
+> Version: 2.0
+> Reviewed: 2026-07-04
+> Purpose: sequence the rim project's phases with entry/exit gates and record current status. The authoritative long-form roadmap is [fanatec-wheel-roadmap-and-system-spec.md](./fanatec-wheel-roadmap-and-system-spec.md); this document is its status ledger.
 
 ## Document Change Log
 
 | Version | Date | Changes |
 |---|---|---|
-| 1.0 | 2026-07-02 | Initial roadmap. Phasing follows the subsystem dependency map in [study/README.md](./study/README.md); gates follow the validation checklist in [study/tools.md](./study/tools.md) §5. |
+| 2.0 | 2026-07-04 | Replaced the generic ecosystem bring-up phasing (wheel base / pedals / cockpit) with this repository's actual rim roadmap (Phases 1–6) and recorded implementation status per phase. The ecosystem phasing remains valid context for the wider research base but did not describe this codebase. |
+| 1.0 | 2026-07-02 | Initial roadmap (reference-architecture phasing). |
 
 ## 1. Phasing Principle
 
-Work proceeds in dependency order: the wheel base is the system master, so it is brought up first; peripherals are added only once the master and its safety path are proven. Each phase has explicit **entry** and **exit** criteria, and no phase involving actuator torque proceeds to full energy until its safety gate passes.
+The rim is brought up against a simulated base first, then a real base, then custom hardware. Each phase has explicit gates; nothing that could load or delay the link path ships before the link invariants are proven (fast-path purity, armed-frame immutability, 50 ms stale rule).
 
-> [!IMPORTANT]
-> This roadmap is scoped to the reference architecture in this study base. Real customer requirements will refine phase content and acceptance criteria.
-
-**Figure 1-1: Bring-Up Dependency Order**
+**Figure 1-1: Phase Dependency Order**
 
 ```mermaid
 flowchart LR
-    P0[Phase 0\nHost & Tooling] --> P1[Phase 1\nWheel Base]
-    P1 --> P2[Phase 2\nRim & QR]
-    P1 --> P3[Phase 3\nPedals]
-    P2 --> P4[Phase 4\nAdd-ons]
+    P1[Phase 1\nAdapter + services\n+ simulator] --> P2[Phase 2\nReal-base evidence\n+ instrumentation]
+    P1 --> P3[Phase 3\nInput fabric v2]
+    P2 --> P4[Phase 4\nOutput v2 + isolation]
     P3 --> P4
-    P4 --> P5[Phase 5\nAccessories]
-    P5 --> P6[Phase 6\nCockpit & Integration]
+    P4 --> P5[Phase 5\nHardening + release]
+    P5 --> P6[Phase 6\nPortability + display]
 ```
 
-## 2. Phases
+## 2. Phases and Status
 
-### Phase 0 — Host and Tooling
+| Phase | Scope | Firmware | Hardware evidence |
+|---|---|---|---|
+| 1 | `rimlink` adapter, link_spi, input/output/diag services, base simulator, 14 unit tests | **Done** | bench pair validated |
+| 2 | Capture ring + `rim cap`, fastboot + `rim boot`, session header, host toolkit, compat matrix, sim base-twin profile | **Done** | real-base captures, boot margin, matrix rows: **pending** |
+| 3 | input_svc v2: 4× quadrature, funky, Hall clutches + dual-clutch, settings schema v2, axis/encoder frame enablement, scan-budget measurement | **Done** | full-fabric P99, LA reconciliation, 4 h base stress: **pending** |
+| 4 | led_svc, lra_svc (source disabled), power manager, watchdog, DMA/IRQ budget, pin registry, rim_pcb_a docs stub | **Done** | PCB rev A port, 24 h isolation run: **pending** |
+| 5 | MCUboot verified boot (ED25519 sysbuild), health counters, soak automation, config lock, release definition + CI | **Done** | 24 h soak, interrupted-update, boot-margin-through-loader: **pending** |
+| 6 | Portability bake-off (NXP/Renesas), display module, environmental campaign | **Not started** | — |
 
-- **Entry:** target MCU family selected; toolchain per [code-standards.md](./code-standards.md) §2.
-- **Work:** flashing path, logic analyzer / oscilloscope bench, protocol simulator, current-limited supply, HIL fixtures per [study/tools.md](./study/tools.md).
-- **Exit:** a module can be built, flashed, and observed on the bench; fault-injection fixture is ready.
+Detailed delivery record: [plans/260704-phases2-5/plan.md](../plans/260704-phases2-5/plan.md).
 
-### Phase 1 — Wheel Base
+## 3. Gates Still Open (hardware-dependent)
 
-- **Entry:** Phase 0 exit.
-- **Work:** USB enumeration and HID; encoder and current acquisition; bounded PWM; torque arbiter and fault handling; bootloader/recovery.
-- **Safety gate (from tools.md §5):** verified on oscilloscope, logic analyzer, current-limited supply, USB trace, and E-stop/fault-injection fixture **before** any full-energy motor test.
-- **Exit:** base enumerates, produces bounded torque under current limit, and fails safe on injected fault.
+1. **Real-base session** (Phase 2 exit): LA capture on a genuine base, `ring_diff.py` reconciling to zero unexplained discrepancy, first real row in [compat/matrix.md](./compat/matrix.md), measured first-poll deadline vs `rim boot` (≥ 2× margin).
+2. **Full-fabric timing** (Phase 3 exit): `rim stats` P99 ≤ 250 µs with every input populated on real hardware.
+3. **Isolation proof** (Phase 4 exit): 24 h dual-console soak via `scripts/soak/soak_runner.py` with LED/haptic activity and zero link anomalies.
+4. **Update torture** (Phase 5 exit): power-cut-during-swap test per [update-recovery.md](./update-recovery.md).
+5. **PCB rev A bring-up** (Phase 4/6): checklist in [../boards/README.md](../boards/README.md); pin baseline in [specs/steering_wheel_pin_mapping.csv](./specs/steering_wheel_pin_mapping.csv).
 
-### Phase 2 — Rim and QR
-
-- **Entry:** Phase 1 exit.
-- **Work:** rim input scan, display/LED, identity/capability reporting; QR-link framing with length checks and stalled-peer recovery.
-- **Gate:** logic analyzer on the QR link, rail/backfeed test, input-bounce test, display/LED stress test.
-- **Exit:** rim identifies to the base, exchanges bounded frames, and degrades safely on link loss (rim telemetry cleared, display stopped).
-
-### Phase 3 — Pedals
-
-- **Entry:** Phase 1 exit (parallel with Phase 2).
-- **Work:** sensor sampling, filtering, calibration (tare/span), HID axes, and base-port proxy path.
-- **Gate:** calibration repeatability, cable-fault and rail-out-of-bounds handling.
-- **Exit:** pedals report stable, calibrated axes over both USB and base-port paths.
-
-### Phase 4 — Add-ons
-
-- **Entry:** Phases 2 and 3 exit.
-- **Work:** H-pattern gate thresholds with impossible-state rejection; sequential edge/pulse semantics; handbrake range calibration.
-- **Exit:** shifter and handbrake report correct states with debounce and fault detection.
-
-### Phase 5 — Accessories
-
-- **Entry:** Phase 4 exit.
-- **Work:** dashboards/button boxes, telemetry bridge integration per [study/telemetry.md](./study/telemetry.md).
-- **Exit:** dashboards render live telemetry within the latency budget; button boxes enumerate as clean HID.
-
-### Phase 6 — Cockpit and Integration
-
-- **Entry:** Phase 5 exit.
-- **Work:** full-rig integration; deflection-under-load and fastener-torque audit; resonance / tactile-transducer isolation check per [study/tactile.md](./study/tactile.md) and [study/cockpits.md](./study/cockpits.md).
-- **Exit:** integrated rig meets FFB fidelity and pedal-signal stability targets with no destructive resonance.
-
-## 3. Risk Register
+## 4. Risk Register
 
 | Risk | Impact | Mitigation |
 |---|---|---|
-| High-torque test before fault handling proven | Injury / hardware damage | Phase 1 safety gate is mandatory before full energy. |
-| Generation-boundary compatibility (e.g., ClubSport DD/DD+ SPI) | Rim/base integration failure | Track in [study/compatibility-matrix.md](./study/compatibility-matrix.md); verify on bench. |
-| Telemetry middleware latency | Poor dashboard/shaker responsiveness | Measure and budget in Phase 5 (see telemetry.md). |
-| Vendor/standards claims unverified against live sources | Incorrect assumptions | Re-confirm links per [study/references.md](./study/references.md). |
-
-## 4. Milestones
-
-M0 bench ready (Phase 0) → M1 base fails safe under load (Phase 1) → M2 rim+pedals integrated (Phases 2–3) → M3 add-ons + accessories (Phases 4–5) → M4 full rig validated (Phase 6).
+| Boot-to-ready margin fails against a fast-polling base | Rim not enumerated | Mitigation ladder in [update-recovery.md](./update-recovery.md): shrink MCUboot, direct-XIP, hold QR detect |
+| `rumble` semantics differ from assumption | Wrong/unsafe haptics | Source disabled by default until `field_activity.py` evidence (spec 4-S2) |
+| BTN1/PF10 shares the on-board QSPI CLK net | Phantom NOR clocking | Benign on bench (NOR CS idles high); relocate on PCB rev A (hw spec §6) |
+| Base firmware update changes link behavior | Compat regression | Per-firmware rows in the compat matrix; capture ring freeze on anomaly |
+| Two DRV2605L on one bus share address 0x5A | Haptic driver conflict | EN-line device selection or address-selectable substitute (hw spec §4) |
 
 ## Unresolved Questions
 
-- Concrete acceptance thresholds (torque, latency, deflection) will be set from customer requirements and recorded here.
+- Phase 6 acceptance thresholds (bake-off criteria, display latency budget) are set when that phase is planned.

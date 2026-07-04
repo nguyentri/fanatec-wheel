@@ -1,0 +1,35 @@
+/*
+ * Copyright (c) 2026 Fanatec Wheel Project Contributors
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * MCUboot view of the rim flash layout (Phase 5, spec 5-S1) -
+ * must stay identical to app/boards/fk723m1_zgt6.overlay.
+ * STM32H723ZG: 8 x 128 KiB sectors.
+ */
+
+/delete-node/ &storage_partition;
+
+&flash0 {
+	partitions {
+		compatible = "fixed-partitions";
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		boot_partition: partition@0 {
+			label = "mcuboot";
+			reg = <0x00000000 DT_SIZE_K(128)>;
+		};
+		slot0_partition: partition@20000 {
+			label = "image-0";
+			reg = <0x00020000 DT_SIZE_K(256)>;
+		};
+		slot1_partition: partition@60000 {
+			label = "image-1";
+			reg = <0x00060000 DT_SIZE_K(256)>;
+		};
+		storage_partition: partition@c0000 {
+			label = "storage";
+			reg = <0x000c0000 DT_SIZE_K(256)>;
+		};
+	};
+};

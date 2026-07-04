@@ -22,7 +22,7 @@
 
 /* Analog D-pad ladder on PA3 (ADC1 INP15). */
 &adc1 {
-	pinctrl-0 = <&adc1_inp15_pa3>;
+	pinctrl-0 = <&adc1_inp15_pa3 &adc1_inp16_pa0 &adc1_inp17_pa1>;
 	pinctrl-names = "default";
 	st,adc-clock-source = "SYNC";
 	st,adc-prescaler = <4>;
@@ -38,11 +38,62 @@
 		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
 		zephyr,resolution = <12>;
 	};
+
+	/* Hall clutch paddles (Phase 3, spec 3-S3): PA0/PA1. */
+	channel@10 {
+		reg = <16>;
+		zephyr,gain = "ADC_GAIN_1";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+		zephyr,resolution = <12>;
+	};
+
+	channel@11 {
+		reg = <17>;
+		zephyr,gain = "ADC_GAIN_1";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+		zephyr,resolution = <12>;
+	};
+};
+
+/* The board dts places storage on QSPI NOR; the rim keeps all state
+ * on internal flash (no external-flash dependency in the boot path). */
+/delete-node/ &storage_partition;
+
+/* Flash partitions: MCUboot-ready layout (Phase 5, spec 5-S1/5-S2) +
+ * 2-sector NVS settings storage (Phase 3, spec 3-S5).
+ * STM32H723ZG: 8 x 128 KiB sectors. */
+&flash0 {
+	partitions {
+		compatible = "fixed-partitions";
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		boot_partition: partition@0 {
+			label = "mcuboot";
+			reg = <0x00000000 DT_SIZE_K(128)>;
+		};
+		slot0_partition: partition@20000 {
+			label = "image-0";
+			reg = <0x00020000 DT_SIZE_K(256)>;
+		};
+		slot1_partition: partition@60000 {
+			label = "image-1";
+			reg = <0x00060000 DT_SIZE_K(256)>;
+		};
+		/* sector 5 spare (future scratch/expansion) */
+		storage_partition: partition@c0000 {
+			label = "storage";
+			reg = <0x000c0000 DT_SIZE_K(256)>;
+		};
+	};
 };
 
 / {
 	zephyr,user {
-		io-channels = <&adc1 15>;
+		/* 0: D-pad ladder, 1..2: Hall clutch paddles. */
+		io-channels = <&adc1 15>, <&adc1 16>, <&adc1 17>;
 	};
 
 	rim_pins {
@@ -62,6 +113,23 @@
 		btn4: btn4 { gpios = <&gpioc 3  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
 		btn5: btn5 { gpios = <&gpioe 9  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
 		btn6: btn6 { gpios = <&gpioe 11 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
+
+		/* Quadrature encoders (Phase 3, spec 3-S1): 4 channels. */
+		enc0_a: enc0_a { gpios = <&gpiod 0 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
+		enc0_b: enc0_b { gpios = <&gpiod 1 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
+		enc1_a: enc1_a { gpios = <&gpiod 3 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
+		enc1_b: enc1_b { gpios = <&gpiod 4 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
+		enc2_a: enc2_a { gpios = <&gpiod 5 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
+		enc2_b: enc2_b { gpios = <&gpiod 6 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
+		enc3_a: enc3_a { gpios = <&gpiod 7 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
+		enc3_b: enc3_b { gpios = <&gpioe 0 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
+
+		/* Funky switch (Phase 3, spec 3-S2): 4 dirs + push. */
+		fk_up: fk_up { gpios = <&gpioe 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
+		fk_down: fk_down { gpios = <&gpioe 3 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
+		fk_left: fk_left { gpios = <&gpioe 4 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
+		fk_right: fk_right { gpios = <&gpioe 5 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
+		fk_push: fk_push { gpios = <&gpioe 6 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
 	};
 
 	/* Timing test points + error latch (spec section 10 / LD3). */
@@ -78,4 +146,8 @@
 		clk-gpios = <&gpioe 13 GPIO_ACTIVE_HIGH>;
 		dio-gpios = <&gpioe 14 GPIO_ACTIVE_HIGH>;
 	};
+};
+
+&iwdg {
+	status = "okay";
 };

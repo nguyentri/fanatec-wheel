@@ -1,52 +1,49 @@
 # Documentation Index
 
-> Version: 1.0
-> Reviewed: 2026-07-02
+> Version: 2.0
+> Reviewed: 2026-07-04
 
 ## Document Change Log
 
 | Version | Date | Changes |
 |---|---|---|
-| 1.0 | 2026-07-02 | Added version header and change log; added the five newer subsystem docs (motion, tactile, telemetry, communication-protocols, compatibility-matrix) to the Study table; added Project-overview/PDR, spec-updates, and the engineering journal to the Project table; validated relative links. |
+| 2.0 | 2026-07-04 | Corrected the index to the released repository: added the implemented-firmware docs (phase specs, consolidated specs, compat, release/update, budget), moved the study table to an external-research note (those documents live in the research base, not this firmware repo), and removed links to files not present here. |
+| 1.0 | 2026-07-02 | Initial index of the research base. |
 
-This directory is the entry point for the Fanatec and sim-racing research base. Start with the study documents for subsystem knowledge, then use architecture and project docs for repository-level decisions.
-
-## Study Documents
-
-| Topic | Document | Use When |
-|---|---|---|
-| Study map | [study/README.md](./study/README.md) | Choosing a reading path through the sim-racing domain |
-| Customer glossary | [study/glossary.md](./study/glossary.md) | Standardizing Fanatec terminology, abbreviations, compatibility language, and customer-support wording |
-| Ecosystem overview | [study/sim_racing_research.md](./study/sim_racing_research.md) | Understanding host, wheel base, rim, pedals, accessories, safety, and firmware boundaries |
-| Wheel base | [study/wheel_base.md](./study/wheel_base.md) | Designing or reviewing motor-control, FFB, USB, safety, and update architecture |
-| Steering rim | [study/wheel_rim.md](./study/wheel_rim.md) | Studying QR electrical links, input scanning, display/LED output, and rim identity |
-| Pedals | [study/pedals.md](./study/pedals.md) | Studying potentiometer, Hall, load-cell, ADC, USB, and RJ12 pedal paths |
-| Add-ons | [study/add_ons.md](./study/add_ons.md) | Studying shifters and handbrakes |
-| Accessories | [study/accessories.md](./study/accessories.md) | Studying quick releases, dashboards, telemetry displays, and button boxes |
-| Cockpits | [study/cockpits.md](./study/cockpits.md) | Understanding mechanical mounting, rigidity, and load paths |
-| Motion platforms | [study/motion.md](./study/motion.md) | Studying motion rigs, motion cueing, and the safety envelope |
-| Tactile transducers | [study/tactile.md](./study/tactile.md) | Studying bass-shakers, isolation from FFB, and resonance |
-| Telemetry software | [study/telemetry.md](./study/telemetry.md) | Studying the game -> bridge -> device telemetry pipeline |
-| Communication protocols | [study/communication-protocols.md](./study/communication-protocols.md) | Understanding the full protocol stack: USB/HID/PID, OS input APIs, DFU, and tool-to-device paths |
-| Compatibility matrix | [study/compatibility-matrix.md](./study/compatibility-matrix.md) | Separating USB-direct vs base-proxy, QR generation, and platform paths |
-| Tools | [study/tools.md](./study/tools.md) | Finding standards, host tools, firmware tools, and validation equipment |
-| Repositories | [study/repos.md](./study/repos.md) | Finding public open-source projects and knowing how to interpret them |
+This directory documents the **implemented rim firmware** (Zephyr, FK723M1-ZGT6). Start with the codebase summary, then the specs relevant to your task.
 
 ## Project Documents
 
 | Topic | Document |
 |---|---|
+| Codebase summary (start here) | [codebase-summary.md](./codebase-summary.md) |
 | System architecture | [system-architecture.md](./system-architecture.md) |
-| Code standards | [code-standards.md](./code-standards.md) |
-| Codebase summary | [codebase-summary.md](./codebase-summary.md) |
-| Roadmap | [development-roadmap.md](./development-roadmap.md) |
-| Changelog | [project-changelog.md](./project-changelog.md) |
-| Specification update conventions | [spec-update.md](./spec-update.md) |
-| Specification change log | [spec-updates.md](./spec-updates.md) |
+| Roadmap and status | [development-roadmap.md](./development-roadmap.md) |
 | Project overview / PDR | [project-overview-pdr.md](./project-overview-pdr.md) |
-| Engineering journal | [journals/260701-2159-repository-initialization.md](./journals/260701-2159-repository-initialization.md) |
+| Code standards + review checklist | [code-standards.md](./code-standards.md) |
+| Project changelog | [project-changelog.md](./project-changelog.md) |
+| Release definition | [release.md](./release.md) |
+| Update & recovery (MCUboot) | [update-recovery.md](./update-recovery.md) |
+| Spec-enhancement conventions | [skills/spec-update.md](./skills/spec-update.md) |
 
-## Source Confidence Rules
+## Specifications
+
+| Topic | Document | Authority |
+|---|---|---|
+| Long-form roadmap + system spec | [fanatec-wheel-roadmap-and-system-spec.md](./fanatec-wheel-roadmap-and-system-spec.md) | normative |
+| Phase 1 software / hardware | [phase1-software-spec.md](./phase1-software-spec.md) · [phase1-hardware-spec.md](./phase1-hardware-spec.md) | normative |
+| Phases 2–6 software / hardware | [phases2-6-software-spec.md](./phases2-6-software-spec.md) · [phases2-6-hardware-spec.md](./phases2-6-hardware-spec.md) | normative |
+| Consolidated software spec | [specs/steering_wheel_sw_spec.md](./specs/steering_wheel_sw_spec.md) | summary (phase specs win) |
+| Consolidated hardware spec | [specs/steering_wheel_hw_spec.md](./specs/steering_wheel_hw_spec.md) | summary |
+| Pin mapping (Implemented/Planned/Reserved) | [specs/steering_wheel_pin_mapping.csv](./specs/steering_wheel_pin_mapping.csv) | implemented rows match the overlay |
+| DMA / IRQ budget (living) | [specs/dma-irq-budget.md](./specs/dma-irq-budget.md) | living |
+| Compatibility matrix | [compat/matrix.md](./compat/matrix.md) (rendered from [matrix.yaml](./compat/matrix.yaml)) | evidence-backed |
+
+Board photos / renders: [specs/fk723m1_zgt6.webp](./specs/fk723m1_zgt6.webp), [specs/steering_wheel_pbc_3d.png](./specs/steering_wheel_pbc_3d.png), [specs/steering_wheel_production.png](./specs/steering_wheel_production.png).
+
+## External Research Base
+
+The subsystem study documents (ecosystem, wheel base, rim, pedals, add-ons, accessories, cockpits, motion, tactile, telemetry, protocols, tools, repositories, glossary) live in the **research repository**, not in this firmware tree. Their source-confidence rules carry over here:
 
 | Source Type | Use As | Do Not Use As |
 |---|---|---|

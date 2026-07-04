@@ -107,3 +107,19 @@ Implemented (Phase 1 complete, pending hardware bring-up):
 Deferred with `TODO(phase2-perf)` markers: SPI DMA + non-cacheable link
 buffers, and the LL-level transfer fallback (only if measured re-arm latency
 misses Gate G1, software spec section 10).
+
+## Implementation status
+
+| Phase | Scope | Status |
+|---|---|---|
+| 1 | Legacy-SPI adapter, input/output/diag services, simulator | done |
+| 2 | Capture ring + `rim cap`, fastboot, session header, host toolkit, compat matrix, sim base-twin profile | done (real-base captures pending hardware) |
+| 3 | input_svc v2: encoders, funky, Hall clutch + dual-clutch, settings schema v2, frame axis/encoder enablement | done (full-fabric P99 pending hardware) |
+| 4 | led_svc, lra_svc (disabled source), power manager, watchdog, DMA/IRQ budget, pin registry | done (PCB rev A ports pending) |
+| 5 | MCUboot verified boot (ED25519 sysbuild), health counters, soak runner, config lock, release definition | done (24 h soak + interrupted-update pending hardware) |
+
+Build the signed pair: `west build -b fk723m1_zgt6 app --sysbuild`.
+Shell tour: `rim session|boot|cap|input|clutch|save|lock|health|stats`,
+`sim profile|rate|fault`. Host tooling: `scripts/capture/README.md`,
+`scripts/soak/soak_runner.py`, `scripts/pin_registry.py`.
+Plans + outcome: `plans/260704-phases2-5/plan.md`.

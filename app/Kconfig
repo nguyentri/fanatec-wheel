@@ -26,3 +26,23 @@ config RIM_SHELL
 	help
 	  Shell commands (rim mosi/miso/disp/btn/id/stats) reproducing the
 	  reference sketch's serial command feature (spec section 4).
+
+config RIM_FASTBOOT
+	bool "Boot-deadline mode: link-first init, deferred services"
+	default y
+	help
+	  Phase 2 (spec 2-S2): main() initializes only the fast path
+	  (adapter seal -> SPI arm -> LINK_READY) and defers input/
+	  output/diagnostic service init behind link readiness via the
+	  system workqueue. Boot-to-ready is timestamped and reported
+	  by the `rim boot` shell command for comparison against the
+	  measured base first-poll deadline (>= 2x margin required).
+
+config RIM_WATCHDOG
+	bool "Watchdog fed from the input thread (Phase 4)"
+	select WATCHDOG
+	help
+	  Arms the hardware watchdog (100 ms) fed exclusively by the
+	  input thread's 1 kHz tick (spec 4-S6). Default off on the
+	  bench board to keep debugger sessions alive; production
+	  builds enable it. Reset cause is captured via hwinfo.

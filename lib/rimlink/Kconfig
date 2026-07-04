@@ -26,3 +26,13 @@ module-str = rimlink
 source "subsys/logging/Kconfig.template.log_config"
 
 endif # RIMLINK_LEGACY_SPI
+
+config RIMLINK_CAPTURE
+	bool "Transaction capture ring (Phase 2 instrumentation)"
+	depends on RIMLINK_LEGACY_SPI
+	default y
+	help
+	  256-entry RAM ring of link transactions {timestamp, direction,
+	  frame, crc_ok, cs_gap} for real-base evidence capture
+	  (spec 2-S1). Armed/drained from diag_svc only; zero fast-path
+	  cost when disarmed; freezes on anomaly for post-mortem (2-M2).

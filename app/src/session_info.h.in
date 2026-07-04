@@ -1,0 +1,5 @@
+/* Generated - session attribution (spec 2-S3). */
+#ifndef APP_GENERATED_SESSION_INFO_H_
+#define APP_GENERATED_SESSION_INFO_H_
+#define RIM_GIT_HASH "@RIM_GIT_HASH@"
+#endif

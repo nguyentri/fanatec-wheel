@@ -1,0 +1,11 @@
+# Simulator base-twin profile (spec 2-S6). Values below are the Phase 1
+# conservative defaults; Phase 2 replaces them with measured base
+# parameters from scripts/capture/link_stats.py WITHOUT simulator code
+# changes. Schema supports up to 12 MHz clock and genuine-base flush
+# behavior (roadmap 11.5).
+profile: phase1-default        # rename to e.g. csl-dd-8nm-fw-x.y when measured
+clock_hz: 500000               # <= 12000000
+cadence_us: 2000               # transaction period
+cadence_jitter_us: 0           # uniform 0..N added per transaction
+cs_setup_us: 5                 # CS-assert to first clock
+flush_bytes: 0                 # extra bytes clocked within CS after byte 33

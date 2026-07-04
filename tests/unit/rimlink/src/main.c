@@ -14,6 +14,8 @@
 #include <zephyr/random/random.h>
 
 #include <lib/rimlink/rimlink.h>
+#include <lib/rimlink/rimlink_capture.h>
+#include "health.h"
 
 /* Independent bitwise reference: reflected poly 0x31 -> 0x8C. */
 static uint8_t ref_crc8(const uint8_t *d, size_t len)
@@ -235,5 +237,80 @@ ZTEST(rimlink_link, test_rx_paths)
 	zassert_equal(last_out.disp[0], 0x50, "disp decoded");
 }
 
+
+/* ---- Phase 2: capture ring (spec 2-S1 / 2-M2) ---- */
+
+ZTEST(rimlink_cap, test_arm_record_wrap_freeze_drain)
+{
+	struct rimlink_cap_status st;
+	struct rimlink_cap_entry e;
+	uint8_t frame[RIMLINK_FRAME_LEN] = { 0xA5, 0x03 };
+
+	/* Disarmed: record is a no-op. */
+	rimlink_cap_stop();
+	rimlink_cap_record(RIMLINK_CAP_RX, frame, true, 100);
+	rimlink_cap_status_get(&st);
+	uint32_t base = st.recorded;
+
+	/* Armed: entries recorded with metadata. */
+	rimlink_cap_start();
+	rimlink_cap_freeze_on_anomaly(true);
+	for (int i = 0; i < 5; i++) {
+		frame[2] = (uint8_t)i;
+		rimlink_cap_record(i % 2 ? RIMLINK_CAP_RX : RIMLINK_CAP_TX,
+				   frame, i != 3, 1000 + i);
+	}
+	rimlink_cap_status_get(&st);
+	zassert_equal(st.recorded - base, 5, "5 recorded");
+
+	zassert_ok(rimlink_cap_read(st.recorded > st.depth ?
+				    st.depth - 1 : st.recorded - 1, &e));
+	zassert_equal(e.frame[0], 0xA5, "frame copied");
+
+	/* Anomaly freeze (2-M2): stops recording, keeps contents. */
+	rimlink_cap_note_anomaly();
+	rimlink_cap_record(RIMLINK_CAP_RX, frame, true, 1);
+	struct rimlink_cap_status st2;
+
+	rimlink_cap_status_get(&st2);
+	zassert_true(st2.frozen, "frozen after anomaly");
+	zassert_equal(st2.recorded, st.recorded, "no writes while frozen");
+
+	/* start clears freeze. */
+	rimlink_cap_start();
+	rimlink_cap_status_get(&st2);
+	zassert_false(st2.frozen, "unfrozen");
+
+	/* Wrap: fill beyond depth, oldest index still readable. */
+	for (uint32_t i = 0; i < st2.depth + 10; i++) {
+		rimlink_cap_record(RIMLINK_CAP_RX, frame, true, i);
+	}
+	rimlink_cap_status_get(&st2);
+	zassert_ok(rimlink_cap_read(0, &e), "oldest readable");
+	zassert_ok(rimlink_cap_read(st2.depth - 1, &e), "newest readable");
+	zassert_equal(rimlink_cap_read(st2.depth, &e), -ERANGE, "bounds");
+	rimlink_cap_stop();
+}
+
 ZTEST_SUITE(rimlink, NULL, NULL, NULL, NULL, NULL);
+
+/* ---- Phase 5: health counters (spec 5-S3) ---- */
+
+ZTEST(health, test_boot_count_and_accumulation)
+{
+	struct health_counters h0, h1;
+
+	(void)health_init(); /* settings backend: none (RAM only) */
+	health_get(&h0);
+	zassert_true(h0.power_cycles >= 1, "boot counted");
+
+	health_note_mate();
+	health_note_mate();
+	health_get(&h1);
+	zassert_equal(h1.mate_events, h0.mate_events + 2, "mate events");
+	zassert_true(h1.txn_total >= h0.txn_total, "totals monotonic");
+}
+
+ZTEST_SUITE(health, NULL, NULL, NULL, NULL, NULL);
+ZTEST_SUITE(rimlink_cap, NULL, NULL, NULL, NULL, NULL);
 ZTEST_SUITE(rimlink_link, NULL, NULL, NULL, NULL, NULL);

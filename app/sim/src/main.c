@@ -24,18 +24,18 @@
 #include <lib/rimlink/rimlink.h>
 
 #include "../../src/seg7.h"
+#include "sim_profile.h"
 
 LOG_MODULE_REGISTER(sim, LOG_LEVEL_INF);
 
 #define SPI_NODE DT_NODELABEL(spi1)
 #define HAVE_SPI DT_NODE_HAS_STATUS(SPI_NODE, okay)
 
-/* CS-assert-to-first-clock >= 5 us (genuine-rim envelope, spec 2.1). */
-#define SIM_CS_SETUP_US 5
-/* Default clock: conservative start of the sweep (hardware spec s.9). */
-#define SIM_SPI_HZ 500000
-/* Default cadence: Gate G1 soak rate. */
-#define SIM_DEFAULT_CADENCE_MS 2
+/* Base-twin profile (spec 2-S6): defaults generated from
+ * profiles/base_twin.yaml; runtime-overridable via `sim profile`. */
+#define SIM_CS_SETUP_US SIM_PROFILE_CS_SETUP_US
+#define SIM_SPI_HZ SIM_PROFILE_CLOCK_HZ
+#define SIM_DEFAULT_CADENCE_US SIM_PROFILE_CADENCE_US
 
 enum sim_fault {
 	FAULT_NONE = 0,
@@ -47,26 +47,32 @@ enum sim_fault {
 
 static struct {
 	bool running;
-	uint32_t cadence_ms;
+	uint32_t cadence_us;
+	uint32_t jitter_us;
+	uint32_t clock_hz;
+	uint32_t flush_bytes;
 	enum sim_fault fault;
 	uint32_t fault_n;     /* every Nth transaction / parameter */
 	uint32_t txn;
 	uint32_t miso_crc_err;
 	uint32_t first_byte_err;
 	uint32_t faults_injected;
-	uint8_t mosi[RIMLINK_FRAME_LEN + 1]; /* +1 for extra-clock fault */
-	uint8_t miso[RIMLINK_FRAME_LEN + 1];
+	uint8_t mosi[RIMLINK_FRAME_LEN + 8]; /* + flush/extra-clock room */
+	uint8_t miso[RIMLINK_FRAME_LEN + 8];
 	struct k_spinlock lock;
 } sim = {
 	.running = true,
-	.cadence_ms = SIM_DEFAULT_CADENCE_MS,
+	.cadence_us = SIM_DEFAULT_CADENCE_US,
+	.jitter_us = SIM_PROFILE_CADENCE_JITTER_US,
+	.clock_hz = SIM_SPI_HZ,
+	.flush_bytes = SIM_PROFILE_FLUSH_BYTES,
 	.fault_n = 100,
 };
 
 #if HAVE_SPI
 static const struct device *const spi_dev = DEVICE_DT_GET(SPI_NODE);
 
-static const struct spi_config spi_cfg = {
+static struct spi_config spi_cfg = {
 	.frequency = SIM_SPI_HZ,
 	/* Controller, Mode 1 (CPOL=0/CPHA=1), MSB first (spec 2.1). */
 	.operation = SPI_OP_MODE_MASTER | SPI_MODE_CPHA |
@@ -89,7 +95,7 @@ static void seal_mosi(void)
 static void run_transaction(void)
 {
 #if HAVE_SPI
-	uint8_t mosi_txn[RIMLINK_FRAME_LEN + 1];
+	uint8_t mosi_txn[RIMLINK_FRAME_LEN + 8];
 	size_t len = RIMLINK_FRAME_LEN;
 	bool inject = (sim.fault != FAULT_NONE) && (sim.fault_n != 0U) &&
 		      ((sim.txn + 1U) % sim.fault_n == 0U);
@@ -119,6 +125,14 @@ static void run_transaction(void)
 		}
 		sim.faults_injected++;
 	}
+
+	/* Genuine-base flush emulation (2-S6 / roadmap 11.5): extra
+	 * bytes clocked within the same CS after byte 33. */
+	if (len == RIMLINK_FRAME_LEN && sim.flush_bytes > 0U) {
+		len += MIN(sim.flush_bytes, 8U);
+	}
+
+	spi_cfg.frequency = sim.clock_hz;
 
 	const struct spi_buf txb = { .buf = mosi_txn, .len = len };
 	struct spi_buf rxb = { .buf = sim.miso, .len = len };
@@ -165,13 +179,16 @@ static void sim_thread(void *a, void *b, void *c)
 
 		run_transaction();
 
-		uint32_t sleep_ms = sim.cadence_ms;
+		uint32_t sleep_us = sim.cadence_us;
 
+		if (sim.jitter_us > 0U) {
+			sleep_us += sys_rand32_get() % sim.jitter_us;
+		}
 		if (sim.fault == FAULT_JITTER && sim.fault_n != 0U) {
-			sleep_ms += sys_rand32_get() % sim.fault_n;
+			sleep_us += (sys_rand32_get() % sim.fault_n) * 1000U;
 			sim.faults_injected++;
 		}
-		k_sleep(K_MSEC(MAX(1U, sleep_ms)));
+		k_sleep(K_USEC(MAX(100U, sleep_us)));
 
 		int64_t now = k_uptime_get();
 
@@ -212,15 +229,37 @@ static int cmd_sim_stop(const struct shell *sh, size_t argc, char **argv)
 static int cmd_sim_rate(const struct shell *sh, size_t argc, char **argv)
 {
 	if (argc == 2) {
-		int ms = atoi(argv[1]);
+		int us = atoi(argv[1]);
 
-		if (ms < 1) {
-			shell_error(sh, "cadence >= 1 ms");
+		if (us < 100) {
+			shell_error(sh, "cadence >= 100 us");
 			return -EINVAL;
 		}
-		sim.cadence_ms = (uint32_t)ms;
+		sim.cadence_us = (uint32_t)us;
 	}
-	shell_print(sh, "cadence: %u ms", sim.cadence_ms);
+	shell_print(sh, "cadence: %u us", sim.cadence_us);
+	return 0;
+}
+
+/* sim profile [clock_hz cadence_us jitter_us flush] - base twin (2-S6). */
+static int cmd_sim_profile(const struct shell *sh, size_t argc, char **argv)
+{
+	if (argc == 5) {
+		uint32_t hz = (uint32_t)strtoul(argv[1], NULL, 0);
+
+		if (hz < 100000U || hz > 12000000U) {
+			shell_error(sh, "clock 100k..12M (schema cap)");
+			return -EINVAL;
+		}
+		sim.clock_hz = hz;
+		sim.cadence_us = (uint32_t)strtoul(argv[2], NULL, 0);
+		sim.jitter_us = (uint32_t)strtoul(argv[3], NULL, 0);
+		sim.flush_bytes = (uint32_t)strtoul(argv[4], NULL, 0);
+	}
+	shell_print(sh, "profile %s: clock=%u Hz cadence=%u us jitter=%u us "
+		    "cs_setup=%u us flush=%u B", SIM_PROFILE_NAME,
+		    sim.clock_hz, sim.cadence_us, sim.jitter_us,
+		    (unsigned int)SIM_CS_SETUP_US, sim.flush_bytes);
 	return 0;
 }
 
@@ -318,7 +357,8 @@ static int cmd_sim_reset(const struct shell *sh, size_t argc, char **argv)
 SHELL_STATIC_SUBCMD_SET_CREATE(sub_sim,
 	SHELL_CMD(start, NULL, "start clocking transactions", cmd_sim_start),
 	SHELL_CMD(stop, NULL, "stop", cmd_sim_stop),
-	SHELL_CMD_ARG(rate, NULL, "[ms] get/set cadence", cmd_sim_rate, 1, 1),
+	SHELL_CMD_ARG(rate, NULL, "[us] get/set cadence", cmd_sim_rate, 1, 1),
+	SHELL_CMD_ARG(profile, NULL, "[hz cad_us jit_us flush] base twin", cmd_sim_profile, 1, 4),
 	SHELL_CMD_ARG(disp, NULL, "<txt> encode 3 chars to disp[3]", cmd_sim_disp, 1, 1),
 	SHELL_CMD_ARG(leds, NULL, "<hex16> set LED bitfield", cmd_sim_leds, 2, 0),
 	SHELL_CMD_ARG(rumble, NULL, "<b0> <b1> set rumble bytes", cmd_sim_rumble, 3, 0),
@@ -331,8 +371,10 @@ SHELL_CMD_REGISTER(sim, &sub_sim, "Base-side simulator control", NULL);
 
 int main(void)
 {
-	printk("Rim-Link Phase 1 base simulator (%u Hz SPI, %u ms cadence)\n",
-	       SIM_SPI_HZ, sim.cadence_ms);
+	printk("Rim-Link base simulator, twin profile '%s' "
+	       "(%u Hz, %u us cadence, flush %u)\n",
+	       SIM_PROFILE_NAME, sim.clock_hz, sim.cadence_us,
+	       sim.flush_bytes);
 
 #if !HAVE_SPI
 	LOG_ERR("spi1 not enabled in devicetree");

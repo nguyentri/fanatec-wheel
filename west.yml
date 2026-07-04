@@ -23,6 +23,7 @@ manifest:
         path-prefix: 3rd_party/zephyr
         name-allowlist:
           - cmsis_6
+          - mcuboot
           - hal_stm32
           - picolibc
           - segger

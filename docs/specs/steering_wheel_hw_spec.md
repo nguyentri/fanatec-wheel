@@ -2,7 +2,14 @@
 
 | Document | Version | Date | Target Audience |
 |---|---|---|---|
-| Hardware Specification | 1.0 | 2026-07-04 | Embedded developer (mid-level), sim-racing domain fresher |
+| Hardware Specification | 1.1 | 2026-07-04 | Embedded developer (mid-level), sim-racing domain fresher |
+
+## Document Change Log
+
+| Version | Date | Changes |
+|---|---|---|
+| 1.1 | 2026-07-04 | Corrected against the released source: added the bench implementation-status table (section 8); corrected the pin-mapping CSV reference (Status column, I2C1 moved to PB8/PB9, clutch ADC on PA0/PA1, D-pad ladder on PA3); flagged the BTN1/PF10 QSPI-CLK sharing caveat; documented the DRV2605L shared-address bus constraint; noted the windowed-watchdog deviation (IWDG on the bench MCU). |
+| 1.0 | 2026-07-04 | Initial consolidated specification. |
 
 > **Informative:**
 > This document consolidates the hardware design for the Advanced Fanatec-Compatible Steering Wheel, targeting the **FK723M1-ZGT6** development board (STM32H723ZGT6) as the core controller. It defines the final system architecture, electrical parameters, power distribution, and the mechanical integration required for the 300 mm GT wheel.
@@ -80,7 +87,7 @@ The input fabric relies primarily on direct GPIO with internal pull-ups, minimiz
 
 Outputs are bounded and locally rendered to avoid delaying the fast-path SPI link.
 - **LEDs**: 15 RGB RPM LEDs and 8 flag LEDs. These are addressable (SK6812-class) driven by a DMA-fed timer/SPI stream to avoid CPU blocking.
-- **Haptics**: Two independent LRAs driven by DRV2605L-class I2C haptic drivers for short, directional cues.
+- **Haptics**: Two independent LRAs driven by DRV2605L-class I2C haptic drivers for short, directional cues. Both DRV2605L devices answer the same fixed I2C address (0x5A); the design therefore shares one I2C bus and uses the per-driver EN lines (`LRA_EN_L`/`LRA_EN_R`) to select the active device, or substitutes an address-selectable equivalent on PCB rev A.
 - **Power Constraints**: A global brightness cap and strict duty-cycle limits are enforced to guarantee the output power draw remains at least 30% below the measured QR current limit.
 
 ## 5. Mechanical Integration
@@ -94,8 +101,9 @@ The components will be integrated into a complete 300 mm GT wheel assembly.
 ## 6. Prototyping on the FK723M1-ZGT6
 
 The FK723M1-ZGT6 is the target board. During prototyping and before custom PCB manufacturing:
-- Do not use on-board features that conflict with necessary pins (e.g., the external Winbond OSPI flash pins on `PF6`-`PF10` and `PG6`).
-- Refer to `steering_wheel_pin_mapping.csv` for the explicit pin assignments designed to avoid conflicts with the FK723M1-ZGT6's fixed peripherals.
+- Do not use on-board features that conflict with necessary pins (e.g., the external Winbond QSPI flash pins on `PF6`-`PF10` and `PG6`).
+  - **Known bench caveat**: the released overlay places `BTN1` on `PF10`, which shares the QSPI CLK net with the on-board NOR. The NOR's chip select idles high (pull-up), so button edges on its clock input are ignored — benign on the bench, but `BTN1` **shall** be relocated on PCB rev A. Firmware never accesses the QSPI NOR (the settings `storage` partition lives on internal flash; the board's QSPI `storage_partition` node is deleted by the overlay).
+- Refer to [`steering_wheel_pin_mapping.csv`](./steering_wheel_pin_mapping.csv) for the explicit pin assignments. The CSV carries a `Status` column: **Implemented** rows match `app/boards/fk723m1_zgt6.overlay` exactly (verifiable with `python3 scripts/pin_registry.py app/boards/fk723m1_zgt6.overlay`); **Planned** rows are PCB rev A targets pending schematic verification; **Reserved** rows are board-fixed peripherals.
 
 ## 7. Bill of Materials (BOM) & Component Preparation
 
@@ -134,3 +142,21 @@ To manufacture the prototype and final assembly, the following hardware componen
 - **Quick Release**: 1x Fanatec QR2 Wheel-Side.
 - **Harnessing**: JST-GH connectors (receptacles on PCB, pre-crimped wires) and flexible silicone-insulated wiring.
 - **Hardware**: Assorted metric screws (M3/M4), standoffs, and grommets for secure wire routing.
+
+## 8. Implementation Status on the FK723M1-ZGT6 Bench
+
+The released firmware (Phases 1–5) exercises this hardware specification as far as the development board allows. Devicetree guards let the same application binary configuration run on the bench and, later, on PCB rev A without code changes.
+
+| Subsystem (this spec) | Bench status | Notes |
+|---|---|---|
+| QR2 SPI link (section 2.2) | Implemented | SPI1 slave Mode 1, CS sense on PG14, LINK_READY test point PF3; protection network is a PCB rev A item |
+| Power mux / load switch (2.1) | Stub | `power_mgr` state machine + counters run; `out_rail` GPIO node absent on bench |
+| 6 buttons + D-pad ladder | Implemented | remaining 6 buttons, rotaries, shift paddles: Planned (CSV) |
+| 2 funky switches (3) | 1 implemented | funky 2 and the encoder rings: Planned |
+| 4 thumb encoders (3) | Implemented | PD0/1, PD3/4, PD5/6, PD7+PE0 |
+| 2 Hall clutches (3) | Implemented | PA0/PA1 = ADC1 INP16/17; full pipeline + dual-clutch modes |
+| 15 RGB + 8 flag LEDs (4) | Renderer implemented | physical chain behind the `led-strip` alias: PCB rev A |
+| 2 LRAs via DRV2605L (4) | Gate logic implemented | driver behind `lra0` node: PCB rev A; rumble source disabled by default |
+| Watchdog | Implemented (deviation) | IWDG, window lower bound 0; true windowed part: PCB rev A selection |
+| Display module (1.1, optional) | Not started | Phase 6 track |
+| Mechanical (5) / BOM (7) | Procurement guidance | unchanged |

@@ -31,6 +31,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: 3.12
+          cache: pip
 
       - name: Setup Zephyr project
         uses: zephyrproject-rtos/action-zephyr-setup@v1
@@ -43,9 +44,31 @@ jobs:
         shell: bash
         run: west build -b ${{ matrix.board }} app -p always
 
+      - name: Build rim firmware (TM1637 + watchdog variant)
+        shell: bash
+        run: west build -b ${{ matrix.board }} app -p always -- -DCONFIG_RIM_TM1637=y -DCONFIG_RIM_WATCHDOG=y
+
+      - name: Build signed image (MCUboot sysbuild, spec 5-S1)
+        shell: bash
+        run: |
+          pip install cbor2
+          west build -b ${{ matrix.board }} app -d build-sys --sysbuild -p always
+          ls -la build-sys/app/zephyr/zephyr.signed.bin build-sys/mcuboot/zephyr/zephyr.bin
+
       - name: Build base simulator
         shell: bash
         run: west build -b ${{ matrix.board }} app/sim -p always
+
+      - name: Capture toolkit smoke (spec 2-S4)
+        shell: bash
+        run: |
+          pip install pyyaml
+          cd scripts/capture
+          python3 la_decode.py fixtures/sample_la.csv > /tmp/la.jsonl
+          python3 field_activity.py /tmp/la.jsonl
+          python3 ring_diff.py fixtures/sample_ring_dump.txt /tmp/la.jsonl
+          cd ../.. && python3 scripts/capture/render_matrix.py
+          git diff --exit-code docs/compat/matrix.md
 
       - name: Unit tests (twister, host-native)
         shell: bash
@@ -63,3 +86,46 @@ jobs:
             west build -b ${{ matrix.board }} "$t" -p always || fail=1
           done
           exit $fail
+
+  release:
+    name: Release artifacts (spec 5-S6)
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+
+      - name: Setup Zephyr project
+        uses: zephyrproject-rtos/action-zephyr-setup@v1
+        with:
+          app-path: .
+          toolchains: arm-zephyr-eabi
+
+      - name: Build release pair
+        shell: bash
+        # Dev key placeholder: production signing key comes from the
+        # CI secret store (docs/update-recovery.md, Keys).
+        run: |
+          pip install cbor2 pyyaml
+          west build -b fk723m1_zgt6 app -d build-sys --sysbuild -p always
+          python3 scripts/capture/render_matrix.py
+          mkdir -p dist
+          cp build-sys/app/zephyr/zephyr.signed.bin dist/
+          cp build-sys/mcuboot/zephyr/zephyr.bin dist/mcuboot.bin
+          cp docs/compat/matrix.md dist/matrix-snapshot.md
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: rim-release-${{ github.ref_name }}
+          path: dist/

@@ -15,4 +15,7 @@
 /** Configure CS EXTI + indicators, verify SPI, release the link thread. */
 int link_spi_init(void);
 
+/** Boot-to-ready: us from reset to first armed transfer (0 = not yet). */
+uint32_t link_spi_boot_ready_us(void);
+
 #endif /* APP_SRC_LINK_SPI_H_ */

@@ -17,3 +17,17 @@ target_sources(app PRIVATE
 	../src/seg7.c
 )
 target_include_directories(app PRIVATE ../src)
+
+# Base-twin profile (spec 2-S6): YAML -> generated header.
+set(TWIN_PROFILE ${CMAKE_CURRENT_SOURCE_DIR}/profiles/base_twin.yaml
+    CACHE FILEPATH "Base-twin profile YAML")
+add_custom_command(
+	OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/generated/sim_profile.h
+	COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/generated
+	COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/profiles/gen_profile.py
+		${TWIN_PROFILE} ${CMAKE_CURRENT_BINARY_DIR}/generated/sim_profile.h
+	DEPENDS ${TWIN_PROFILE} ${CMAKE_CURRENT_SOURCE_DIR}/profiles/gen_profile.py)
+add_custom_target(sim_profile_h DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/generated/sim_profile.h)
+add_dependencies(app sim_profile_h)
+target_include_directories(app PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/generated)
+

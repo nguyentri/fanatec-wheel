@@ -16,6 +16,9 @@
 #include <zephyr/logging/log.h>
 
 #include "output_svc.h"
+#include "led_svc.h"
+#include "lra_svc.h"
+#include "power_mgr.h"
 #include "seg7.h"
 #ifdef CONFIG_RIM_TM1637
 #include "tm1637.h"
@@ -78,6 +81,12 @@ void output_svc_rx(const struct base_outputs *out)
 		decode_text(out->disp, osvc.text, sizeof(osvc.text));
 	}
 	k_spin_unlock(&osvc.lock, key);
+
+	/* Phase 4 consumers (workqueue context, spec 4-S1/4-S2/4-S3):
+	 * every frame reaching here already passed CRC validation. */
+	power_mgr_note_valid_rx();
+	led_svc_submit(out->leds, out->disp);
+	lra_svc_rumble(out->rumble);
 
 	if (!disp_changed) {
 		return;
