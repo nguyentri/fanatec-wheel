@@ -3,8 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0
  *
  * Phase 1 rim firmware overlay for FK723M1-ZGT6 (STM32H723ZGT6).
- * Pin plan follows the Phase 1 hardware spec; adjust to the actual
- * bench wiring before bring-up.
+ *
+ * Pin plan follows the Phase 1 hardware spec section 5.2 (defined
+ * against the same STM32H723ZG LQFP144 package): SPI1 on PA4-PA6/PB5,
+ * CS-sense EXTI PG14, LINK_READY PF3, SNAPSHOT_TICK PD15, buttons
+ * PF10/PC2/PB1/PC3/PE9/PE11, D-pad ADC PA3, TM1637 PE13/PE14.
+ * Adjust to the actual bench wiring before bring-up.
  */
 
 /* Legacy rim link: SPI1 peripheral (slave), Mode 1, hardware NSS. */
@@ -13,35 +17,65 @@
 	pinctrl-0 = <&spi1_sck_pa5 &spi1_miso_pa6
 		     &spi1_mosi_pb5 &spi1_nss_pa4>;
 	pinctrl-names = "default";
-	/* TODO(phase1): DMA channels for full-frame transfers
-	 * dmas = <&dmamux1 ...>, <&dmamux1 ...>;
-	 * dma-names = "tx", "rx";
-	 */
+	/* TODO(phase2-perf): dmas/dma-names for full-frame DMA */
+};
+
+/* Analog D-pad ladder on PA3 (ADC1 INP15). */
+&adc1 {
+	pinctrl-0 = <&adc1_inp15_pa3>;
+	pinctrl-names = "default";
+	st,adc-clock-source = "SYNC";
+	st,adc-prescaler = <4>;
+	status = "okay";
+
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	channel@f {
+		reg = <15>;
+		zephyr,gain = "ADC_GAIN_1";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+		zephyr,resolution = <12>;
+	};
 };
 
 / {
+	zephyr,user {
+		io-channels = <&adc1 15>;
+	};
+
 	rim_pins {
 		compatible = "gpio-keys";
 
-		/* CS-sense EXTI for re-arm at CS rising edge */
+		/* CS-sense EXTI: same CS wire, second tap - mirrors the
+		 * reference D2+D10 trick; re-arm at rising edge. */
 		cs_sense: cs_sense {
 			gpios = <&gpiog 14 GPIO_ACTIVE_LOW>;
 		};
 
-		/* Six DUT buttons, active-low with internal pull-ups
-		 * (hardware spec section 5.2) */
-		btn1: btn1 { gpios = <&gpioc 0 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
-		btn2: btn2 { gpios = <&gpioc 1 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
-		btn3: btn3 { gpios = <&gpioc 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
-		btn4: btn4 { gpios = <&gpioc 3 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
-		btn5: btn5 { gpios = <&gpiod 0 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
-		btn6: btn6 { gpios = <&gpiod 1 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
+		/* Six DUT buttons, active-low, internal pull-ups
+		 * (hardware spec section 5.2). */
+		btn1: btn1 { gpios = <&gpiof 10 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
+		btn2: btn2 { gpios = <&gpioc 2  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
+		btn3: btn3 { gpios = <&gpiob 1  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
+		btn4: btn4 { gpios = <&gpioc 3  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
+		btn5: btn5 { gpios = <&gpioe 9  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
+		btn6: btn6 { gpios = <&gpioe 11 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; };
 	};
 
-	/* Timing test points (spec section 10) */
+	/* Timing test points + error latch (spec section 10 / LD3). */
 	timing_pins {
 		compatible = "gpio-leds";
 		link_ready: link_ready { gpios = <&gpiof 3 GPIO_ACTIVE_HIGH>; };
 		snap_tick: snap_tick { gpios = <&gpiod 15 GPIO_ACTIVE_HIGH>; };
+		err_led: err_led { gpios = <&gpiob 14 GPIO_ACTIVE_HIGH>; };
+	};
+
+	/* Optional TM1637 display mirror (CONFIG_RIM_TM1637). */
+	tm1637: tm1637 {
+		compatible = "titanmec,tm1637";
+		clk-gpios = <&gpioe 13 GPIO_ACTIVE_HIGH>;
+		dio-gpios = <&gpioe 14 GPIO_ACTIVE_HIGH>;
 	};
 };

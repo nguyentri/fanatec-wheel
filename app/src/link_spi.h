@@ -7,15 +7,12 @@
 #define APP_SRC_LINK_SPI_H_
 
 /**
- * @brief Fast-path link glue: SPI peripheral driver + NSS/CS re-arm.
- *
- * Owns the 33-byte transceive, the CS-rising EXTI resync, the
- * armed/staging TX double buffer, and the RX hand-off queue
- * (spec sections 3, 5.2, 5.3). No logging, allocation, or blocking
- * calls are permitted in this path by construction.
+ * @brief Fast-path link glue: SPI peripheral transfers + CS-sense
+ * EXTI re-arm/statistics + LINK_READY/error indicators
+ * (spec sections 3, 5.2, 5.3, 10).
  */
 
-/** Initialize SPI1 slave, arm the identity frame, raise LINK_READY. */
+/** Configure CS EXTI + indicators, verify SPI, release the link thread. */
 int link_spi_init(void);
 
 #endif /* APP_SRC_LINK_SPI_H_ */

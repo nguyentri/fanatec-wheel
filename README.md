@@ -78,3 +78,32 @@ Implemented as templates with `TODO(phase1)` markers, per
   snapshot publish (TODO)
 - `app/src/output_svc.c` — 7-seg decode (partial table), TM1637 mirror (TODO)
 - `app/src/diag_svc.c` — `rim id` / `rim stats` shell; mosi/miso/btn (TODO)
+
+## Phase 1 implementation status
+
+Implemented (Phase 1 complete, pending hardware bring-up):
+
+- `lib/rimlink` - adapter v1 (`legacy-spi`): verbatim reference CRC-8 table
+  (verified vector `A5 03 00x30 -> 0x5A` + 200-random-vector equivalence),
+  33-byte frame build/validate, 22-bit logical button map, TX double buffer
+  with freshness swap, 50 ms stale-input clearing, RX validation queue with
+  workqueue callback, full statistics (txn/crc/short/rearm/overrun/cs-gap).
+- `app` (DUT rim firmware): SPI1 slave Mode 1 link thread with CS-sense EXTI
+  re-arm and LINK_READY/err-LED indicators; 1 kHz input service (6 debounced
+  buttons + analog D-pad ladder with reference thresholds and hysteresis,
+  SNAPSHOT_TICK, publish-latency P99/max); output service with the verbatim
+  7-segment decode table, change/CRC gating, LED/rumble evidence counters
+  and optional TM1637 mirror (`CONFIG_RIM_TM1637`, `rAcE` boot banner);
+  `rim` shell (mosi/miso/disp/btn/map/id/dpad/stats/reset) reproducing the
+  reference serial commands.
+- `app/sim` (base-side simulator): Mode-1 controller at 500 kHz / 2 ms
+  cadence with software CS, MOSI CRC sealing, MISO header+CRC verification,
+  fault injectors (crc / trunc / extra clocks / jitter), display-text
+  encoding and per-second statistics via the `sim` shell.
+- Unit tests (`native_sim/native/64`): 5 suites, 14 tests - CRC vectors and
+  equivalence, frame layout/round-trip, all-22-bit map, buffer swap + stale
+  rule, RX paths, 7-seg decode/encode, debounce, D-pad windows/hysteresis.
+
+Deferred with `TODO(phase2-perf)` markers: SPI DMA + non-cacheable link
+buffers, and the LL-level transfer fallback (only if measured re-arm latency
+misses Gate G1, software spec section 10).

@@ -1,0 +1,6 @@
+common:
+  tags: rimlink app
+  integration_platforms:
+    - native_sim
+tests:
+  app.logic: {}

@@ -2,10 +2,8 @@
  * Copyright (c) 2026 Fanatec Wheel Project Contributors
  * SPDX-License-Identifier: Apache-2.0
  *
- * Frame build / parse for the legacy 33-byte rim link
- * (docs/phase1-software-spec.md sections 2.2, 2.3, 5).
- *
- * No module outside lib/rimlink may reference frame offsets.
+ * Frame build / parse / button-bit mapping for the legacy 33-byte rim
+ * link (spec sections 2.2-2.4). Pure functions: host-native testable.
  */
 
 #include <string.h>
@@ -30,19 +28,29 @@ enum rim_id rimlink_identity_get(void)
 	return current_id;
 }
 
-void rimlink_frame_build(uint8_t frame[RIMLINK_FRAME_LEN],
-			 const struct rim_inputs *in)
+void rimlink_button_bit_change(uint32_t *buttons, uint8_t bit, bool on)
+{
+	/* Reference buttonBitChange(): valid bits are 1..24; Phase 1
+	 * uses 1..22. Bit 1 = LSB of byte A. */
+	if (bit < 1U || bit > 24U) {
+		return;
+	}
+	if (on) {
+		*buttons |= 1UL << (bit - 1U);
+	} else {
+		*buttons &= ~(1UL << (bit - 1U));
+	}
+}
+
+void rimlink_frame_build_id(uint8_t frame[RIMLINK_FRAME_LEN],
+			    const struct rim_inputs *in, enum rim_id id)
 {
 	memset(frame, 0, RIMLINK_FRAME_LEN);
 
 	frame[RIMLINK_OFF_HEADER] = RIMLINK_HEADER;
-	frame[RIMLINK_OFF_ID] = (uint8_t)current_id;
+	frame[RIMLINK_OFF_ID] = (uint8_t)id;
 
-	/*
-	 * Logical button bitset -> button bytes A/B/C.
-	 * Spec section 2.4: bit 1 = LSB of byte A (offset 2),
-	 * continuing through byte C (offset 4), bits 1..22.
-	 */
+	/* Logical bitset -> button bytes A/B/C (spec section 2.4). */
 	frame[RIMLINK_OFF_BUTTONS + 0] = (uint8_t)(in->buttons >> 0);
 	frame[RIMLINK_OFF_BUTTONS + 1] = (uint8_t)(in->buttons >> 8);
 	frame[RIMLINK_OFF_BUTTONS + 2] = (uint8_t)(in->buttons >> 16);
@@ -51,9 +59,16 @@ void rimlink_frame_build(uint8_t frame[RIMLINK_FRAME_LEN],
 	frame[RIMLINK_OFF_AXIS_Y] = in->axis_y;
 	frame[RIMLINK_OFF_ENCODER] = (uint8_t)in->encoder;
 
-	/* btnHub, btnPS, reserved, fwvers stay 0x00 in Phase 1. */
+	/* btnHub, btnPS, reserved (12-30), fwvers (31) stay 0x00 in
+	 * Phase 1, matching the reference returnData init. */
 
 	frame[RIMLINK_OFF_CRC] = rimlink_crc8(frame, RIMLINK_OFF_CRC);
+}
+
+void rimlink_frame_build(uint8_t frame[RIMLINK_FRAME_LEN],
+			 const struct rim_inputs *in)
+{
+	rimlink_frame_build_id(frame, in, current_id);
 }
 
 bool rimlink_frame_validate(const uint8_t frame[RIMLINK_FRAME_LEN],

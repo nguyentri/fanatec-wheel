@@ -1,52 +1,137 @@
 /*
  * Copyright (c) 2026 Fanatec Wheel Project Contributors
  * SPDX-License-Identifier: Apache-2.0
+ *
+ * Output service (spec section 7), porting the reference
+ * refreshAlphanumericDisplays(): only CRC-valid frames reach this
+ * code (adapter gate), and only frames whose disp[3] differs from the
+ * previous valid value cause a decode/refresh. LED and rumble fields
+ * are accumulated into counters only - Phase 4 evidence collection.
  */
+
+#include <stdio.h>
+#include <string.h>
 
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
 
 #include "output_svc.h"
+#include "seg7.h"
+#ifdef CONFIG_RIM_TM1637
+#include "tm1637.h"
+#endif
 
 LOG_MODULE_REGISTER(output_svc, CONFIG_APP_LOG_LEVEL);
 
-/*
- * 7-segment -> ASCII decode, ported from the reference sketch
- * (spec section 2.3). Bit 7 = dot, masked before lookup; unknown
- * patterns are rendered as hex by the caller.
- * TODO(phase1): port the full table verbatim from the reference sketch.
- */
-char output_svc_7seg_to_ascii(uint8_t seg)
+/* Minimum TM1637 refresh interval (spec section 3.1). */
+#define OUTPUT_MIN_REFRESH_MS 10
+
+static struct {
+	uint8_t prev_disp[3];
+	char text[16];
+	struct output_stats stats;
+	int64_t last_refresh;
+	struct k_spinlock lock;
+} osvc;
+
+static void decode_text(const uint8_t disp[3], char *text, size_t size)
 {
-	switch (seg & 0x7FU) {
-	case 0x3F: return '0';
-	case 0x06: return '1';
-	case 0x5B: return '2';
-	case 0x4F: return '3';
-	case 0x66: return '4';
-	case 0x6D: return 'S'; /* also '5' */
-	case 0x7D: return '6';
-	case 0x07: return '7';
-	case 0x7F: return '8';
-	case 0x6F: return '9';
-	case 0x39: return 'C';
-	case 0x40: return '-';
-	case 0x00: return ' ';
-	default:   return '\0'; /* unknown: caller prints hex */
+	size_t pos = 0;
+
+	for (int i = 0; i < 3; i++) {
+		char c = seg7_to_ascii(disp[i]);
+
+		if (c != '\0') {
+			text[pos++] = c;
+		} else {
+			/* Unknown glyph rendered as hex (reference). */
+			pos += snprintf(&text[pos], size - pos, "0x%02X",
+					disp[i] & 0x7FU);
+		}
+		if (disp[i] & 0x80U) { /* dot bit */
+			text[pos++] = '.';
+		}
 	}
+	text[pos] = '\0';
+}
+
+void output_svc_rx(const struct base_outputs *out)
+{
+	k_spinlock_key_t key;
+	bool disp_changed =
+		memcmp(out->disp, osvc.prev_disp, sizeof(out->disp)) != 0;
+
+	key = k_spin_lock(&osvc.lock);
+
+	if (out->leds != osvc.stats.leds_last) {
+		osvc.stats.leds_changes++;
+	}
+	if (memcmp(out->rumble, osvc.stats.rumble_last, 2) != 0) {
+		osvc.stats.rumble_changes++;
+	}
+	osvc.stats.leds_last = out->leds;
+	memcpy(osvc.stats.rumble_last, out->rumble, 2);
+
+	if (disp_changed) {
+		memcpy(osvc.prev_disp, out->disp, sizeof(osvc.prev_disp));
+		osvc.stats.disp_changes++;
+		decode_text(out->disp, osvc.text, sizeof(osvc.text));
+	}
+	k_spin_unlock(&osvc.lock, key);
+
+	if (!disp_changed) {
+		return;
+	}
+
+	LOG_INF("disp: %s", osvc.text);
+
+#ifdef CONFIG_RIM_TM1637
+	int64_t now = k_uptime_get();
+
+	if ((now - osvc.last_refresh) >= OUTPUT_MIN_REFRESH_MS) {
+		/* Reference: mosiBuf[2..4] -> digits 0..2, 4th blank. */
+		uint8_t seg[4] = { out->disp[0], out->disp[1],
+				   out->disp[2], 0x00 };
+
+		(void)tm1637_set_segments(seg);
+		osvc.last_refresh = now;
+	}
+#endif
+}
+
+void output_svc_disp_text(char text[16])
+{
+	k_spinlock_key_t key = k_spin_lock(&osvc.lock);
+
+	memcpy(text, osvc.text, 16);
+	k_spin_unlock(&osvc.lock, key);
+}
+
+void output_svc_stats_get(struct output_stats *s)
+{
+	k_spinlock_key_t key = k_spin_lock(&osvc.lock);
+
+	*s = osvc.stats;
+	k_spin_unlock(&osvc.lock, key);
 }
 
 int output_svc_init(void)
 {
-	/*
-	 * TODO(phase1):
-	 *  - consume validated struct base_outputs from the adapter
-	 *    (workqueue context, never ISR)
-	 *  - change-gated decode: act only when disp[3] differs from the
-	 *    previous CRC-valid value
-	 *  - TM1637 refresh (>= 10 ms min interval) when CONFIG_RIM_TM1637
-	 *  - accumulate leds_last / rumble_last + change counters
-	 */
+	strcpy(osvc.text, "   ");
+
+#ifdef CONFIG_RIM_TM1637
+	int ret = tm1637_init();
+
+	if (ret < 0) {
+		LOG_ERR("TM1637 init failed (%d)", ret);
+		return ret;
+	}
+	/* Reference boot banner: 'rAcE' for one second, then clear. */
+	static const uint8_t tm_race[4] = { 0x50, 0x77, 0x58, 0x79 };
+
+	(void)tm1637_set_segments(tm_race);
+#endif
+
 	LOG_INF("output service ready (TM1637: %s)",
 		IS_ENABLED(CONFIG_RIM_TM1637) ? "enabled" : "disabled");
 	return 0;
