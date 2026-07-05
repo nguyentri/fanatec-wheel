@@ -30,3 +30,5 @@ release-manifest.json
 AGENTS.md
 CLAUDE.md
 .repomixignore
+**.png
+temp/

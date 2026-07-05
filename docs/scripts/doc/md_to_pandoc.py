@@ -317,7 +317,7 @@ def process_mermaid_blocks(text: str, md_path: Path, verbose: bool) -> str:
     Render all mermaid blocks to PNGs next to the source file and replace
     each fenced block with a Markdown image reference.
     """
-    out_dir = md_path.parent
+    out_dir = md_path.parent.parent / "assets"
     stem = md_path.stem
     counter = 0
 
@@ -348,7 +348,7 @@ def process_mermaid_blocks(text: str, md_path: Path, verbose: bool) -> str:
 
         return (
             f"<!-- mermaid diagram {counter} pre-rendered to {png_name} -->\n\n"
-            f"![Mermaid diagram {counter}]({png_name})\n"
+            f"![Mermaid diagram {counter}](../assets/{png_name})\n"
         )
 
     return MERMAID_FENCE_RE.sub(replace, text)
@@ -359,7 +359,7 @@ def process_text_diagram_blocks(text: str, md_path: Path, verbose: bool) -> str:
     Render boxed Unicode/ASCII diagrams inside fenced code blocks to PNGs and
     replace those fenced blocks with image references.
     """
-    out_dir = md_path.parent
+    out_dir = md_path.parent.parent / "assets"
     stem = md_path.stem
     counter = 0
 
@@ -386,7 +386,7 @@ def process_text_diagram_blocks(text: str, md_path: Path, verbose: bool) -> str:
 
         return (
             f"<!-- boxed text diagram {counter} rendered to {png_name} -->\n\n"
-            f"![Boxed text diagram {counter}]({png_name})\n"
+            f"![Boxed text diagram {counter}](../assets/{png_name})\n"
         )
 
     return FENCED_BLOCK_RE.sub(replace, text)
@@ -817,7 +817,9 @@ def run_pandoc(
 
     # Explicitly tell pandoc where to look for images.  Without this, pandoc
     # resolves relative paths from the process CWD, not the input file location.
-    cmd += ["--resource-path", str(clean_md.parent)]
+    assets_dir = clean_md.parent.parent / "assets"
+    path_sep = ";" if sys.platform == "win32" else ":"
+    cmd += ["--resource-path", f"{clean_md.parent}{path_sep}{assets_dir}"]
 
     if fmt == "html":
         cmd += ["--embed-resources", "--self-contained"]
