@@ -1,7 +1,7 @@
 # Tổng hợp kiến thức cơ bản về Sim Racing cho người mới bắt đầu
 
-> **Mục tiêu tài liệu:** giúp người mới hiểu các khái niệm nền tảng về vật lý, cảm biến, giao thức truyền thông, force feedback và các thành phần trong một bộ mô phỏng đua xe.  
-> **Đối tượng:** người mới tìm hiểu sim racing, kỹ sư embedded mới bước vào mảng wheel base / steering rim / pedals / peripherals, hoặc người muốn hiểu trước khi mua, lắp, test hoặc phát triển thiết bị.  
+> **Mục tiêu tài liệu:** giúp người mới hiểu các khái niệm nền tảng về vật lý, cảm biến, giao thức truyền thông, force feedback và các thành phần trong một bộ mô phỏng đua xe.
+> **Đối tượng:** người mới tìm hiểu sim racing, kỹ sư embedded mới bước vào mảng wheel base / steering rim / pedals / peripherals, hoặc người muốn hiểu trước khi mua, lắp, test hoặc phát triển thiết bị.
 > **Phạm vi:** kiến thức công khai, nguyên lý kỹ thuật phổ biến và kiến trúc tham khảo. Không mô tả reverse engineering firmware độc quyền, bypass bảo mật console, hoặc thông số bí mật của nhà sản xuất.
 
 ---
@@ -1478,5 +1478,5 @@ Rotational:   T = J × α
 
 ---
 
-**Kết luận ngắn:**  
+**Kết luận ngắn:**
 Muốn hiểu sim racing, hãy nhìn nó như một hệ thống cơ-điện-điều khiển thời gian thực. Game tạo sự kiện vật lý ảo; driver và USB truyền lệnh; wheel base giới hạn và biến lệnh thành dòng motor; motor tạo torque; cockpit giữ lực; cảm biến và firmware đưa trạng thái người lái trở lại game. Nắm được force, torque, sensor, USB/HID/PID, FFB path và safety là đủ nền tảng để bắt đầu học sâu hơn.
