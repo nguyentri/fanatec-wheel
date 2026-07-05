@@ -47,6 +47,7 @@ Usage
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import shutil
@@ -328,7 +329,8 @@ def process_mermaid_blocks(text: str, md_path: Path, verbose: bool) -> str:
         if not code:
             return match.group(0)
 
-        png_name = f"{stem}_mermaid_{counter:02d}.png"
+        code_hash = hashlib.md5(code.encode("utf-8")).hexdigest()[:8]
+        png_name = f"{stem}_mermaid_{code_hash}.png"
         out_png = out_dir / png_name
 
         if out_png.exists():
@@ -372,7 +374,8 @@ def process_text_diagram_blocks(text: str, md_path: Path, verbose: bool) -> str:
             return match.group(0)
 
         counter += 1
-        png_name = f"{stem}_textdiag_{counter:02d}.png"
+        code_hash = hashlib.md5(code.encode("utf-8")).hexdigest()[:8]
+        png_name = f"{stem}_textdiag_{code_hash}.png"
         out_png = out_dir / png_name
 
         if verbose:
@@ -480,11 +483,17 @@ def _render_svg_via_browser(svg: Path, png: Path, dpi: int = 150, chrome: str = 
             f"--window-size={win_w},{win_h}",
             f"file:///{html_path.as_posix()}",
         ]
-        result = subprocess.run(cmd, capture_output=True, timeout=30)
-        if result.returncode != 0 or not shot_path.exists():
-            raise RuntimeError(
-                f"Browser screenshot failed (exit {result.returncode})"
-            )
+        try:
+            with subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE) as proc:
+                stdout, stderr = proc.communicate(timeout=30)
+                if proc.returncode != 0 or not shot_path.exists():
+                    raise RuntimeError(
+                        f"Browser screenshot failed (exit {proc.returncode})\nSTDERR: {stderr.decode('utf-8', errors='replace')}"
+                    )
+        except subprocess.TimeoutExpired as exc:
+            proc.kill()
+            proc.communicate()
+            raise RuntimeError("Browser screenshot timed out") from exc
         # Copy (Pillow not strictly required here, but trims if available)
         import shutil as _sh
         _sh.copy(shot_path, png)

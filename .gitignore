@@ -31,4 +31,5 @@ AGENTS.md
 CLAUDE.md
 .repomixignore
 **.png
+*_clean.md
 temp/
