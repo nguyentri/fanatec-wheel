@@ -1,7 +1,7 @@
 # Sim Racing Accessories Architecture
 
 > Research date: 2026-07-02
-> Evidence model: public standards, manufacturer manuals/support, and community projects. Community projects are implementation evidence, not official vendor specifications.  
+> Evidence model: public standards, manufacturer manuals/support, and community projects. Community projects are implementation evidence, not official vendor specifications.
 > Start here after [sim_racing_research.md](./sim_racing_research.md), [wheel_base.md](./wheel_base.md), and [wheel_rim.md](./wheel_rim.md).
 
 This document outlines the hardware and software architectures of common sim racing peripherals, specifically Quick Release (QR) systems, dashboards, and button boxes. It is intended to provide a foundational understanding for engineers entering the sim racing domain, focusing on embedded systems design, communication protocols, and human-machine interface (HMI) integration.
@@ -20,7 +20,7 @@ The QR and hub are separate compatibility boundaries. A universal hub may suppor
 
 For current Fanatec products, QR2 has distinct **Base-Side** and **Wheel-Side** components. Both sides must use QR2. QR1 and QR2 do not mate, QR1 is discontinued, and conversion support is model-specific. QR2 Lite, QR2, and QR2 Pro Wheel-Side variants also have different product and high-torque approvals; check the current compatibility list rather than inferring support from material alone.
 
-![Quick release: mechanical coupling and power/data bridge](./quick_release_exploded.svg)
+![Quick release: mechanical coupling and power/data bridge](../assets/quick_release_exploded.svg)
 
 The coupling does two jobs at once. Mechanically it locks the Wheel-Side hub to the Base-Side shaft so torque transfers with no play. Electrically, for rims with buttons and displays, spring pins meet contact pads across the joint to carry power and data. Because both halves must be the same generation to mate at all, a shared rim bolt pattern on the hub does *not* prove QR or electrical compatibility — the QR generation, torque rating, and contact interface are separate checks.
 
@@ -39,7 +39,7 @@ graph LR
 
 > **Informative:** Manufacturers employ various protocols to pass data through the QR. Some use standard USB pass-through, while others rely on proprietary serial buses or wireless (Bluetooth/2.4GHz) links combined with inductive power.
 
-The steering wheel microcontroller **shall** process raw peripheral inputs and package them into a structured payload. The QR data link **shall** maintain a polling rate of at least 100 Hz to prevent noticeable input lag. 
+The steering wheel microcontroller **shall** process raw peripheral inputs and package them into a structured payload. The QR data link **shall** maintain a polling rate of at least 100 Hz to prevent noticeable input lag.
 
 | Element | Direction | Type | Description |
 |---------|-----------|------|-------------|
@@ -91,7 +91,7 @@ Button boxes expand the driver's input capabilities, handling ignition switches,
 
 The button box hardware **shall** utilize a switch matrix topology for all push-buttons and toggles. A diode (e.g., 1N4148) **shall** be placed in series with each switch to prevent phantom keypresses (ghosting) when multiple inputs are active. Rotary encoders **shall not** be wired into the matrix; they **shall** be connected to dedicated GPIO pins with hardware or software debouncing.
 
-![Button matrix and anti-ghosting diodes](./button_matrix_ghosting.svg)
+![Button matrix and anti-ghosting diodes](../assets/button_matrix_ghosting.svg)
 
 The diode requirement is not optional cosmetics. In a bare matrix, holding three buttons that share a row and column lets current sneak through a back-path, so the scan reads a fourth key that nobody pressed — a phantom press. A diode in series with each switch allows current one way only, blocking that sneak path so the same three presses read correctly. This is why the diode is specified per switch rather than per row or column.
 
@@ -119,11 +119,23 @@ The button box microcontroller **shall** feature native USB HID support (e.g., A
 | 3 | The firmware **shall** construct a standard HID joystick report. | Formats data for host PC. |
 | 4 | The firmware **shall** transmit the HID report over USB. | Occurs on state change or polling interval. |
 
-## 4. Unresolved Questions
+## 4. Question Register (Resolved and Open)
 
-* Which identity, capability, and torque-permission exchanges are publicly specified for each QR generation? Do not assume a cryptographic or DRM mechanism without approved evidence.
-* What are the specific latency overheads when bridging telemetry through intermediate middleware like SimHub versus native game-engine telemetry output?
-* Could CAN bus architectures replace simple serial or SPI connections in prosumer sim racing steering wheels for higher reliability and node expansion?
+Reviewed 2026-07-05.
+
+### 4.1 Resolved
+
+- **What are the latency overheads of bridging telemetry through middleware (SimHub) vs native game telemetry?**
+  **Resolved as method ([`telemetry.md`](./telemetry.md) §6).** End-to-end latency is stage-additive: game publish interval + host acquisition/mapping + transport (virtual COM/USB) + device render. Middleware adds the host acquisition/mapping stage and a transport hop that native in-engine output avoids, but for numeric dashboard fields this is typically small relative to the game publish interval; latency-sensitive effects (tactile, LEDs) should be prioritized in the mapping. The exact millisecond overhead is hardware/transport-specific — measure each stage (4.2).
+- **Could CAN/CAN-FD replace simple serial or SPI for higher reliability and node expansion in prosumer rims?**
+  **Engineering inference: yes, that is exactly its niche.** CAN/CAN-FD is a differential, multi-controller bus with built-in error detection and arbitration, well suited to several distributed nodes on one rig; the trade-off is protocol overhead and a transceiver per node. It is already listed as an internal topology in [`communication-protocols.md`](./communication-protocols.md), and community evidence shows Fanatec uses CAN internally (FendtXerion Fanatec-Pinout wiki "Data and CAN"). Choose CAN when node count/reliability matters; keep SPI/UART for short point-to-point links where its overhead isn't justified.
+
+### 4.2 Open — for developers to self-investigate
+
+- **Which identity, capability, and torque-permission exchanges are publicly specified per QR generation?**
+  *How:* **none are publicly specified** as a cryptographic/DRM mechanism — treat this as Unknown. Do not assume a handshake without an approved spec; community emulators show only selected legacy observations. Obtain the interface definition officially for any current generation.
+- **Measured middleware-vs-native latency figures on target hardware.**
+  *How:* timestamp at host acquisition, at transport, and at device render, per the method above; report per stage so the dominant contributor is visible.
 
 ## 5. References
 

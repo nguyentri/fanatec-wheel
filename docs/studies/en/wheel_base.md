@@ -161,7 +161,7 @@ For PWM generation, the microcontroller shall use complementary timer outputs. T
 
 The inverter is the power heart of the wheel base. A PMSM/BLDC motor cannot be driven from raw DC; it needs three sinusoidal phase currents, offset 120° from each other, whose rotating magnetic field the rotor follows. The inverter synthesizes those phases from the fixed DC bus using six power MOSFETs arranged as three **half-bridges** (one per phase).
 
-![Three-phase inverter driving the motor](./three_phase_inverter.svg)
+![Three-phase inverter driving the motor](../assets/three_phase_inverter.svg)
 
 Each phase has a high-side switch (to the DC+ rail) and a low-side switch (to DC−). Rapidly switching the appropriate switch on and off with PWM sets the average voltage on that phase; doing this on all three legs with the right timing produces the rotating field. Two facts from this drawing map directly onto the normative requirements above:
 
@@ -172,7 +172,7 @@ Each phase has a high-side switch (to the DC+ rail) and a low-side switch (to DC
 
 Field-Oriented Control depends on measuring phase current accurately, and *when* the current is sampled matters as much as the sample itself. The switching edges of the MOSFETs inject electrical noise, so the ADC is triggered at the quiet point in the middle of the PWM period rather than near an edge.
 
-![PWM carrier, duty cycle, and the ADC sample point](./foc_pwm_timing.svg)
+![PWM carrier, duty cycle, and the ADC sample point](../assets/foc_pwm_timing.svg)
 
 A triangular carrier is compared against each phase's duty command to generate the gate signal: where the carrier is below the command, the high-side switch is on. Sampling current at the carrier peak (the middle of the on-time) captures a clean average value away from the switching transients. This is exactly the "valid middle-of-PWM triggers" requirement in §6, and the dead-time zoom shows the small both-off gap that prevents shoot-through on every edge.
 
@@ -182,7 +182,7 @@ This section details the feedback mechanisms used to measure shaft position and 
 
 The motor itself is a three-phase PMSM: a wound steel stator surrounding a permanent-magnet rotor coupled to the steering shaft. The encoder reads the rotor/shaft angle that FOC needs to commutate correctly, and the current sensing reads the phase currents FOC regulates. The cross-section below shows how the pieces relate.
 
-![Direct-drive servo motor cross-section](./servo_motor_cross_section.svg)
+![Direct-drive servo motor cross-section](../assets/servo_motor_cross_section.svg)
 
 | Encoder | Strength | Concern |
 |---|---|---|
@@ -573,7 +573,7 @@ The firmware shall distinguish fault classes: informational, degraded operation,
 
 Overtemperature is handled by *derating* — smoothly lowering the torque ceiling as the motor and inverter heat up — rather than by an abrupt cutoff at the limit. Because torque needs current and current makes heat (`T ≈ Kt × Iq`), a base run hard will warm up; derating keeps it usable and safe instead of failing suddenly mid-corner.
 
-![Thermal derating curve](./thermal_derating_curve.svg)
+![Thermal derating curve](../assets/thermal_derating_curve.svg)
 
 Below the derate-start temperature the full torque ceiling is available. Between derate-start and the shutdown temperature the ceiling falls off; above shutdown, torque is removed. Recovery uses hysteresis: torque is only restored once the temperature drops well back below the derate-start point, so the system does not oscillate in and out of derating right at the threshold. This is the "derate then disable" reaction listed for overtemperature in the hazard table above.
 
@@ -742,19 +742,40 @@ This section contains links to external documentation and related internal resea
 - [StuyoP/Universal-Shifter-Interface-for-Fanatec](https://github.com/StuyoP/Universal-Shifter-Interface-for-Fanatec) — switch-based shifter proxy.
 - [vnmsimulation/VNM_MOTION_CONTROLLER](https://github.com/vnmsimulation/VNM_MOTION_CONTROLLER) — DIY STM32-based hardware controllers.
 
-## 21. Unresolved Questions
+## 21. Question Register (Resolved and Open)
 
-This section lists the open design decisions and missing information that must be addressed to complete the system architecture.
+Reviewed 2026-07-05. Most items here are **design inputs** for a specific product rather than facts with a public answer. Where the architecture already answers "how," the item is marked **Resolved (method/architecture)**; where a concrete value or selection is still required, it is re-styled as **Open — developer self-investigation** with the method to obtain it.
 
-- Peak/continuous torque, speed, inertia, range, and duty cycle?
-- Motor electrical/thermal data and regenerative energy envelope?
-- Selected processor partition, encoder, current topology, gate driver, and MOSFETs?
-- Required PC/console platforms and licensed authentication architecture?
-- USB descriptors, cadence, effect capacity, and vendor interfaces?
-- QR/rim protocol per supported generation and compatibility policy?
-- Accessory/E-stop/torque-key/CAN connector definitions?
-- Safety/regulatory and independent-assessment targets?
-- Signing, rollback, provisioning, anti-downgrade, and debug policy?
-- Calibration ownership/migration across base, motor, rim, and peripherals?
-- Latency/jitter acceptance budgets and instrumentation?
-- Environmental, EMC, vibration, acoustic, and service-life requirements?
+### 21.1 Resolved (method or architecture already defined)
+
+- **USB descriptors, cadence, effect capacity, and vendor interfaces.**
+  The model is public: HID for inputs + PID Class 1.0 for effects over USB 2.0 FS, cadence set by the endpoint interval (see §13). Community evidence shows Fanatec bases enumerate under **VID `0EB7`** (e.g. `0EB7:0020` CSL DD/DD Pro/ClubSport DD). The *specific* VID/PID, effect-pool depth, and any vendor interface remain a product/registration decision (see 21.2).
+- **Safety/regulatory: the torque-inhibit path.**
+  Fully specified as architecture in §15: an independent hardware latch (overcurrent comparator + gate fault + E-stop + watchdog) that asynchronously disables the gate driver, following an STO-style pattern (cf. TI TIDA-01599). The *regulatory targets* (which marks/standards apply) are market-specific (21.2).
+- **Latency/jitter acceptance budgets and instrumentation.**
+  Method resolved: budget per stage and instrument with hardware timer overrun counters and triggered control traces (§13, §16). Loop-rate anchors are in §13's timing table. The accepted numeric budget is product-specific (21.2).
+- **Signing, rollback, provisioning, anti-downgrade, and debug policy.**
+  The required shape is defined in §14: authenticated image (hash/CRC), A/B power-loss-safe staging, independent recovery bootloader, version/anti-downgrade gating, and debug disabled in retail. The chosen crypto/PKI is an implementation decision (21.2).
+
+### 21.2 Open — for developers to self-investigate
+
+Each needs a requirement, an approved spec, or a measurement — not a lookup.
+
+- **Peak/continuous torque, speed, inertia, range, and duty cycle.**
+  *How:* set from the target segment and competitor specs; size the motor to continuous + peak torque and thermal duty; confirm on a dyno.
+- **Motor electrical/thermal data and regenerative energy envelope.**
+  *How:* obtain from the selected motor's datasheet; measure Kt, resistance, inductance, and thermal time constants; characterize regen into the DC bus under fast reversals and size the clamp/brake resistor.
+- **Selected processor partition, encoder, current topology, gate driver, and MOSFETs.**
+  *How:* choose against the torque/loop-rate targets using vendor reference designs (Infineon PMSM FOC, TI sensored FOC; OpenFFBoard's TMC4671 approach as a public example); validate timing electrically on a bring-up board before full power.
+- **Required PC/console platforms and licensed authentication architecture.**
+  *How:* obtain console licensing terms contractually; never emulate or bypass console authentication (§15, §11 of research doc).
+- **QR/rim protocol per supported generation and compatibility policy.**
+  *How:* treat the rim link as a replaceable adapter (§7); community SPI observations for legacy links are discovery input, not a spec — get the approved interface definition for any current generation.
+- **Accessory/E-stop/torque-key/CAN connector definitions.**
+  *How:* define pinouts per port; community references (FendtXerion Fanatec-Pinout wiki, which notes the Torque Key applies only to DD1/DD2 and documents an E-stop switch circuit) are to be verified electrically before use.
+- **Safety/regulatory and independent-assessment targets.**
+  *How:* determine applicable EMC/product-safety marks for each market and engage an independent assessor early.
+- **Calibration ownership/migration across base, motor, rim, and peripherals.**
+  *How:* version calibration per node, range-check before use, and define atomic migration (§14); track compatibility in [`compatibility-matrix.md`](./compatibility-matrix.md).
+- **Environmental, EMC, vibration, acoustic, and service-life requirements.**
+  *How:* set targets from intended use and validate in the qualification stage (§18 thermal/EMC/vibration/soak).

@@ -96,8 +96,8 @@ flowchart TD
 
 Fanatec is a useful example of a modular ecosystem. The customer normally combines a wheel base, steering wheel or hub, matching quick-release components, pedals, and optional add-ons. Ready2Race bundles package required components for easier purchasing, but the bundle name is not a protocol or compatibility standard.
 
-![Fanatec Ecosystem](./fanatec_ecosystem.jpg)
-![Fanatec Products](./fanatec_products.jpg)
+![Fanatec Ecosystem](../assets/fanatec_ecosystem.jpg)
+![Fanatec Products](../assets/fanatec_products.jpg)
 
 | Tier | Simple Meaning | Important Limitation |
 |---|---|---|
@@ -462,7 +462,7 @@ This is precisely why the wheel base's encoder (5.5) and current sensing (5.3) a
 
 Most modern direct-drive bases use a **three-phase permanent-magnet synchronous motor (PMSM)**, closely related to a BLDC motor. It has two main parts:
 
-![Direct-drive servo motor cross-section](./servo_motor_cross_section.svg)
+![Direct-drive servo motor cross-section](../assets/servo_motor_cross_section.svg)
 
 - **Stator (stationary part):** A stack of thin steel laminations shaped into teeth, with insulated copper wire wound around each tooth. Three sets of coils, spaced 120° apart electrically, form the three phases (U, V, W).
 - **Rotor (rotating part):** A steel hub carrying permanent magnets around its circumference, arranged with alternating North and South poles. The rotor is mechanically fixed to the steering shaft.
@@ -529,7 +529,7 @@ Both are perceived by the driver as roughness, notchiness, or a faint "buzz" —
 
 FOC decides *how much* torque-producing current is wanted; the **inverter** is the power stage that actually delivers it. A three-phase motor cannot be driven from raw DC — it needs three currents offset 120° from each other — so six power MOSFETs, arranged as three half-bridges, chop the DC bus into those three phases.
 
-![Three-phase inverter driving the motor](./three_phase_inverter.svg)
+![Three-phase inverter driving the motor](../assets/three_phase_inverter.svg)
 
 Each phase has a high-side switch (to DC+) and a low-side switch (to DC−). Two safety-critical details follow directly:
 
@@ -540,7 +540,7 @@ Each phase has a high-side switch (to DC+) and a low-side switch (to DC−). Two
 
 The switches are driven with PWM: a triangular carrier is compared against each phase's duty command, and where the carrier is below the command the high-side switch is on. Because the switching edges are electrically noisy, the current is sampled at the *quiet* point in the middle of the PWM period rather than near an edge.
 
-![PWM carrier, duty cycle, and the ADC sample point](./foc_pwm_timing.svg)
+![PWM carrier, duty cycle, and the ADC sample point](../assets/foc_pwm_timing.svg)
 
 Sampling at the carrier peak captures a clean average current away from the switching transients, and the dead-time zoom shows the both-off gap that keeps the leg from shorting. This is the practical reason firmware ties the ADC trigger to the PWM timer instead of sampling on a free-running clock.
 
@@ -914,7 +914,7 @@ Correct seating posture reduces fatigue and improves accuracy:
 
 ## 11. Sensors in sim racing
 
-![Potentiometer vs rotary encoder](./potentiometer_and_encoder.svg)
+![Potentiometer vs rotary encoder](../assets/potentiometer_and_encoder.svg)
 
 ### 11.1 Potentiometer
 
@@ -942,7 +942,7 @@ Disadvantages:
 
 A Hall sensor measures magnetic field. When a magnet moves near the sensor, the output voltage changes.
 
-![Hall-effect sensor operation](./hall_effect_sensor.svg)
+![Hall-effect sensor operation](../assets/hall_effect_sensor.svg)
 
 Physically, a small current flows through a thin semiconductor element inside the sensor. A nearby magnetic field deflects the moving charge carriers sideways (the Hall effect), producing a small voltage across the element that is proportional to the field strength. That voltage is amplified and, in linear Hall sensors, output as an analog signal; in switch-type Hall sensors, it is compared against a threshold and output as a clean digital high/low.
 
@@ -962,7 +962,7 @@ Notes:
 
 A load cell measures force through a strain gauge. When compressed or pulled, the strain gauge resistance changes by a very small amount.
 
-![Load cell strain gauges in a Wheatstone bridge](./load_cell_wheatstone_bridge.svg)
+![Load cell strain gauges in a Wheatstone bridge](../assets/load_cell_wheatstone_bridge.svg)
 
 A strain gauge is a thin conductive foil bonded to a metal beam. As the beam bends, the foil stretches or compresses along with it, changing its resistance slightly (this ratio is called the gauge factor). Because that resistance change is far too small to read directly, a real load cell wires four gauges into a **Wheatstone bridge**: two gauges are bonded where the beam stretches (tension) and two where it compresses, on opposite arms of the bridge. As force is applied, opposite arms move in opposite directions, which roughly doubles the usable signal and cancels out temperature drift that affects all four gauges equally. The result is still only microvolts-to-millivolts, so an instrumentation amplifier (INA) sits between the bridge and the ADC to boost it to a usable range.
 
@@ -1378,7 +1378,7 @@ The system should default to no torque when:
 
 **Thermal derating in detail.** Of these layers, thermal derating is worth seeing as a curve. Rather than allowing full torque right up to a hard cutoff, firmware lowers the torque ceiling gradually as the motor and inverter heat up:
 
-![Thermal derating curve](./thermal_derating_curve.svg)
+![Thermal derating curve](../assets/thermal_derating_curve.svg)
 
 Below the derate-start temperature, full torque is available. Between derate-start and shutdown, the ceiling ramps down; above shutdown, torque is removed. Recovery uses hysteresis — torque is only restored after the temperature falls well back below derate-start — so the wheel does not flicker in and out of derating at the threshold. This keeps a hard-driven base usable and safe as it warms instead of failing abruptly mid-corner.
 

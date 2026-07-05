@@ -34,7 +34,7 @@ flowchart TD
 
 The same stack, drawn as labelled layers with the concrete protocols at each level, makes the "each layer only talks to its neighbours" property easier to see:
 
-![The sim-racing communication stack](./usb_hid_pid_stack.svg)
+![The sim-racing communication stack](../assets/usb_hid_pid_stack.svg)
 
 This document is organized top-down: PC transport and its device classes (§3–§6), the OS/API layer (§7), firmware update (§8), and software-tools-to-device paths (§9). The physical and data-link layers are catalogued in [sim_racing_research.md](./sim_racing_research.md) §7.1 and §7.3 and are not duplicated here beyond the additions in §3.
 
@@ -203,7 +203,16 @@ The base must present standards-clean interfaces at each layer so it works witho
 
 > Vendor/standards links (usb.org, Microsoft, Apple, Fanatec) were not reachable in this review environment and are cited by reference; re-confirm against the live sources before production use.
 
-## Unresolved Questions
+## Question Register (Resolved and Open)
 
-- What are the exact USB product IDs and any vendor-interface report formats per current product? (Vendor payloads are Unknown from public specs.)
-- Which OS APIs will the target integration support first (DirectInput vs GameInput on Windows), and what is the minimum viable set for Linux (libinput vs hidraw)?
+Reviewed 2026-07-05.
+
+### Resolved
+
+- **Which OS APIs should the target integration support first (DirectInput vs GameInput on Windows; libinput vs hidraw on Linux)?**
+  **Engineering recommendation.** On Windows, lead with the **DirectInput / HID PID** path because it has the broadest existing sim-title support for both input and force feedback; treat Microsoft's newer **GameInput** as a forward-looking addition, not the first target. On Linux, use **hidraw** for device access and custom HID reports (this is exactly how the `hid-fanatecff` kernel driver exposes FFB and extended controls), with evdev/joystick for standard axis/button input; `libinput` is not the right layer for wheel FFB. Minimum viable set: Windows DirectInput + Linux hidraw/evdev.
+
+### Open — for developers to self-investigate
+
+- **Exact USB product IDs and any vendor-interface report formats per current product.**
+  *How:* the vendor VID is community-observed as **`0EB7`** (Fanatec), with per-model PIDs enumerated by `hid-fanatecff` (e.g. `0EB7:0020` CSL DD/DD Pro/ClubSport DD) — but this is community evidence for *existing* devices, not a spec for a new product. For your own device, assign/obtain a VID/PID through USB-IF and define descriptors to the HID/PID standard. Vendor (non-HID) payload formats of commercial products are **Unknown** from public specs; capture them only from hardware you own for interoperability testing, and do not assume stability across firmware versions.

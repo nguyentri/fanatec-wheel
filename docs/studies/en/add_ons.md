@@ -8,7 +8,7 @@ author: Antigravity
 # Sim Racing Add-Ons: Shifters and Handbrakes Architecture
 
 > Research date: 2026-07-02
-> Evidence model: public standards, manufacturer manuals/support, and community projects. Community projects are implementation evidence, not official vendor specifications.  
+> Evidence model: public standards, manufacturer manuals/support, and community projects. Community projects are implementation evidence, not official vendor specifications.
 > Related docs: [sim_racing_research.md](./sim_racing_research.md), [wheel_base.md](./wheel_base.md), [pedals.md](./pedals.md), [repos.md](./repos.md).
 
 ## 1. Introduction and Scope
@@ -34,9 +34,9 @@ Sim racing handbrakes rely on two primary sensing architectures to capture user 
 
 The two paradigms differ in what they physically measure. A load cell senses *force* through a strain-gauge bridge (shown below left); a Hall sensor senses *position* through a moving magnet (below right). A force-based handbrake rewards muscle memory the way a real hydraulic lever does; a position-based one is simpler and wears less.
 
-![Load cell strain gauges in a Wheatstone bridge](./load_cell_wheatstone_bridge.svg)
+![Load cell strain gauges in a Wheatstone bridge](../assets/load_cell_wheatstone_bridge.svg)
 
-![Hall-effect sensor operation](./hall_effect_sensor.svg)
+![Hall-effect sensor operation](../assets/hall_effect_sensor.svg)
 
 **Figure 2-1: Handbrake Sensor Data Flow**
 
@@ -46,7 +46,7 @@ graph TD
   Elastomer --> LoadCell[Load Cell Sensor]
   LoadCell -->|Microvolt Signal| Amp[Instrumentation Amplifier]
   Amp -->|0-3.3V Analog| MCU[Microcontroller ADC]
-  
+
   Lever2[Handbrake Lever] -->|Changes Position| Magnet[Permanent Magnet]
   Magnet -->|Varying Magnetic Flux| Hall[Hall Effect Sensor]
   Hall -->|0-3.3V Analog| MCU
@@ -59,7 +59,7 @@ graph TD
 
 Dual-mode shifters provide both traditional H-pattern and sequential shifting within a single unit. The mechanical architecture uses constrained pathways and physical locking mechanisms to route the shifter shaft.
 
-![H-pattern shifter gate](./h_pattern_gate.svg)
+![H-pattern shifter gate](../assets/h_pattern_gate.svg)
 
 In H-pattern mode a machined gate plate limits where the lever can travel, so only real gear positions are reachable; a microswitch or Hall sensor at each position reports the selected gear, and firmware rejects impossible states. Switching to sequential mode blocks the sideways channel, leaving a single up/down lane (push = one direction, pull = the other).
 
@@ -113,7 +113,7 @@ sequenceDiagram
     participant MCU as MCU Firmware
     participant USB as USB Stack
     participant PC as Host PC
-    
+
     loop 1000 Hz Non-blocking
         HW->>MCU: Read GPIO / ADC
         MCU->>MCU: Apply Debounce & Filters
@@ -184,11 +184,21 @@ This section explores how community projects interface with standard shifter mec
 - [SimHub wiki](https://github.com/SHWotever/SimHub/wiki) — button boxes, serial devices, and telemetry support patterns.
 - [Fanatec ecosystem source register](./references.md) — buyer-guide context and official compatibility cross-checks.
 
-## 7. Unresolved Questions
+## 7. Question Register (Resolved and Open)
 
-- **Ecosystem Integration:** How do proprietary ecosystems (e.g., Fanatec, Moza) handle device enumeration and communication via proprietary RJ12/CAN-bus connections to the wheelbase, rather than direct standalone USB?
-- **Thermal Drift:** What are the specific thermal drift compensation requirements for load cell amplifiers (e.g., HX711) over prolonged, multi-hour sim racing endurance sessions?
-- **Auto-Detection:** Can the dual-mode shifter firmware reliably auto-detect the transition between H-pattern and sequential modes without requiring the user to manually trigger a toggle switch or software flag?
+Reviewed 2026-07-05.
+
+### 7.1 Resolved
+
+- **How do proprietary ecosystems handle device enumeration/communication via RJ12/CAN to the wheelbase rather than direct USB?**
+  **Community evidence + engineering inference.** The base acts as the aggregator: peripherals present analog/digital signals or a simple serial link over the base port, and the base folds them into its own HID report to the host (so the host sees one device). Documented examples: GeekyDeaks' pedal emulator proxies USB pedals into the base's **RJ12 UART**; StuyoP's shifter interface presents switch states over the shifter port. Internally, vendors also use **CAN** for distributed nodes (the FendtXerion Fanatec-Pinout wiki includes a "Data and CAN" section). Net: on a base-proxy design, enumeration is the base's job, not the accessory's; the accessory just delivers well-framed signals.
+- **Can dual-mode shifter firmware reliably auto-detect H-pattern vs sequential without a manual toggle?**
+  **Engineering inference: yes for hardware-swap detection, no for inferring from motion alone.** The robust method is a **physical/electrical identity** — a detect pin or resistor ID on the shifter gate that changes with the installed mode — which the firmware reads deterministically. Trying to *infer* mode from lever movement patterns is unreliable (a sequential push can resemble an H-gate move) and can produce wrong-gear events, so it should not be the primary mechanism. Recommend: identity pin primary, software override secondary.
+
+### 7.2 Open — for developers to self-investigate
+
+- **Thermal drift compensation for load-cell amplifiers (e.g. HX711) over multi-hour endurance sessions.**
+  *How (engineering guidance + measurement):* strain-gauge bridges and their amplifiers drift with temperature (offset and gain). Mitigations to evaluate: use a ratiometric bridge (drift largely cancels), allow warm-up, apply periodic **auto-tare/auto-zero** when the pedal is known-released, and characterize the specific amplifier's temperature coefficient on the bench across a realistic temperature sweep. The acceptable residual drift is a product decision — measure your chosen AFE over a multi-hour run and set a re-tare policy from the data rather than assuming a fixed number.
 
 ---
 *End of Document*

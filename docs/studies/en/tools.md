@@ -60,6 +60,11 @@ This document lists practical tools and reference sources for developers studyin
 - Link the exact source used; do not cite a repository search result as evidence for a specific claim.
 - Date community buyer guides. Recheck torque, availability, QR, platform, and firmware claims against current manufacturer support before reuse.
 
-## Unresolved Questions
+## Question Register (Resolved and Open)
 
-- Which USB/HID descriptor inspection tool should be standardized once source code exists?
+Reviewed 2026-07-05.
+
+### Resolved
+
+- **Which USB/HID descriptor inspection tool should be standardized once source code exists?**
+  **Engineering recommendation (verified public tools).** Standardize on a small, cross-platform set rather than one tool: for descriptor decoding use the **USB-IF HID Descriptor Tool** or an online HID report-descriptor decoder; for live capture/decode use **Wireshark with USBPcap** (Windows) or **usbmon** (Linux); for raw HID read/write and quick FFB report testing use **hidapitester** or Linux `usbhid-dump` + `evtest`; and validate axis/button/FFB behavior with the OS joystick/HID test panel. On Linux specifically, the `hid-fanatecff` driver plus `evtest`/`fftest` is the practical FFB-verification path. Pick the descriptor decoder as the primary standard and keep the capture/raw-HID tools as the supporting toolchain.

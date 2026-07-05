@@ -60,7 +60,7 @@ Telemetry software **shall** treat every source as game-version-dependent and **
 
 This addresses the open question in [accessories.md](./accessories.md) §4 (middleware vs native latency). End-to-end latency is the sum of: game publish interval, host acquisition and mapping, transport (serial/USB), and device render. As **engineering inference**, a responsive dashboard budgets each stage so total latency stays below one game frame at the target rate; tactile and LED effects are more latency-sensitive than numeric fields and **should** be prioritized in the mapping and transport.
 
-![Telemetry latency is stage-additive](./telemetry_latency_budget.svg)
+![Telemetry latency is stage-additive](../assets/telemetry_latency_budget.svg)
 
 Because the stages add up, the useful thing to measure is each stage on its own, not just the end-to-end figure — that is how the dominant contributor becomes visible and fixable. The percentages above are illustrative only.
 
@@ -93,6 +93,9 @@ The device is a telemetry *sink*: it does not own the game connection and **shal
 - [accessories.md](./accessories.md) — dashboard and telemetry-display architecture.
 - [tactile.md](./tactile.md) — tactile-transducer output driven from telemetry.
 
-## Unresolved Questions
+## Open Questions for Developers to Self-Investigate
 
-- What per-stage latency figures are achievable with each common transport, measured on target hardware?
+Reviewed 2026-07-05. This is measurement-dependent — the numbers vary by transport, host load, and device, so it must be measured on target rather than looked up.
+
+- **What per-stage latency figures are achievable with each common transport, measured on target hardware?**
+  *How to investigate:* instrument the three stages separately — (1) host acquisition/mapping (timestamp on telemetry receipt vs. on encode), (2) transport (host send vs. device receive, e.g. USB CDC/virtual COM vs. USB HID vs. network), and (3) device render (parse vs. display/effect update). Use a logic analyzer or host-side loopback plus a device-side timestamp. Compare virtual-COM serial, USB HID, and any network transport under realistic refresh rates and host load. Report per stage so the dominant contributor is visible (see §6). As an order-of-magnitude anchor: keep total telemetry latency below one game frame at the target rate, and prioritize latency-sensitive effects (tactile, LEDs) over numeric fields.

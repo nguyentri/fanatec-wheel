@@ -275,7 +275,7 @@ flowchart LR
 
 Several of these inputs are rotary or analog. A rotary encoder reports incremental steps as an A/B quadrature pair, where the phase order of the two channels encodes direction; an analog clutch paddle or thumb joystick instead uses a Hall sensor or potentiometer read through the ADC. The comparison below contrasts the contact-based potentiometer with the contactless encoder disc and its A/B waveforms.
 
-![Potentiometer vs. rotary encoder](./potentiometer_and_encoder.svg)
+![Potentiometer vs. rotary encoder](../assets/potentiometer_and_encoder.svg)
 
 ### 7.2 Output Architecture
 
@@ -329,7 +329,7 @@ sequenceDiagram
 
 Current commercial compatibility has a separate mechanical boundary. Fanatec-store wheels and bases are QR2 by default as of 2026-02-16, while QR1 is discontinued. QR2 requires matching Base-Side and Wheel-Side components; a legacy SPI observation does not establish QR2 mechanical fit, torque approval, or current protocol compatibility.
 
-![Quick release: mechanical coupling and power/data bridge](./quick_release_exploded.svg)
+![Quick release: mechanical coupling and power/data bridge](../assets/quick_release_exploded.svg)
 
 The QR is where the rim's electrical link physically crosses to the base: a Wheel-Side half on the rim mates with a Base-Side half on the shaft, carrying torque mechanically and, for a smart rim, power and data across spring-pin contacts. Both halves must be the same generation to mate at all, so a matching rim bolt pattern alone never proves QR or protocol compatibility.
 
@@ -625,20 +625,35 @@ This section defines the logical sequence of steps required to build and validat
 | 9 | Implement diagnostics, update recovery, and compatibility reporting. | Reliability features |
 | 10 | Publish a tested base/firmware/rim matrix with explicit unsupported combinations. | End-user documentation |
 
-## 17. Unresolved Questions
+## 17. Question Register (Resolved and Open)
 
-This section lists open questions and dependencies that must be resolved before finalizing the product design.
+Reviewed 2026-07-05. Items answerable from public/community evidence or already-defined method are marked **Resolved**; product-specific selections and proprietary specs are re-styled as **Open — developer self-investigation** with a method.
 
-- Which exact steering rim and wheel-base generations are the product targets?
-- Is compatibility with ClubSport DD/DD+ required? If yes, where is the approved interface specification?
-- What are the QR rail voltage/current, signal levels, contact order, and ESD requirements?
-- What is the measured boot-to-first-response deadline?
-- Is the rim link legacy SPI, a newer protocol, or multiple negotiated transports?
-- What identity/capability fields are legally and technically permitted for a new product?
-- Required counts for buttons, encoders, analog paddles, LEDs, display type, and haptics?
-- Is rim firmware updated through the base, direct USB/debug, or both?
-- Which host platforms and telemetry APIs must support display/LED output?
-- What safety, EMC, environmental, and console-licensing requirements apply?
+### 17.1 Resolved
+
+- **Is the rim link legacy SPI, a newer protocol, or multiple negotiated transports?**
+  **Community evidence: both patterns exist.** DIY rim projects (lshachar/Arduino_Fanatec_Wheel, Alexbox364/F_Interface_AL, darknao/btClubSportWheel) demonstrate a **3.3 V base-master / rim-slave SPI** on older products. Modern direct-drive generations use a newer compatibility boundary. Design the rim link as a **replaceable protocol adapter with transport negotiation**, not a single universal assumption. The exact current-generation protocol is Unknown without an approved spec (17.2).
+- **Is rim firmware updated through the base, direct USB/debug, or both?**
+  **Verified public pattern:** base-mediated update is the norm (the base is the USB hub and updater); direct USB/debug is a manufacturing/service path. The Fanatec update guide documents base + selected-wheel updates through the host app. Support "via base" as primary and a controlled service path for recovery.
+- **Which host platforms and telemetry APIs must support display/LED output?**
+  **Resolved as method:** LED/display are telemetry sinks, not FFB; drive them from the telemetry pipeline ([`telemetry.md`](./telemetry.md)). SimHub + `hid-fanatecff-tools` are working public examples across common titles. The specific title/API list is a product scope decision (17.2).
+
+### 17.2 Open — for developers to self-investigate
+
+- **Which exact steering rim and wheel-base generations are the product targets?**
+  *How:* a product-scope decision; enumerate target base generations and QR variants up front — everything below depends on it.
+- **Is compatibility with ClubSport DD/DD+ required, and where is the approved interface specification?**
+  *How:* if required, obtain the approved interface spec through official channels; community emulators are not a substitute for a current contract.
+- **QR rail voltage/current, signal levels, contact order, and ESD requirements.**
+  *How:* measure on approved hardware or obtain from the vendor spec; verify community pinouts electrically before trusting them; design ESD protection on all QR contacts.
+- **Measured boot-to-first-response deadline.**
+  *How:* instrument on target (power-up to first valid rim report); set the deadline against the base's stale-input policy.
+- **What identity/capability fields are legally and technically permitted for a new product?**
+  *How:* a legal/licensing question — clear with counsel and the platform program before implementing any identity handshake.
+- **Required counts for buttons, encoders, analog paddles, LEDs, display type, and haptics.**
+  *How:* derive from the target driving styles (§Form factors in research doc) and competitor rims; size the input-scan matrix and HID descriptor accordingly.
+- **Which safety, EMC, environmental, and console-licensing requirements apply?**
+  *How:* determine per target market and platform; validate in qualification.
 
 ## 18. References
 

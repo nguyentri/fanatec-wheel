@@ -28,7 +28,7 @@ A motion platform physically moves the cockpit to cue the driver's vestibular sy
 
 As **verified public** general knowledge, hobby and prosumer platforms are commonly described by their actuated degrees of freedom: heave (vertical), pitch, roll, surge, sway, and yaw. Small platforms often actuate a subset (for example, pitch and roll); larger rigs add more. The exact DOF and geometry are platform-specific.
 
-![Six degrees of freedom of a motion platform](./motion_dof.svg)
+![Six degrees of freedom of a motion platform](../assets/motion_dof.svg)
 
 Each axis cues a different sensation: surge conveys acceleration and braking, sway conveys cornering load, heave conveys bumps and crests, while pitch (nose up/down), roll (leaning into corners), and yaw (rotation, e.g. the onset of a spin) are the three rotations. A cueing strategy chooses which of these a given platform can render and how strongly.
 
@@ -89,6 +89,16 @@ The motion controller is a real-time actuator system with a person in the loop. 
 - [tools.md](./tools.md) — HIL fixtures and fault-injection gating.
 - [cockpits.md](./cockpits.md) — the structure a platform moves.
 
-## Unresolved Questions
+## Question Register (Resolved and Open)
 
-- What DOF, actuator class, and travel limits will be in scope, and what are the acceptance criteria for latency and safe-stop time on target hardware?
+Reviewed 2026-07-05.
+
+### Resolved (as method / typical ranges)
+
+- **Latency and safe-stop acceptance criteria — how to set them.**
+  Motion cueing latency should be budgeted stage-additively (telemetry → cueing algorithm → actuator command → actuator response) and kept low enough that motion agrees with the visual/FFB cue rather than lagging it. Safe-stop is a **hard safety requirement**, not a tuning goal: the platform must have an independent E-stop and a bounded, controlled stop time with the actuators failing to a safe state — this mirrors the wheel base's hardware-inhibit principle (fail to a safe state, hardware authoritative over software). The *numeric* thresholds are product-specific and set from the chosen actuator class (2.2).
+
+### Open — for developers to self-investigate
+
+- **What DOF, actuator class, and travel limits will be in scope, and what are the numeric acceptance criteria for latency and safe-stop time on target hardware?**
+  *How to investigate:* a scoping decision. Pick the DOF set (e.g. 2-DOF seat mover, 3-DOF, or 6-DOF Stewart platform — see the 6-DOF illustration) and actuator class (belt/servo vs. linear actuator) from the target experience and budget; those choices set travel limits, force, and speed. Then **measure** achieved end-to-end cueing latency and the controlled safe-stop time on the built platform and validate against the safety envelope before unsupervised use. Do not finalize acceptance numbers before actuator selection — they are meaningless without it.

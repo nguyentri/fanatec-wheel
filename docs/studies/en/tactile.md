@@ -41,7 +41,7 @@ flowchart LR
 
 The source is typically the telemetry pipeline (see [telemetry.md](./telemetry.md)) or a dedicated low-frequency audio channel. A crossover/low-pass stage **shall** restrict energy to the transducer's intended low-frequency band so higher-frequency content is not dumped into the structure.
 
-![Tactile transducers: keep energy in a low-frequency band](./tactile_crossover.svg)
+![Tactile transducers: keep energy in a low-frequency band](../assets/tactile_crossover.svg)
 
 Keeping the shaker inside its intended low band (green) is what stops its energy from summing into the wheel's FFB detail band (purple) or driving a structural resonance of the rig (red). The exact resonance frequencies are rig-specific and must be measured rather than assumed — see §6.
 
@@ -82,6 +82,9 @@ Tactile output is usually driven by host software plus an amplifier, so device f
 - [telemetry.md](./telemetry.md) — the telemetry/audio source and safe-quiet behavior.
 - [tools.md](./tools.md) — resonance / tactile-transducer isolation check.
 
-## Unresolved Questions
+## Open Questions for Developers to Self-Investigate
 
-- What are the measured resonance frequencies of the target rig structure, and which effect bands must be avoided or damped as a result?
+Reviewed 2026-07-05. This item is rig-specific and cannot be answered in the abstract — it requires measurement on the actual structure.
+
+- **What are the measured resonance frequencies of the target rig structure, and which effect bands must be avoided or damped?**
+  *How to investigate:* attach an accelerometer to the structure and excite it with a swept-sine signal through a transducer (or an impact test); the response peaks are the resonances. Cross-reference those frequencies against the dominant FFB effect bands and the transducer's operating band, then keep energy out of any overlap (crossover tuning) and add damping — mass, bracing, or isolating mounts — where an overlap is unavoidable. Record the rig configuration (profile size, bracing, mounted mass, fastener torque) with the results, because resonances shift when any of these change. See [`tools.md`](./tools.md) §5 for the isolation/resonance check.

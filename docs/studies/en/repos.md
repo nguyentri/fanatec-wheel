@@ -79,6 +79,9 @@ If you want to keep exploring the latest community creations across GitHub and G
 - [SimHub wiki](https://github.com/SHWotever/SimHub/wiki) — public telemetry/dashboard/button-box ecosystem.
 - [OpenFFBoard wiki](https://github.com/Ultrawipf/OpenFFBoard/wiki/) — public modular FFB wheelbase ecosystem.
 
-## Unresolved Questions
+## Open Questions for Developers to Self-Investigate
 
-- Which repositories should be promoted into a formal compatibility matrix after bench verification?
+Reviewed 2026-07-05. Process question — the answer is produced by the reader's verification work, not by lookup.
+
+- **Which repositories should be promoted into a formal compatibility matrix after bench verification?**
+  *How to investigate:* treat every repo here as **discovery input / community evidence**, never as an official spec. Promote a project into [`compatibility-matrix.md`](./compatibility-matrix.md) only after (a) confirming the exact hardware/firmware it was validated against, (b) reproducing its behavior on the bench, and (c) recording the result with date and versions. Prioritize projects that already publish concrete, checkable details — e.g. `gotzl/hid-fanatecff` (device USB IDs, extended controls) and `GeekyDeaks/fanatec-pedal-emulator` (RJ12/UART pinout) — since these are the easiest to verify. Re-verify on firmware or product changes.

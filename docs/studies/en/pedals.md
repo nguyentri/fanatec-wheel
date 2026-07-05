@@ -20,7 +20,7 @@ This section details the physical sensors used to translate mechanical pedal mov
 
 Potentiometers are contact-based rotary resistors that measure the pedal's travel distance (position). As the pedal is pressed, a mechanical wiper moves across a resistive track, producing a variable voltage output.
 
-![Potentiometer vs. rotary encoder](./potentiometer_and_encoder.svg)
+![Potentiometer vs. rotary encoder](../assets/potentiometer_and_encoder.svg)
 
 Read as a voltage divider, the output is simply `V_out = V+ × (wiper position / full track)`. This is cheap and trivial for an ADC to read, but the sliding contact is also the weakness: it wears, and worn tracks develop noise and dead spots. (The right-hand panel shows a rotary encoder for contrast — a contactless alternative used for steering-angle and rotor sensing rather than pedal travel.)
 
@@ -31,7 +31,7 @@ Read as a voltage divider, the output is simply `V_out = V+ × (wiper position /
 
 Hall Effect sensors are non-contact devices that measure changes in a magnetic field to determine pedal position. A magnet attached to the pedal arm moves relative to the sensor, altering the magnetic flux.
 
-![Hall-effect sensor operation](./hall_effect_sensor.svg)
+![Hall-effect sensor operation](../assets/hall_effect_sensor.svg)
 
 Because there is no physical contact between the magnet and the sensor, there is nothing to wear out. The trade-off is placement sensitivity: the magnet size, air gap, and alignment must be right, and calibration should keep the pedal's travel inside the sensor's linear range (the output saturates outside it, as the curve above shows).
 
@@ -42,7 +42,7 @@ Because there is no physical contact between the magnet and the sensor, there is
 
 Load cells measure the physical force (pressure) applied to the pedal rather than its position. They utilize strain gauges that deform under pressure, altering their electrical resistance and producing a microvolt-level differential signal. This mimics real-world hydraulic brake systems where pedal pressure dictates braking force.
 
-![Load cell strain gauges in a Wheatstone bridge](./load_cell_wheatstone_bridge.svg)
+![Load cell strain gauges in a Wheatstone bridge](../assets/load_cell_wheatstone_bridge.svg)
 
 The reason the raw signal is so small — and why an amplifier is non-negotiable — is visible in the bridge above. Four strain gauges are wired into a Wheatstone bridge, two in tension and two in compression, so applying force unbalances the bridge and produces a differential voltage. This arrangement doubles sensitivity and cancels temperature drift, but the output is still only microvolts to millivolts, so an instrumentation amplifier sits between the bridge and the ADC.
 
@@ -80,7 +80,7 @@ graph LR
 
 The raw analog signals from the sensors must be digitized. The resolution of the ADC directly impacts the precision of the pedal input.
 
-![ADC resolution](./adc_sampling_resolution.svg)
+![ADC resolution](../assets/adc_sampling_resolution.svg)
 
 An ADC records the continuous analog signal as a series of discrete steps. More bits means more steps, so the recorded staircase hugs the true signal more closely and the pedal moves smoothly rather than in visible jumps. This is why a load cell — whose usable signal is tiny even after amplification — benefits from 16-bit or higher conversion, while position sensors are adequate at 12-bit. The important caveat is that extra bits only help if the analog signal is clean; without a stable reference and proper filtering, the additional bits simply digitize noise.
 
@@ -177,11 +177,23 @@ This section explores how community open-source projects approach pedal emulatio
 | Motivation | Allows use of non-Fanatec pedals on consoles, bypassing console security |
 | Product lesson | The wheelbase pedal port is an analog/digital interface (not USB), which can be spoofed by external DACs/PWM to proxy other devices. |
 
-## 7. Unresolved Questions
+## 7. Question Register (Resolved and Open)
 
-*   What is the acceptable latency budget (in milliseconds) from physical pedal actuation to USB HID packet transmission for competitive e-sports?
-*   Should the firmware support custom, non-linear gamma curves for throttle applications directly on the microcontroller, or should this be delegated to the host PC software?
-*   Are there proprietary wheelbase protocols over RJ12 that require licensing or reverse-engineering for cross-compatibility?
+Reviewed 2026-07-05.
+
+### 7.1 Resolved
+
+- **What is the acceptable latency budget (ms) from physical pedal actuation to USB HID packet transmission for competitive e-sports?**
+  **Engineering inference.** The dominant, controllable term is the report interval: a 1000 Hz (1 ms interval) HID device caps quantization latency at ~1 ms, versus ~8 ms at 125 Hz. A competitive target is therefore a **1 ms polling interval** plus a bounded sampling/filtering delay, keeping actuation-to-report comfortably under one game frame (≈16.7 ms at 60 Hz). Treat 1 ms as the *transport* budget and measure sensor + filter latency separately (see [`telemetry.md`](./telemetry.md) §6 for the stage-additive method); over-filtering (heavy averaging) is usually the real latency culprit, not USB.
+- **Should the firmware support custom non-linear gamma curves on the MCU, or delegate to host software?**
+  **Engineering inference: support both, MCU-first for portability.** An on-device curve (lookup table over the calibrated range) works everywhere including consoles and independent of host software, and is the safer default; a host-side curve offers richer, easier editing. The common pattern is: MCU applies calibration + an optional stored curve; host tooling edits and uploads that curve. Keep the raw axis available so the curve is never destructive.
+- **Are there proprietary wheelbase protocols over RJ12 that require licensing or reverse-engineering for cross-compatibility?**
+  **Community evidence (verify electrically).** The analog pedal path over RJ12 is simple and community-documented — e.g. GeekyDeaks' `fanatec-pedal-emulator` reports the CSL Elite pedal-to-base link as a plain **UART protocol** (CP2102, 5 V-tolerant) and publishes an RJ12 pinout (pin 1 = 3.3 V, pin 6 = GND, analog signal(s) between; wheelbase side carries RX/TX/Vcc). No licensing is needed for the *analog/serial* pedal path itself; what is licensed/proprietary is the **console authentication** the base performs upstream, which is a separate concern from the pedal link. Older CSL Elite LC modules use a PIC18F26J53. Confirm any pinout on your exact hardware before connecting.
+
+### 7.2 Open — for developers to self-investigate
+
+- **Exact per-model RJ12 electrical limits and pin assignments across the full product range.**
+  *How:* the community pinout above covers selected models only; measure your target model's socket (reference voltages, signal ranges, current limits) before proxying third-party hardware, and never exceed the base's rail limits.
 
 ## 8. References
 

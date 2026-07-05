@@ -79,6 +79,9 @@ Grounded in the platform-licensing entries in [tools.md](./tools.md); all specif
 
 Add a row only with an explicit status. New "Verify" rows are welcome as a to-do list, but a cell **shall not** be marked Verified without either an official source or a reproduced bench result recorded alongside it.
 
-## Unresolved Questions
+## Open Questions for Developers to Self-Investigate
 
-- Which specific products, QR conversions, and community projects can be moved from "Verify" / "Community-reported" to "Verified" after bench testing and confirmation against live official sources?
+Reviewed 2026-07-05. This is a process/verification question with no static answer — promotion depends on bench work the reader performs.
+
+- **Which specific products, QR conversions, and community projects can move from "Verify" / "Community-reported" to "Verified" after bench testing?**
+  *How to investigate:* apply the evidence model in [`README.md`](./README.md). Promote an item to **Verified public behavior** only when it is either (a) confirmed against a live official source (manufacturer manual/support page/product page) *and* re-checked for currency, or (b) reproduced on the bench with the actual hardware and recorded (setup, firmware version, date, measurement). Community-reported items (e.g. the `0EB7:xxxx` USB IDs from `hid-fanatecff`, RJ12 pinouts, QR conversion claims) stay "Community-reported" until one of those two conditions is met. Keep a dated log so entries can be re-verified when firmware or product lines change.

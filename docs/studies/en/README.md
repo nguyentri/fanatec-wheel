@@ -1,12 +1,14 @@
 # Sim Racing Study Index
 
-> Version: 1.2
+> Version: 1.4
 > Reviewed: 2026-07-05
 
 ## Document Change Log
 
 | Version | Date | Changes |
 |---|---|---|
+| 1.4 | 2026-07-05 | Question-register pass. Reviewed every "Unresolved Questions" section across the base and either **resolved** items (from the knowledge base, public standards, or documented community evidence such as the `hid-fanatecff` USB IDs and the GeekyDeaks RJ12/UART pinout) or **re-styled** them as "Open — developer self-investigation" with a concrete method (what to measure, which spec to obtain, which tool to use). Sections renamed to "Question Register (Resolved and Open)" or "Open Questions for Developers to Self-Investigate" accordingly. |
+| 1.3 | 2026-07-05 | Added a consolidated, reader-facing force-feedback explainer ([force_feedback_explained.md](./force_feedback_explained.md)) covering the theory of force, the servo motor and power electronics, the full FFB signal chain, and every category of force/vibration felt at the hand (tire physics, weight transfer, road/kerb texture, condition effects) plus fidelity, tuning, and safety. It reuses the existing FFB-relevant illustrations and cross-references the subsystem docs. |
 | 1.2 | 2026-07-05 | Systematic explanation + illustration pass. Added original SVG illustrations for physical/power-electronics concepts across the subsystem docs (three-phase inverter, PWM/ADC timing, thermal derating, servo cross-section, load cell / Hall / potentiometer-encoder sensors, ADC resolution, button-matrix ghosting, H-pattern gate, quick-release coupling, cockpit flex, 6-DOF motion, comms stack, telemetry latency, tactile crossover), each with accompanying plain-language explanation. Illustrations are original diagrams, not manufacturer artwork. |
 | 1.1 | 2026-07-02 | Added version header and change log; added the five newer subsystem docs (telemetry, tactile, motion, compatibility-matrix, communication-protocols) to the reading path and dependency map; captioned the dependency-map diagram. |
 
@@ -18,6 +20,7 @@ This folder is a developer-oriented study map for sim-racing hardware and firmwa
 |---|---|---|
 | 1 | [glossary.md](./glossary.md) | Learn product terms, abbreviations, compatibility labels, and customer-safe wording. |
 | 2 | [sim_racing_research.md](./sim_racing_research.md) | Learn the ecosystem, safety model, FFB path, and subsystem ownership. |
+| 2b | [force_feedback_explained.md](./force_feedback_explained.md) | Get the consolidated FFB picture: theory of force, servo motor, the full signal chain, what the hands feel (tire physics, weight transfer, road texture), fidelity, tuning, and safety. |
 | 3 | [wheel_base.md](./wheel_base.md) | Understand the safety-critical hub: USB/PID, motor control, torque arbitration, update, diagnostics. |
 | 4 | [wheel_rim.md](./wheel_rim.md) | Understand rotating I/O nodes, QR links, rim identity, input scanning, displays, and generation boundaries. |
 | 5 | [pedals.md](./pedals.md) | Understand sensor chains, calibration, USB HID, and base-port proxying. |

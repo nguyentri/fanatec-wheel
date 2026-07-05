@@ -1,7 +1,7 @@
 # Sim Racing Cockpits: Mechanical Architecture & Rigidity
 
 > Research date: 2026-07-02
-> Evidence model: public product/manual information plus engineering inference. Cockpit stiffness recommendations are design guidance, not a universal vendor requirement.  
+> Evidence model: public product/manual information plus engineering inference. Cockpit stiffness recommendations are design guidance, not a universal vendor requirement.
 > Related docs: [sim_racing_research.md](./sim_racing_research.md), [wheel_base.md](./wheel_base.md), [pedals.md](./pedals.md).
 
 ## 1. Introduction
@@ -19,7 +19,7 @@ graph TD
     RigBase[Main Base Frame] --> WheelUprights[Wheelbase Uprights]
     RigBase --> PedalDeck[Pedal Deck]
     RigBase --> SeatCrossmembers[Seat Cross-members]
-    
+
     WheelUprights --> DDMount[Direct Drive Mount]
     PedalDeck --> LCPedals[Load Cell Pedals]
     SeatCrossmembers --> SeatBrackets[Seat Brackets / Sliders]
@@ -32,15 +32,15 @@ The base frame is the foundational structural loop. All secondary structures (up
 
 Structural flex introduces parasitic losses to the system. Understanding how flex affects both output fidelity and input consistency is critical for designing a performant rig.
 
-![Cockpit rigidity: where force goes in a stiff vs. flexible rig](./cockpit_flex_forces.svg)
+![Cockpit rigidity: where force goes in a stiff vs. flexible rig](../assets/cockpit_flex_forces.svg)
 
 The illustration makes the core idea concrete: in a stiff rig, the wheelbase's FFB torque and the driver's brake force transfer almost entirely to the hands and feet. In a flexible rig, part of that energy bends the frame instead — the upright leans under torque and the pedal deck moves back under braking. That absorbed energy is exactly the detail the driver loses: the wheel feels soft or delayed, and braking becomes hard to repeat.
 
 ### 3.1. Direct Drive Torque Dynamics
 
-Direct Drive (DD) wheelbases couple a large servo motor directly to the steering wheel, capable of producing transient torque spikes in excess of 20Nm. These motors operate with high bandwidth to deliver detailed road texture and slip angle feedback. 
+Direct Drive (DD) wheelbases couple a large servo motor directly to the steering wheel, capable of producing transient torque spikes in excess of 20Nm. These motors operate with high bandwidth to deliver detailed road texture and slip angle feedback.
 
-If the wheelbase uprights flex, the mechanical structure absorbs the high-frequency FFB transients. 
+If the wheelbase uprights flex, the mechanical structure absorbs the high-frequency FFB transients.
 
 * The wheelbase uprights **shall** be constructed from profile no smaller than 40x80mm to resist torsional flex.
 * The mounting brackets connecting the uprights to the base frame **should** utilise heavy-duty corner gussets and sandwich plates to eliminate play.
@@ -93,11 +93,21 @@ For customer communication, separate three questions:
 2. Is the structure rated and sufficiently stiff for the base's available torque and pedal force?
 3. Are the seat, wheel, pedals, shifter, and handbrake ergonomically adjustable together?
 
-## 6. Unresolved Questions
+## 6. Question Register (Resolved and Open)
 
-- What is the measurable, acceptable tolerance for micro-flex (in millimeters) under a 100kg braking load before it demonstrably impacts load cell sensor consistency?
-- How should vibration transducers (e.g., tactile transducers or "bass shakers") be mechanically isolated from the primary structural profiles to avoid destructive interference with Direct Drive high-frequency FFB?
-- Are there specific resonance frequencies in standard 40x80mm aluminum structures that align with common FFB signal frequencies, and if so, how can they be dampened?
+Reviewed 2026-07-05.
+
+### 6.1 Resolved
+
+- **How should tactile transducers ("bass shakers") be mechanically isolated from the primary structural profiles to avoid interfering with DD high-frequency FFB?**
+  **Resolved ([`tactile.md`](./tactile.md) §4–5).** Mount transducers to the seat or a dedicated panel rather than rigidly into the main FFB load path; where a frame mount is unavoidable, use compliant/isolating mounts; and restrict the transducer to its intended low-frequency band with a crossover so its energy does not sum into the wheel's FFB detail band. Commission the tactile system independently before running it alongside high-torque FFB.
+
+### 6.2 Open — for developers to self-investigate
+
+- **Acceptable micro-flex tolerance (mm) under a 100 kg braking load before it demonstrably affects load-cell consistency.**
+  *How:* this is measurement-specific to the rig and load cell — there is no universal number. Method: apply a known static load, measure deflection at the pedal deck with a dial indicator, and correlate against load-cell repeatability. Treat the rig as a stable reference frame only once deflection is small relative to the load cell's resolution; record fastener torque and bracket type so results are reproducible (see Implementation Notes).
+- **Do standard 40×80 mm aluminum structures have resonances aligning with common FFB frequencies, and how to damp them?**
+  *How:* **Unknown without measurement on the actual structure** — resonances depend on length, bracing, joints, and mounted mass. Method (per [`tactile.md`](./tactile.md) §6 and [`tools.md`](./tools.md) §5): excite the structure (swept sine via a transducer) with an accelerometer attached to locate resonances, then keep transducer energy and dominant FFB effect bands out of those frequencies, adding mass/bracing/isolating mounts where an overlap exists.
 
 ## 7. References
 

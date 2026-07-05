@@ -24,6 +24,7 @@ This overarching document serves as the root of the sim racing knowledge base. F
 | Subsystem | Document | Primary Focus |
 |---|---|---|
 | **Wheel Base** | [`wheel_base.md`](./wheel_base.md) | Motor control, FFB stages, centralized USB hub |
+| **Force Feedback (explainer)** | [`force_feedback_explained.md`](./force_feedback_explained.md) | Consolidated FFB explanation: force theory, servo motor, signal chain, felt forces/vibrations, fidelity, tuning, safety |
 | **Steering Rim** | [`wheel_rim.md`](./wheel_rim.md) | Embedded wheel firmware, inputs, integrated displays, SPI |
 | **Pedals** | [`pedals.md`](./pedals.md) | Load cells, ADCs, RJ12 proxying |
 | **Add-Ons** | [`add_ons.md`](./add_ons.md) | Shifters (H-pattern/sequential) and handbrakes |
@@ -118,8 +119,8 @@ Tier labels help navigation but do not prove that two products are electrically,
 
 The wheel base is the central system hub for a console setup. Compatible pedals, shifters, and handbrakes connect to the base, which exposes one licensed USB path to the console. On PC, supported peripherals may instead operate as independent USB devices. A Ready2Race bundle is a purchasing package, not a new interface standard.
 
-![Fanatec Ecosystem](./fanatec_ecosystem.jpg)
-![Fanatec Products](./fanatec_products.jpg)
+![Fanatec Ecosystem](../assets/fanatec_ecosystem.jpg)
+![Fanatec Products](../assets/fanatec_products.jpg)
 
 | Platform | Fanatec License Location | Practical Rule |
 |---|---|---|
@@ -277,9 +278,9 @@ The core wheel base architecture is separated into a system management domain an
 
 The motor is a three-phase PMSM — a wound steel stator around a permanent-magnet rotor on the steering shaft — and the inverter is the six-MOSFET power stage that synthesizes its three phase currents from the DC bus:
 
-![Direct-drive servo motor cross-section](./servo_motor_cross_section.svg)
+![Direct-drive servo motor cross-section](../assets/servo_motor_cross_section.svg)
 
-![Three-phase inverter driving the motor](./three_phase_inverter.svg)
+![Three-phase inverter driving the motor](../assets/three_phase_inverter.svg)
 
 The inverter's three half-bridges each set one phase's voltage by PWM; the two switches in a leg are never on together (dead-time prevents a DC-bus short), and low-side shunts return the phase-current measurement the FOC loop needs.
 
@@ -320,7 +321,7 @@ The system may use a single MCU or a split architecture (Main MCU + Motor MCU/AS
 
 Field-Oriented Control (FOC) transforms rotor angle and current measurements to regulate the torque-producing current. The firmware shall ensure high accuracy and synchronized PWM/ADC timing. Hardware-level overcurrent and break inputs shall override software control. Firmware shall synchronously trigger the ADC within a valid middle-of-PWM window and shall calibrate current-sense offsets during initialization.
 
-![PWM carrier, duty cycle, and the ADC sample point](./foc_pwm_timing.svg)
+![PWM carrier, duty cycle, and the ADC sample point](../assets/foc_pwm_timing.svg)
 
 The "valid middle-of-PWM window" is the key timing detail: a triangular carrier compared against each phase's duty command generates the gate signals, and the ADC samples current at the carrier peak — the quiet midpoint of the switching period — so the reading is not corrupted by switching-edge noise. The dead-time zoom shows the brief both-off gap that prevents shoot-through on every transition.
 
@@ -706,21 +707,39 @@ flowchart TD
 
 Engineers shall physically verify encoder scale and direction, ADC timing, and independent gate disable before connecting the full power supply.
 
-## 13. Unresolved Questions
+## 13. Question Register (Resolved and Open)
 
-This section lists the technical and product requirements that must be confirmed before implementation.
+Reviewed 2026-07-05. Items that could be answered from the knowledge base, public standards, or documented community evidence are marked **Resolved**. Items that depend on a specific product's requirements, proprietary vendor specs, or on-target measurement cannot be answered in the abstract and are re-styled as **Open — developer self-investigation**, each with a concrete method.
 
-- Should motion platforms, tactile transducers, cockpits, and telemetry software be expanded into separate documents?
-- Product torque, speed, inertia, rotation, acoustic, and environmental requirements?
-- Supported PC/console platforms and approved licensing architecture?
-- Exact MCU/ASIC, encoder, gate driver, sensing topology, and power ratings?
-- Peripheral electrical/protocol topology and ownership?
-- USB descriptors, report cadence, effect capacity, and vendor interface?
-- Hardware torque-inhibit path and safety/regulatory targets?
-- Update signing, rollback, provisioning, and recovery policy?
-- Calibration/version compatibility across base, motor, rim, pedals, and adapters?
-- End-to-end latency/jitter budgets and acceptance methods?
-- Diagnostics retention and retail debug-access rules?
+### 13.1 Resolved
+
+- **Should motion platforms, tactile transducers, cockpits, and telemetry software be expanded into separate documents?**
+  **Resolved (done).** All four now exist: [`motion.md`](./motion.md), [`tactile.md`](./tactile.md), [`cockpits.md`](./cockpits.md), and [`telemetry.md`](./telemetry.md), and are in the reading path in [`README.md`](./README.md).
+- **USB descriptors, report cadence, effect capacity, and vendor interface?**
+  **Partially resolved (verified public model; product values Unknown).** The transport and effect model are public: USB HID for inputs and USB PID Class 1.0 for force effects (constant, periodic, condition, ramp), typically USB 2.0 Full-Speed. Report cadence follows the endpoint's interrupt interval; the control loop rates are in §10.2. What remains product-specific is the exact VID/PID, effect-pool size, and any vendor (non-HID) interface — see §13.2. Community evidence: the `hid-fanatecff` driver enumerates Fanatec devices under **VID `0EB7`** (e.g. `0EB7:0020` for the CSL DD / DD Pro / ClubSport DD base), which is *community-observed*, not an official descriptor spec.
+- **Hardware torque-inhibit path and safety/regulatory targets?**
+  **Resolved at the architecture level (targets are product-specific).** The required inhibit path is defined throughout §11 and in [`wheel_base.md`](./wheel_base.md) §15: an independent hardware fault latch driven by an overcurrent comparator, gate-driver fault, E-stop/torque-off, and watchdog, asynchronously disabling the gate driver regardless of software. The industry reference pattern is a Safe-Torque-Off (STO) style architecture (cf. TI TIDA-01599). The *specific* regulatory scope (e.g. which EMC/safety marks apply in target markets) is a product decision — see §13.2.
+- **End-to-end latency/jitter budgets and acceptance methods?**
+  **Resolved as method (numeric targets are product-specific).** Latency is stage-additive; budget and measure each stage independently (game tick → USB → FFB eval → FOC loop) rather than only end-to-end, per [`telemetry.md`](./telemetry.md) §6. Typical loop-rate anchors are in §10.2 (FOC 10–40 kHz, FFB 0.5–2 kHz). The accepted budget number itself must be set against the product's competitive/latency goals and then verified on target.
+
+### 13.2 Open — for developers to self-investigate
+
+These require a specific product definition, an approved vendor spec, or bench measurement. They are engineering inputs to gather, not facts to look up.
+
+- **Product torque, speed, inertia, rotation, acoustic, and environmental requirements.**
+  *How:* derive from the target market segment and reference competitors' published specs; convert to motor sizing (continuous/peak torque, thermal duty) and confirm with a dyno/bench.
+- **Supported PC/console platforms and approved licensing architecture.**
+  *How:* platform licensing is contractual — obtain the console licensing program terms directly; do not infer or emulate console authentication (§11.3). PC support is verifiable against OS + game requirements.
+- **Exact MCU/ASIC, encoder, gate driver, sensing topology, and power ratings.**
+  *How:* select against the torque/loop-rate requirements above using vendor reference designs (e.g. Infineon PMSM FOC, TI sensored FOC, OpenFFBoard's TMC4671-based approach as a public example); validate on a bring-up board.
+- **Peripheral electrical/protocol topology and ownership.**
+  *How:* define per-port; for the base-proxy path, community pinouts (FendtXerion Fanatec-Pinout wiki; GeekyDeaks pedal-emulator RJ12/UART notes) are discovery input to verify electrically, not an authority.
+- **Update signing, rollback, provisioning, anti-downgrade, and recovery policy.**
+  *How:* choose a signing scheme (hash/CRC + authenticated image), A/B staging, and an independent recovery bootloader; see [`wheel_base.md`](./wheel_base.md) §14.
+- **Calibration/version compatibility across base, motor, rim, pedals, and adapters.**
+  *How:* version every node and define a compatibility matrix ([`compatibility-matrix.md`](./compatibility-matrix.md)); range-check calibration before use.
+- **Diagnostics retention and retail debug-access rules.**
+  *How:* decide a wear-limited critical-fault retention policy and disable manufacturing debug in retail images (§11.3).
 
 ## 14. References
 

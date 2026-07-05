@@ -418,17 +418,17 @@ Một hệ servo thực sự cần có:
 
 **Bên trong motor (stator, rotor, cặp cực).** Đa số direct-drive base dùng motor đồng bộ nam châm vĩnh cửu ba pha (PMSM): một stator bằng thép quấn dây đồng bao quanh một rotor gắn nam châm nối với trục vô lăng. Torque sinh ra do tương tác từ qua khe hở không khí rất nhỏ giữa stator và rotor.
 
-![Mặt cắt ngang motor servo direct-drive](./servo_motor_cross_section.svg)
+![Mặt cắt ngang motor servo direct-drive](../assets/servo_motor_cross_section.svg)
 
 **Inverter: biến DC thành dòng ba pha.** Motor ba pha không thể chạy bằng DC thô — nó cần ba dòng lệch pha 120°. Sáu MOSFET công suất (ba nửa cầu) băm bus DC thành ba pha đó.
 
-![Inverter ba pha điều khiển motor](./three_phase_inverter.svg)
+![Inverter ba pha điều khiển motor](../assets/three_phase_inverter.svg)
 
 Hai điểm an toàn quan trọng: hai công tắc trong cùng một nhánh **không bao giờ** được bật cùng lúc (nếu không sẽ ngắn mạch bus DC — *shoot-through*), nên luôn có một khe **dead-time** nhỏ; và các điện trở shunt phía thấp là nơi đo dòng pha — phản hồi mà vòng dòng điện FOC cần.
 
 **Thời điểm lấy mẫu dòng.** Các công tắc được điều khiển bằng PWM. Vì các cạnh chuyển mạch gây nhiễu điện, dòng được lấy mẫu ở điểm yên tĩnh giữa chu kỳ PWM thay vì gần cạnh.
 
-![Sóng mang PWM, duty cycle và điểm lấy mẫu ADC](./foc_pwm_timing.svg)
+![Sóng mang PWM, duty cycle và điểm lấy mẫu ADC](../assets/foc_pwm_timing.svg)
 
 ### 5.5 Encoder và steering angle
 
@@ -546,11 +546,11 @@ Pedals chuyển động chân người lái thành tín hiệu điện.
 
 Ba loại cảm biến này khác nhau ở nguyên lý: potentiometer đo vị trí bằng con trượt tiếp xúc trên vệt điện trở; Hall đo vị trí không tiếp xúc qua nam châm; load cell đo lực qua strain gauge trong một cầu Wheatstone.
 
-![Potentiometer so với rotary encoder](./potentiometer_and_encoder.svg)
+![Potentiometer so với rotary encoder](../assets/potentiometer_and_encoder.svg)
 
-![Cảm biến Hall effect](./hall_effect_sensor.svg)
+![Cảm biến Hall effect](../assets/hall_effect_sensor.svg)
 
-![Strain gauge của load cell trong cầu Wheatstone](./load_cell_wheatstone_bridge.svg)
+![Strain gauge của load cell trong cầu Wheatstone](../assets/load_cell_wheatstone_bridge.svg)
 
 ### 7.2 Vì sao phanh load cell tốt hơn potentiometer?
 
