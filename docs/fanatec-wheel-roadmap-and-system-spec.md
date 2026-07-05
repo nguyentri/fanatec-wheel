@@ -19,6 +19,7 @@
 | 1.0 | 2026-07-03 | Initial roadmap, system specification, and phased procurement plan. |
 | 1.1 | 2026-07-03 | Resolved open questions: first bench base fixed to CSL DD 8 Nm; added §11.4 legacy-link output capability findings (display/LED/rumble frame fields) from public source review; updated Phase 2/4 accordingly. |
 | 1.2 | 2026-07-04 | Review pass: added §11.5 link-timing findings (12 MHz observed clock, CRC-8 polynomial verified computationally, Zephyr slave-driver confirmation), added §16 Completed Product Definition with system/firmware diagrams and requirements traceability, linked all phase specifications, updated question register. |
+| 1.3 | 2026-07-04 | Output HMI revised: the RPM/flag LEDs are replaced by a digital LCD panel rendering the same rev bar + flag indicators (delta specs 4-A1/4-S1 v1.2); BOM and Phase 4 work items updated. |
 
 ---
 
@@ -31,7 +32,7 @@ The program shall deliver a PC-first, 300 mm closed D-shaped GT steering wheel t
 - communicates with a Fanatec direct-drive base only through the quick-release electrical link (no normal USB data cable),
 - runs Zephyr RTOS 4.4.0 on a natively 3.3 V Cortex-M MCU,
 - provides full GT controls, magnetic shift paddles, and dual analog Hall clutch paddles,
-- provides RPM/flag RGB LEDs and two directional LRAs as bounded output cues,
+- provides a digital LCD rendering the RPM rev bar and flag indicators, plus two directional LRAs, as bounded output cues,
 - remains screenless in the core configuration; a 4.3-inch display is a gated optional expansion.
 
 Initial compatibility research targets CSL DD / GT DD Pro and Podium DD1/DD2 only. ClubSport DD/DD+ and the current Podium DD shall be treated as unsupported until their electrical and protocol behavior is established through approved documentation or safe bench measurement (community evidence explicitly warns the legacy AVR emulator approach fails on ClubSport DD/DD+).
@@ -91,7 +92,7 @@ This section defines the end-state product the roadmap converges on. Phase deliv
 
 ### 3.5 Output HMI
 
-15 RGB RPM LEDs, eight flag/status LEDs positioned for peripheral vision, and two independently driven LRAs for short left/right cues. Continuous road-texture haptic effects shall not be implemented; they may mask base FFB.
+A digital LCD panel rendering a 15-segment RPM rev bar and eight flag/status indicators positioned for peripheral vision, and two independently driven LRAs for short left/right cues. Continuous road-texture haptic effects shall not be implemented; they may mask base FFB.
 
 ### 3.6 Acceptance Criteria (system level)
 
@@ -292,7 +293,7 @@ This phase adds the bounded output HMI (LEDs, LRAs), proves output traffic canno
 | Step | Action | Notes / Constraint |
 |---|---|---|
 | 1 | Determine which LED/display/rumble commands the stock base+driver actually transport to a legacy rim (from Phase 2 captures and the Linux driver's public feature surface — `Community implementation`: [hid-fanatecff](https://github.com/gotzl/hid-fanatecff)) | Decides whether RPM LEDs are base-fed or host-fed |
-| 2 | Implement LED service: 15 RPM + 8 flag LEDs, rate-limited, priority alerts over decoration, safe quiet state on stale data | Medium priority; measured against link error rate |
+| 2 | Implement rev/flag display service: 15-segment rev bar + 8 flag indicators on the digital LCD, rate-limited, priority alerts over decoration, safe quiet state on stale data | Medium priority; measured against link error rate |
 | 3 | Implement LRA service: two independent short directional cues via haptic driver; hardware-ready even if base telemetry cannot feed it | No continuous texture effects |
 | 4 | 24-hour combined stress: max input + max LED + LRA duty against the real base; zero missed transactions required | The core Approach-A validation |
 | 5 | Full-scale ergonomic mock-up (3D-printed or laser-cut rim blank with all controls placed); blind control-identification sessions; freeze control count and placement | Gate for mechanical CAD |
@@ -303,7 +304,7 @@ This phase adds the bounded output HMI (LEDs, LRAs), proves output traffic canno
 
 | Item | Qty | Band | Purpose | Notes |
 |---|---|---|---|---|
-| Addressable RGB LEDs (SK6812/WS2812-class) or constant-current LED driver ICs + RGB LEDs | 30+ | A | 15 RPM + 8 flag + spares | Current budget must fit measured QR budget |
+| Digital LCD panel (SPI/parallel TFT, RGB565) + backlight driver | 1 (+1 spare) | A | Rev bar + flag rendering (replaces the addressable LED chain) | Panel + backlight current must fit measured QR budget |
 | LRA actuators (coin/bar type) | 4 | A–B | 2 fitted + spares | |
 | Haptic driver ICs/breakouts (DRV2605L-class) | 2–3 | A | LRA drive with braking/overdrive | |
 | Load switch / ideal-diode ICs (TPS2211/LM66100-class), 3.3 V LDO/buck, supervisor ICs | — | A | Power tree per §3.2 | |
@@ -548,7 +549,7 @@ flowchart LR
         FP[Fast path: SPI slave DMA + CS EXTI re-arm]
         AD[rimlink v1 legacy-spi - versioned adapter]
         IS[input_svc v2: scan, debounce, quadrature, Hall, dual-clutch]
-        OS[output_svc v2: led_svc bit-to-pattern, lra_svc gated]
+        OS[output_svc v2: lcd_svc race screen, lra_svc gated]
         PM[power mgr: rail sequencing, brownout]
         DG[diag_svc: shell, counters, capture ring, health]
         ST[settings: cal, maps, modes - locked in production]

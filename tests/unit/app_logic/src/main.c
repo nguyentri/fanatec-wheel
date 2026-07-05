@@ -17,7 +17,7 @@
 #include "encoder.h"
 #include "funky.h"
 #include "clutch.h"
-#include "led_svc.h"
+#include "lcd_svc.h"
 #include "lra_svc.h"
 
 ZTEST(seg7, test_decode_reference_table)
@@ -332,51 +332,51 @@ ZTEST(clutch, test_dual_clutch_other_modes)
 }
 
 
-/* ---- LED renderer (spec 4-S1, pure) ---- */
+/* ---- LCD rev-bar renderer (spec 4-S1, pure) ---- */
 
-static bool led_lit(const struct led_frame *f, int i)
+static bool lcd_lit(const struct lcd_frame *f, int i)
 {
 	return f->rgb[i][0] || f->rgb[i][1] || f->rgb[i][2];
 }
 
-ZTEST(led, test_render_interpolation_and_flags)
+ZTEST(lcd, test_render_interpolation_and_flags)
 {
-	struct led_frame f;
+	struct lcd_frame f;
 	const uint8_t disp[3] = {0};
 
 	/* No bits: dark bar, no flags. */
-	led_render(0, disp, &f);
-	for (int i = 0; i < LED_STRIP_LEN; i++) {
-		zassert_false(led_lit(&f, i), "dark at %d", i);
+	lcd_render(0, disp, &f);
+	for (int i = 0; i < LCD_REV_SEGMENTS; i++) {
+		zassert_false(lcd_lit(&f, i), "dark at %d", i);
 	}
 	zassert_equal(f.flags, 0, "no flags");
 
 	/* Bit 0 -> LED 0 lit green, no red (start of ramp). */
-	led_render(BIT(0), disp, &f);
+	lcd_render(BIT(0), disp, &f);
 	zassert_true(f.rgb[0][1] > 0, "LED0 green");
 	zassert_equal(f.rgb[0][0], 0, "LED0 no red at position 0");
 
 	/* Bit 8 (last logical) -> LED 14 lit red, no green. */
-	led_render(BIT(8), disp, &f);
+	lcd_render(BIT(8), disp, &f);
 	zassert_true(f.rgb[14][0] > 0, "LED14 red");
 	zassert_equal(f.rgb[14][1], 0, "LED14 no green at position 8");
 
 	/* Mid position lands between LEDs: both neighbours lit. */
-	led_render(BIT(3), disp, &f); /* centre 5.25 */
-	zassert_true(led_lit(&f, 5), "LED5 lit");
-	zassert_true(led_lit(&f, 6), "LED6 spill");
+	lcd_render(BIT(3), disp, &f); /* centre 5.25 */
+	zassert_true(lcd_lit(&f, 5), "LED5 lit");
+	zassert_true(lcd_lit(&f, 6), "LED6 spill");
 
 	/* All 9 bits: full bar coverage. */
-	led_render(0x01FF, disp, &f);
+	lcd_render(0x01FF, disp, &f);
 	int lit = 0;
 
-	for (int i = 0; i < LED_STRIP_LEN; i++) {
-		lit += led_lit(&f, i) ? 1 : 0;
+	for (int i = 0; i < LCD_REV_SEGMENTS; i++) {
+		lit += lcd_lit(&f, i) ? 1 : 0;
 	}
 	zassert_true(lit >= 14, "full bar (%d lit)", lit);
 
 	/* Flags: bits 9-15 -> flag LEDs 0-6; flag 7 reserved. */
-	led_render((uint16_t)(BIT(9) | BIT(15)), disp, &f);
+	lcd_render((uint16_t)(BIT(9) | BIT(15)), disp, &f);
 	zassert_equal(f.flags, BIT(0) | BIT(6), "flag map");
 	zassert_false(f.flags & BIT(7), "flag 7 reserved (pending)");
 }
@@ -404,7 +404,7 @@ ZTEST(lra, test_gate_caps_duration_and_enforces_cooldown)
 	zassert_equal(lra_gate_request(&g, t + 200, 0), 0, "zero cue");
 }
 
-ZTEST_SUITE(led, NULL, NULL, NULL, NULL, NULL);
+ZTEST_SUITE(lcd, NULL, NULL, NULL, NULL, NULL);
 ZTEST_SUITE(lra, NULL, NULL, NULL, NULL, NULL);
 ZTEST_SUITE(encoder, NULL, NULL, NULL, NULL, NULL);
 ZTEST_SUITE(funky, NULL, NULL, NULL, NULL, NULL);

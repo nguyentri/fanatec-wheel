@@ -20,6 +20,10 @@ The QR and hub are separate compatibility boundaries. A universal hub may suppor
 
 For current Fanatec products, QR2 has distinct **Base-Side** and **Wheel-Side** components. Both sides must use QR2. QR1 and QR2 do not mate, QR1 is discontinued, and conversion support is model-specific. QR2 Lite, QR2, and QR2 Pro Wheel-Side variants also have different product and high-torque approvals; check the current compatibility list rather than inferring support from material alone.
 
+![Quick release: mechanical coupling and power/data bridge](./quick_release_exploded.svg)
+
+The coupling does two jobs at once. Mechanically it locks the Wheel-Side hub to the Base-Side shaft so torque transfers with no play. Electrically, for rims with buttons and displays, spring pins meet contact pads across the joint to carry power and data. Because both halves must be the same generation to mate at all, a shared rim bolt pattern on the hub does *not* prove QR or electrical compatibility — the QR generation, torque rating, and contact interface are separate checks.
+
 **Figure 1-1: Quick Release Electrical Architecture**
 
 ```mermaid
@@ -86,6 +90,10 @@ Button boxes expand the driver's input capabilities, handling ignition switches,
 > **Informative:** To support dozens of switches without exhausting microcontroller GPIO pins, buttons are wired in a row-column matrix.
 
 The button box hardware **shall** utilize a switch matrix topology for all push-buttons and toggles. A diode (e.g., 1N4148) **shall** be placed in series with each switch to prevent phantom keypresses (ghosting) when multiple inputs are active. Rotary encoders **shall not** be wired into the matrix; they **shall** be connected to dedicated GPIO pins with hardware or software debouncing.
+
+![Button matrix and anti-ghosting diodes](./button_matrix_ghosting.svg)
+
+The diode requirement is not optional cosmetics. In a bare matrix, holding three buttons that share a row and column lets current sneak through a back-path, so the scan reads a fourth key that nobody pressed — a phantom press. A diode in series with each switch allows current one way only, blocking that sneak path so the same three presses read correctly. This is why the diode is specified per switch rather than per row or column.
 
 **Figure 3-1: Matrix Wiring Topology**
 

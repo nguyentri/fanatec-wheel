@@ -19,6 +19,7 @@
 |---|---|---|
 | 1.0 | 2026-07-03 | Initial delta specifications for Phases 2–6 on the Phase 1 v1.0 baseline. |
 | 1.1 | 2026-07-04 | Review pass: fixture bandwidth requirement (12 MHz) added; Phase 2 fixture and PCB rev A block figures added; LED architecture, display-module link, and rev-B criteria questions closed as decisions. |
+| 1.2 | 2026-07-04 | 4-A1 output device changed from the addressable LED chain to a digital LCD panel (SPI/parallel TFT, RGB565) rendering the rev bar + flag indicators; question register row 2 updated accordingly; rail-switching and power-budget requirements carried over unchanged. |
 
 ---
 
@@ -150,9 +151,9 @@ This phase adds the bounded output hardware and converts the validated proto sta
 
 | ID | ADD item | Requirement summary |
 |---|---|---|
-| 4-A1 | **LED subsystem** | 15 RGB RPM LEDs + 8 flag/status LEDs. Addressable (SK6812-class) driven from a DMA-fed timer/SPI stream, or constant-current driver ICs — decided by the measured QR current budget (Phase 2, `verified`). Worst-case LED current shall fit the budget with ≥ 30 % margin; a global brightness cap shall be hardware-enforceable (rail load switch). |
+| 4-A1 | **Rev/flag display subsystem** | A digital LCD panel (SPI or parallel TFT, RGB565-capable) rendering the 15-segment RPM rev bar + 8 flag/status indicators locally. Panel and backlight sit on the switched output rail; worst-case panel + backlight current shall fit the measured QR budget (Phase 2, `verified`) with ≥ 30 % margin; a global backlight-brightness cap shall be hardware-enforceable (rail load switch). |
 | 4-A2 | **Haptic subsystem** | 2 LRAs on DRV2605L-class drivers (I2C + enable GPIOs), independent left/right channels, flyback/current protection per driver datasheet. Hardware-ready regardless of the §11.4 rumble-transport outcome. |
-| 4-A3 | **Load-switched output rail** | LEDs, LRAs (and future display) on a separately switched rail sequenced after link/input readiness; inrush-limited for LED bulk capacitance. |
+| 4-A3 | **Load-switched output rail** | The LCD panel (with backlight) and LRAs on a separately switched rail sequenced after link/input readiness; inrush-limited for panel/backlight bulk capacitance. |
 | 4-A4 | **Rim PCB rev A** | 4-layer board integrating: MCU (H723 baseline footprint; bakeoff alternate noted in layout review), QR interface protection (series-R, ESD arrays, TVS), ideal-diode power mux (QR vs service USB) — the productionized descendant of the reference project's isolation diode — 3V3 regulation + supervisor/brownout, scan fabric connectors (JST-GH per input group), LED/haptic drivers, load switches, SWD service pads (Tag-Connect), LINK_READY/SNAPSHOT_TICK test points retained, mounting pattern matching the Phase 5 plate draft. |
 | 4-A5 | **Ergonomic mock-up hardware** | Full-scale printed/laser-cut rim blanks carrying real controls for blind-identification sessions; not electrically connected to the base. |
 
@@ -262,6 +263,6 @@ Each track is independent and separately gated; none may modify the G5-frozen co
 | # | Question | Status (2026-07-04) | Resolution |
 |---|---|---|---|
 | 1 | QR2 wheel-side electrical tap details | **Measurement pending** | Genuinely empirical; Phase 2 step 2 owns it. The 12 MHz bandwidth requirement (§2.3) now constrains the tap design in advance |
-| 2 | LED architecture | **Resolved (baseline decision)** | SK6812-class addressable chain is the baseline (DMA-fed stream, one data line, per-LED RGB); the hardware-switched output rail plus firmware global-brightness cap enforce the power budget. Constant-current drivers remain the documented fallback if the verified QR budget cannot carry the chain's worst case with ≥ 30 % margin |
+| 2 | Rev/flag display architecture | **Resolved (revised decision)** | A digital LCD panel replaces the SK6812-class addressable chain: one display device renders the rev bar and flag indicators (Zephyr display API, RGB565 tile writes), removing the per-LED chain and its data-line timing from the board. The hardware-switched output rail plus a backlight-brightness cap enforce the power budget; the addressable chain remains the documented fallback if a suitable panel cannot fit the verified QR budget with ≥ 30 % margin |
 | 3 | Rev B respin | **Resolved (criteria defined)** | Rev B is triggered by any of: bring-up step failure not fixable by bodge within protection/power blocks, isolation-proof failure attributable to layout (coupling/return paths), or a bakeoff MCU decision differing from H723. Otherwise rev A proceeds to Phase 5 |
 | 4 | Display-module internal link | **Resolved (baseline decision)** | Full-duplex UART at 1 Mbaud, COBS-framed packets with CRC-16 and sequence numbers, telemetry one-way-dominant, module TX limited to acks/health. Chosen over SPI to avoid a second clocked bus near the QR link and to keep the module electrically trivial to disconnect. Physical layer re-verified against the Phase 2 power/EMC measurements at track start |

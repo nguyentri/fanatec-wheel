@@ -16,7 +16,7 @@ exists (spec 4-S4). Bring-up checklist per hardware spec s.4:
 1. Copy the overlay pinmux into the board DTS; run the pin registry
    diff against the schematic net list - zero conflicts required.
 2. Populate the nodes that are guarded stubs on the bench board:
-   `out_rail` (load switch, spec 4-S3), `led-strip` alias (spec 4-S1),
+   `out_rail` (load switch, spec 4-S3), the `chosen zephyr,display` LCD node + CONFIG_LVGL (spec 4-S1),
    `lra0` (DRV2605-class, spec 4-S2), and a windowed watchdog part
    if selected (spec 4-S6 deviation note).
 3. Boot with the same application binary configuration; the services

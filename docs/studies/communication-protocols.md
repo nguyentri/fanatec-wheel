@@ -32,6 +32,10 @@ flowchart TD
     App --> API --> Class --> Xport --> Link --> Phy
 ```
 
+The same stack, drawn as labelled layers with the concrete protocols at each level, makes the "each layer only talks to its neighbours" property easier to see:
+
+![The sim-racing communication stack](./usb_hid_pid_stack.svg)
+
 This document is organized top-down: PC transport and its device classes (§3–§6), the OS/API layer (§7), firmware update (§8), and software-tools-to-device paths (§9). The physical and data-link layers are catalogued in [sim_racing_research.md](./sim_racing_research.md) §7.1 and §7.3 and are not duplicated here beyond the additions in §3.
 
 ## 3. Physical and Link Layer (Additions)

@@ -24,7 +24,7 @@ target_sources(app PRIVATE
 	src/funky.c
 	src/clutch.c
 	src/rim_settings.c
-	src/led_svc.c
+	src/lcd_svc.c
 	src/lra_svc.c
 	src/power_mgr.c
 	src/rim_wdt.c

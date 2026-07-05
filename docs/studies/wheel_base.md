@@ -157,9 +157,32 @@ flowchart LR
 Rapid user motion may regenerate energy into the DC bus. The firmware shall calculate the returned energy to determine supply absorption limits, coordinate the brake resistor/clamp, and manage voltage limits. 
 For PWM generation, the microcontroller shall use complementary timer outputs. The hardware shall enforce dead time. The ADC trigger shall be synchronized with the PWM cycle. The hardware shall provide an asynchronous break input to immediately halt switching. The gate enable signal shall default to an off state through reset and bootloader execution. The firmware shall perform all PWM parameter updates on an atomic boundary.
 
+### 5.1 How the inverter produces three-phase current
+
+The inverter is the power heart of the wheel base. A PMSM/BLDC motor cannot be driven from raw DC; it needs three sinusoidal phase currents, offset 120° from each other, whose rotating magnetic field the rotor follows. The inverter synthesizes those phases from the fixed DC bus using six power MOSFETs arranged as three **half-bridges** (one per phase).
+
+![Three-phase inverter driving the motor](./three_phase_inverter.svg)
+
+Each phase has a high-side switch (to the DC+ rail) and a low-side switch (to DC−). Rapidly switching the appropriate switch on and off with PWM sets the average voltage on that phase; doing this on all three legs with the right timing produces the rotating field. Two facts from this drawing map directly onto the normative requirements above:
+
+- **Dead-time is mandatory.** The two switches in one leg must never be on together, or they would create a direct short across the DC bus (called *shoot-through*) and destroy the MOSFETs. Hardware enforces a brief dead-time gap where both are off during every transition.
+- **Low-side shunts feed the current loop.** The small shunt resistors in each low-side leg are how phase current is measured, which is the feedback the FOC current loop (§5.2 and §6) needs to control torque.
+
+### 5.2 PWM timing and current sampling
+
+Field-Oriented Control depends on measuring phase current accurately, and *when* the current is sampled matters as much as the sample itself. The switching edges of the MOSFETs inject electrical noise, so the ADC is triggered at the quiet point in the middle of the PWM period rather than near an edge.
+
+![PWM carrier, duty cycle, and the ADC sample point](./foc_pwm_timing.svg)
+
+A triangular carrier is compared against each phase's duty command to generate the gate signal: where the carrier is below the command, the high-side switch is on. Sampling current at the carrier peak (the middle of the on-time) captures a clean average value away from the switching transients. This is exactly the "valid middle-of-PWM triggers" requirement in §6, and the dead-time zoom shows the small both-off gap that prevents shoot-through on every edge.
+
 ## 6. Sensors
 
 This section details the feedback mechanisms used to measure shaft position and motor currents, which are critical for field-oriented control (FOC) and force feedback.
+
+The motor itself is a three-phase PMSM: a wound steel stator surrounding a permanent-magnet rotor coupled to the steering shaft. The encoder reads the rotor/shaft angle that FOC needs to commutate correctly, and the current sensing reads the phase currents FOC regulates. The cross-section below shows how the pieces relate.
+
+![Direct-drive servo motor cross-section](./servo_motor_cross_section.svg)
 
 | Encoder | Strength | Concern |
 |---|---|---|
@@ -545,6 +568,14 @@ flowchart TD
 | Update corruption | Authentication/integrity/recovery | Stay torque-disabled |
 
 The firmware shall distinguish fault classes: informational, degraded operation, recoverable torque-off, latched fault, and hardware-dominant fault. The software shall not be permitted to clear a hardware-dominant fault while the underlying hardware condition remains asserted.
+
+### 15.1 Thermal derating in practice
+
+Overtemperature is handled by *derating* — smoothly lowering the torque ceiling as the motor and inverter heat up — rather than by an abrupt cutoff at the limit. Because torque needs current and current makes heat (`T ≈ Kt × Iq`), a base run hard will warm up; derating keeps it usable and safe instead of failing suddenly mid-corner.
+
+![Thermal derating curve](./thermal_derating_curve.svg)
+
+Below the derate-start temperature the full torque ceiling is available. Between derate-start and the shutdown temperature the ceiling falls off; above shutdown, torque is removed. Recovery uses hysteresis: torque is only restored once the temperature drops well back below the derate-start point, so the system does not oscillate in and out of derating right at the threshold. This is the "derate then disable" reaction listed for overtemperature in the hazard table above.
 
 ## 16. Diagnostics
 

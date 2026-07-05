@@ -275,6 +275,14 @@ This section details the internal hardware components of a direct-drive wheel ba
 
 The core wheel base architecture is separated into a system management domain and a real-time motor control domain. Direct-drive bases commonly use three-phase BLDC/PMSM motors with encoder feedback, phase-current sensing, Pulse Width Modulation (PWM), a gate driver, and an inverter.
 
+The motor is a three-phase PMSM — a wound steel stator around a permanent-magnet rotor on the steering shaft — and the inverter is the six-MOSFET power stage that synthesizes its three phase currents from the DC bus:
+
+![Direct-drive servo motor cross-section](./servo_motor_cross_section.svg)
+
+![Three-phase inverter driving the motor](./three_phase_inverter.svg)
+
+The inverter's three half-bridges each set one phase's voltage by PWM; the two switches in a leg are never on together (dead-time prevents a DC-bus short), and low-side shunts return the phase-current measurement the FOC loop needs.
+
 **Figure 5-1: Hardware Architecture Block Diagram**
 
 ```mermaid
@@ -311,6 +319,10 @@ flowchart TD
 The system may use a single MCU or a split architecture (Main MCU + Motor MCU/ASIC). 
 
 Field-Oriented Control (FOC) transforms rotor angle and current measurements to regulate the torque-producing current. The firmware shall ensure high accuracy and synchronized PWM/ADC timing. Hardware-level overcurrent and break inputs shall override software control. Firmware shall synchronously trigger the ADC within a valid middle-of-PWM window and shall calibrate current-sense offsets during initialization.
+
+![PWM carrier, duty cycle, and the ADC sample point](./foc_pwm_timing.svg)
+
+The "valid middle-of-PWM window" is the key timing detail: a triangular carrier compared against each phase's duty command generates the gate signals, and the ADC samples current at the carrier peak — the quiet midpoint of the switching period — so the reading is not corrupted by switching-edge noise. The dead-time zoom shows the brief both-off gap that prevents shoot-through on every transition.
 
 ## 6. Hardware Interaction
 

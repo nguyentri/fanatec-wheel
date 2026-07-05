@@ -19,6 +19,8 @@
 |---|---|---|
 | 1.0 | 2026-07-03 | Initial software delta specifications for Phases 2–6 on the Phase 1 v1.0 baseline. |
 | 1.1 | 2026-07-04 | Review pass: simulator base-twin gains 12 MHz + flush emulation; Phase 4 output data-flow and 6-T2 module sequence figures added; LED default map, MCUboot mitigation, and module-link questions closed. |
+| 1.2 | 2026-07-04 | 4-S1 output device changed from the addressable LED chain to a digital LCD panel: the same 15-segment rev bar + 8 flag indicators rendered through the Zephyr display API (`chosen zephyr,display`, RGB565 tile writes); protocol field names, the rendering rules, rate limit, and quiet state are unchanged. |
+| 1.3 | 2026-07-04 | Service renamed `led_svc` -> `lcd_svc`; view layer moved to **LVGL 9** (Zephyr `lvgl` module): full race screen (title, 0..10 rev scale over the segment bar, gear-in-arc from the decoded display bytes, flag squares, quiet-state banner). Lap/tire panels are placeholders - the legacy frame carries no telemetry (question register). Note: the LVGL-enabled image (~420 KiB) still exceeds the expanded 384 KiB MCUboot slot; widget/font pruning or a further partition revision is required before signing that variant. |
 
 ---
 
@@ -48,7 +50,7 @@ flowchart LR
         I2[input_svc v2: encoders, funky, Hall, dual-clutch]
     end
     subgraph P4[Phase 4]
-        O2[output_svc v2: led_svc + lra_svc] --- B4[board: rim_pcb_a]
+        O2[output_svc v2: lcd_svc + lra_svc] --- B4[board: rim_pcb_a]
     end
     subgraph P5[Phase 5]
         H5[hardening: verified boot, recovery, health]
@@ -129,7 +131,7 @@ This phase adds the LED and haptic services and ports the firmware to PCB rev A.
 
 | ID | ADD | Specification |
 |---|---|---|
-| 4-S1 | **`led_svc`** | Consumes the validated 16-bit `leds` bitfield from `rimlink` RX callbacks; renders to 15 RGB RPM LEDs via a configurable bit→pattern map (per roadmap §11.4: local rendering, no per-LED protocol addressing) plus 8 flag LEDs derived from `disp`/`leds` rules; frame-rate limited (default ≤ 60 Hz, change-driven); priority alerts preempt decoration; stale link (> 200 ms without valid RX) → quiet state. Driver: DMA-fed timer/SPI stream for addressable chain — DMA channels and priorities allocated so LED streaming can never delay link DMA (documented in the DMA budget table). |
+| 4-S1 | **`lcd_svc`** | Consumes the validated 16-bit `leds` bitfield from `rimlink` RX callbacks; the pure model layer maps it to a 15-segment RPM rev bar via a configurable bit→pattern map (per roadmap §11.4: local rendering, no per-segment protocol addressing) plus 8 flag indicators derived from `disp`/`leds` rules. View layer: an **LVGL 9 race screen** on a digital LCD (`chosen zephyr,display` node) — title bar, 0..10 rev scale over the segment bar, the decoded display character as the gear inside an arc with an RPM caption, flag squares, and placeholder lap/tire panels (the legacy frame carries no telemetry). Frame-rate limited (default ≤ 60 Hz, change-driven); priority alerts preempt decoration; stale link (> 200 ms without valid RX) → quiet state with a visible banner. The LVGL timer pump and all rendering run in the workqueue; the panel's SPI/DMA priority is allocated so display traffic can never delay link DMA (DMA budget table). On boards without a panel the model runs to counters only. |
 | 4-S2 | **`lra_svc`** | Two channels via DRV2605L-class drivers (I2C); short bounded cue primitives only (duration-capped, cooldown-enforced); source = `rumble[2]` field **iff** Phase 2/4 captures show the base populates it for the chosen identity (roadmap §11.4 condition), else service stays hardware-ready/disabled; no continuous effects (system-spec rule); stale/quiet behavior as 4-S1. |
 | 4-S3 | **Output rail sequencing** | Power-manager module drives the load-switch GPIO: rail enabled only after LINK_READY and first valid transaction; disabled on brownout warning, stale link, or fault latch; sequencing events counted |
 | 4-S4 | **Board port `rim_pcb_a`** | New Zephyr board/devicetree for PCB rev A; pin registry generated from the overlay; Phase 1 test-point contract (LINK_READY, SNAPSHOT_TICK) preserved; CI builds nucleo + pcb_a from one source tree |
@@ -141,7 +143,7 @@ This phase adds the LED and haptic services and ports the firmware to PCB rev A.
 ```mermaid
 flowchart LR
     BASE[Base frame RX] --> AD[rimlink: CRC-validate]
-    AD -->|leds 16-bit| LM[led_svc: bit-to-pattern map] --> STR[DMA LED stream ≤ 60 Hz] --> RPM[15 RGB + 8 flag LEDs]
+    AD -->|leds 16-bit| LM[lcd_svc model: bit-to-pattern map] --> STR[LVGL race screen ≤ 60 Hz] --> RPM[LCD: rev bar + gear + 8 flags]
     AD -->|disp 3 chars| FL[flag rules] --> LM
     AD -->|rumble 0/1, iff verified| LR[lra_svc: bounded cue primitives] --> DRV[2x DRV2605L] --> LRA[LRAs]
     AD -->|stale >200 ms| Q[quiet state] --> LM
@@ -155,7 +157,7 @@ flowchart LR
 
 ### 4.3 Phase 4 Exit (software contribution to G4)
 
-Isolation proof passed on PCB rev A; `led_svc` mapping validated against captured base LED semantics; `lra_svc` decision recorded (enabled with evidence, or parked); settings/watchdog/power-manager regression green.
+Isolation proof passed on PCB rev A; `lcd_svc` mapping validated against captured base LED semantics; `lra_svc` decision recorded (enabled with evidence, or parked); settings/watchdog/power-manager regression green.
 
 ---
 

@@ -12,7 +12,7 @@ target_sources(app PRIVATE
 	${CMAKE_CURRENT_SOURCE_DIR}/../../../app/src/encoder.c
 	${CMAKE_CURRENT_SOURCE_DIR}/../../../app/src/funky.c
 	${CMAKE_CURRENT_SOURCE_DIR}/../../../app/src/clutch.c
-	${CMAKE_CURRENT_SOURCE_DIR}/../../../app/src/led_svc.c
+	${CMAKE_CURRENT_SOURCE_DIR}/../../../app/src/lcd_svc.c
 	${CMAKE_CURRENT_SOURCE_DIR}/../../../app/src/lra_svc.c
 )
 target_include_directories(app PRIVATE

@@ -32,6 +32,10 @@ The base frame is the foundational structural loop. All secondary structures (up
 
 Structural flex introduces parasitic losses to the system. Understanding how flex affects both output fidelity and input consistency is critical for designing a performant rig.
 
+![Cockpit rigidity: where force goes in a stiff vs. flexible rig](./cockpit_flex_forces.svg)
+
+The illustration makes the core idea concrete: in a stiff rig, the wheelbase's FFB torque and the driver's brake force transfer almost entirely to the hands and feet. In a flexible rig, part of that energy bends the frame instead — the upright leans under torque and the pedal deck moves back under braking. That absorbed energy is exactly the detail the driver loses: the wheel feels soft or delayed, and braking becomes hard to repeat.
+
 ### 3.1. Direct Drive Torque Dynamics
 
 Direct Drive (DD) wheelbases couple a large servo motor directly to the steering wheel, capable of producing transient torque spikes in excess of 20Nm. These motors operate with high bandwidth to deliver detailed road texture and slip angle feedback. 

@@ -23,7 +23,7 @@
 #include "output_svc.h"
 #include "diag_svc.h"
 #include "rim_settings.h"
-#include "led_svc.h"
+#include "lcd_svc.h"
 #include "lra_svc.h"
 #include "power_mgr.h"
 #include "rim_wdt.h"
@@ -43,9 +43,9 @@ static void services_init(void)
 		LOG_ERR("watchdog init failed (%d)", ret);
 	}
 
-	ret = led_svc_init();
+	ret = lcd_svc_init();
 	if (ret < 0) {
-		LOG_ERR("led_svc init failed (%d)", ret);
+		LOG_ERR("lcd_svc init failed (%d)", ret);
 	}
 
 	ret = lra_svc_init();

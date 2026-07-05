@@ -97,7 +97,7 @@ struct rim_inputs {
 /** Validated base outputs delivered via the RX callback. */
 struct base_outputs {
 	uint8_t disp[3];   /* raw 7-segment characters, bit 7 = dot */
-	uint16_t leds;     /* 16-bit LED bitfield rendered by led_svc */
+	uint16_t leds;     /* 16-bit LED bitfield rendered by lcd_svc */
 	uint8_t rumble[2]; /* rumble channels - counted/logged only */
 };
 

@@ -20,6 +20,10 @@ This section details the physical sensors used to translate mechanical pedal mov
 
 Potentiometers are contact-based rotary resistors that measure the pedal's travel distance (position). As the pedal is pressed, a mechanical wiper moves across a resistive track, producing a variable voltage output.
 
+![Potentiometer vs. rotary encoder](./potentiometer_and_encoder.svg)
+
+Read as a voltage divider, the output is simply `V_out = V+ × (wiper position / full track)`. This is cheap and trivial for an ADC to read, but the sliding contact is also the weakness: it wears, and worn tracks develop noise and dead spots. (The right-hand panel shows a rotary encoder for contrast — a contactless alternative used for steering-angle and rotor sensing rather than pedal travel.)
+
 *   The system **shall** supply a stable reference voltage to the potentiometer.
 *   Potentiometers are prone to mechanical wear over time, which introduces noise or "dead spots" into the signal.
 
@@ -27,12 +31,20 @@ Potentiometers are contact-based rotary resistors that measure the pedal's trave
 
 Hall Effect sensors are non-contact devices that measure changes in a magnetic field to determine pedal position. A magnet attached to the pedal arm moves relative to the sensor, altering the magnetic flux.
 
+![Hall-effect sensor operation](./hall_effect_sensor.svg)
+
+Because there is no physical contact between the magnet and the sensor, there is nothing to wear out. The trade-off is placement sensitivity: the magnet size, air gap, and alignment must be right, and calibration should keep the pedal's travel inside the sensor's linear range (the output saturates outside it, as the curve above shows).
+
 *   Hall Effect implementations **shall** use a fixed magnetic reference to ensure repeatable position tracking.
 *   Because they lack physical contact, Hall Effect sensors are highly durable and immune to the frictional wear associated with potentiometers.
 
 ### 2.3 Load Cells
 
 Load cells measure the physical force (pressure) applied to the pedal rather than its position. They utilize strain gauges that deform under pressure, altering their electrical resistance and producing a microvolt-level differential signal. This mimics real-world hydraulic brake systems where pedal pressure dictates braking force.
+
+![Load cell strain gauges in a Wheatstone bridge](./load_cell_wheatstone_bridge.svg)
+
+The reason the raw signal is so small — and why an amplifier is non-negotiable — is visible in the bridge above. Four strain gauges are wired into a Wheatstone bridge, two in tension and two in compression, so applying force unbalances the bridge and produces a differential voltage. This arrangement doubles sensitivity and cancels temperature drift, but the output is still only microvolts to millivolts, so an instrumentation amplifier sits between the bridge and the ADC.
 
 *   A load cell-based brake pedal **shall** be paired with an appropriate mechanical resistance medium (e.g., elastomers or springs) to provide physical feedback.
 *   The raw signal from a load cell **shall** be amplified using an instrumentation amplifier before analog-to-digital conversion.
@@ -67,6 +79,10 @@ graph LR
 ### 3.1 Analog-to-Digital Conversion
 
 The raw analog signals from the sensors must be digitized. The resolution of the ADC directly impacts the precision of the pedal input.
+
+![ADC resolution](./adc_sampling_resolution.svg)
+
+An ADC records the continuous analog signal as a series of discrete steps. More bits means more steps, so the recorded staircase hugs the true signal more closely and the pedal moves smoothly rather than in visible jumps. This is why a load cell — whose usable signal is tiny even after amplification — benefits from 16-bit or higher conversion, while position sensors are adequate at 12-bit. The important caveat is that extra bits only help if the analog signal is clean; without a stable reference and proper filtering, the additional bits simply digitize noise.
 
 *   The system **shall** digitize the amplified load cell signal using a high-resolution ADC (e.g., HX711 or ADS1115).
 *   The ADC resolution **should** be at least 12-bit for potentiometers and Hall Effect sensors, and 16-bit or higher for load cells.

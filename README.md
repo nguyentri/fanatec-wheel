@@ -28,12 +28,13 @@ rim produces **no torque**; it is an input/display peripheral.
   clutch channels (median-of-3 -> IIR -> calibration -> deadzone -> plausibility)
   with dual-clutch bite-point / two-axis / mappable modes. Worst-case compose
   time is measured, not assumed (`rim stats`).
-- **Local output rendering** — a 16-bit LED field interpolated across 15 RGB rev
-  LEDs plus 8 flag LEDs (change-driven <= 60 Hz, quiet after 200 ms of link
-  silence), and bounded haptic cues (duration cap + cooldown; the frame rumble
-  source is disabled by default pending real-base evidence). Both back-ends are
-  devicetree-guarded, so the same binary runs on the bench board (counters-only)
-  and on custom hardware.
+- **Local output rendering** — the 16-bit `leds` field drives an **LVGL race
+  screen** on a digital LCD: a 0..10-scaled 15-segment rev bar, the current gear
+  inside an arc (decoded from the display bytes), and 8 flag indicators
+  (change-driven <= 60 Hz, quiet-state banner after 200 ms of link silence), and bounded
+  haptic cues (duration cap + cooldown; the frame rumble source is disabled by
+  default pending real-base evidence). Both back-ends are devicetree-guarded, so
+  the same binary runs on the bench board (counters-only) and on custom hardware.
 - **Configuration & persistence** — a versioned settings schema (NVS) for
   calibration, mapping, and clutch mode, with a field write-lock. Commits happen
   only from the diagnostic context, never the fast path.
@@ -63,7 +64,7 @@ app/                  Rim firmware (device under test)
     input_svc.c       1 kHz acquisition -> immutable snapshot
     encoder|funky|clutch|debounce|dpad|seg7|tm1637.c   pure decoders + helpers
     output_svc.c      validated-frame fan-out + display decode
-    led_svc.c         15 RGB + 8 flag renderer, quiet state
+    lcd_svc.c         LVGL race screen: rev bar, gear-in-arc, flags, quiet state
     lra_svc.c         bounded haptic cue service (source gated)
     power_mgr.c       output-rail sequencing state machine
     rim_wdt.c         IWDG fed by the input thread
@@ -87,7 +88,7 @@ tests/unit/app_logic  decoder + LED/LRA pure-logic suites (native_sim)
 tests/func/example_sensor   on-target functional build
 docs/                 System roadmap + hardware/software specifications
 west.yml              Zephyr v4.4.0 manifest (hal_stm32, cmsis_6, picolibc,
-                      segger, mcuboot)
+                      segger, mcuboot, lvgl)
 ```
 
 ---
@@ -220,8 +221,12 @@ Items that require a real base or custom hardware are wired and instrumented but
 marked **measurement pending** in the code and specs: real-base link captures and
 the boot-margin measurement, the full-fabric latency report, the 24-hour output
 isolation soak, and the interrupted-update torture test. Devicetree guards keep
-the LED chain, haptic driver, output-rail load switch, and windowed-watchdog part
-as drop-in points on a future PCB without code changes.
+the LCD panel (`chosen zephyr,display` + `CONFIG_LVGL`), haptic driver,
+output-rail load switch, and windowed-watchdog part as drop-in points on a future
+PCB without code changes. Note: the LVGL-enabled image (~420 KiB) still exceeds
+the expanded 384 KiB MCUboot slot — prune LVGL widgets/fonts or revise the
+partition plan further before signing that variant (the bench image is unaffected
+at ~106 KiB).
 
 ---
 

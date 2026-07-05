@@ -60,6 +60,10 @@ Telemetry software **shall** treat every source as game-version-dependent and **
 
 This addresses the open question in [accessories.md](./accessories.md) §4 (middleware vs native latency). End-to-end latency is the sum of: game publish interval, host acquisition and mapping, transport (serial/USB), and device render. As **engineering inference**, a responsive dashboard budgets each stage so total latency stays below one game frame at the target rate; tactile and LED effects are more latency-sensitive than numeric fields and **should** be prioritized in the mapping and transport.
 
+![Telemetry latency is stage-additive](./telemetry_latency_budget.svg)
+
+Because the stages add up, the useful thing to measure is each stage on its own, not just the end-to-end figure — that is how the dominant contributor becomes visible and fixable. The percentages above are illustrative only.
+
 > [!TIP]
 > Measure each stage independently (host timestamp, transport, device render) rather than only the end-to-end figure, so the dominant contributor is visible.
 

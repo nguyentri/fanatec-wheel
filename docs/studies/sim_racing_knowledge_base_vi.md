@@ -416,6 +416,20 @@ Một hệ servo thực sự cần có:
 - **Phản hồi động (Dynamic response):** Có thể phản ứng ngay lập tức với các thay đổi FFB nhanh (như chém kerb hoặc mất bám).
 - **Kiểm soát torque:** Cho phép firmware tạo ra chính xác mức torque được yêu cầu mà không bị trễ hay mất bước.
 
+**Bên trong motor (stator, rotor, cặp cực).** Đa số direct-drive base dùng motor đồng bộ nam châm vĩnh cửu ba pha (PMSM): một stator bằng thép quấn dây đồng bao quanh một rotor gắn nam châm nối với trục vô lăng. Torque sinh ra do tương tác từ qua khe hở không khí rất nhỏ giữa stator và rotor.
+
+![Mặt cắt ngang motor servo direct-drive](./servo_motor_cross_section.svg)
+
+**Inverter: biến DC thành dòng ba pha.** Motor ba pha không thể chạy bằng DC thô — nó cần ba dòng lệch pha 120°. Sáu MOSFET công suất (ba nửa cầu) băm bus DC thành ba pha đó.
+
+![Inverter ba pha điều khiển motor](./three_phase_inverter.svg)
+
+Hai điểm an toàn quan trọng: hai công tắc trong cùng một nhánh **không bao giờ** được bật cùng lúc (nếu không sẽ ngắn mạch bus DC — *shoot-through*), nên luôn có một khe **dead-time** nhỏ; và các điện trở shunt phía thấp là nơi đo dòng pha — phản hồi mà vòng dòng điện FOC cần.
+
+**Thời điểm lấy mẫu dòng.** Các công tắc được điều khiển bằng PWM. Vì các cạnh chuyển mạch gây nhiễu điện, dòng được lấy mẫu ở điểm yên tĩnh giữa chu kỳ PWM thay vì gần cạnh.
+
+![Sóng mang PWM, duty cycle và điểm lấy mẫu ADC](./foc_pwm_timing.svg)
+
 ### 5.5 Encoder và steering angle
 
 Encoder đo vị trí/góc trục vô lăng. Nó rất quan trọng vì:
@@ -529,6 +543,14 @@ Pedals chuyển động chân người lái thành tín hiệu điện.
 | Potentiometer | Vị trí / hành trình | Rẻ, dễ đọc ADC | Mòn cơ khí, noise, dead spot | Pedal entry-level |
 | Hall effect | Vị trí qua từ trường | Không tiếp xúc, bền | Cần bố trí nam châm chuẩn | Ga, côn, handbrake |
 | Load cell | Lực / áp lực | Giống cảm giác phanh thật, ổn định theo muscle memory | Cần amplifier, cơ khí cứng | Brake pedal |
+
+Ba loại cảm biến này khác nhau ở nguyên lý: potentiometer đo vị trí bằng con trượt tiếp xúc trên vệt điện trở; Hall đo vị trí không tiếp xúc qua nam châm; load cell đo lực qua strain gauge trong một cầu Wheatstone.
+
+![Potentiometer so với rotary encoder](./potentiometer_and_encoder.svg)
+
+![Cảm biến Hall effect](./hall_effect_sensor.svg)
+
+![Strain gauge của load cell trong cầu Wheatstone](./load_cell_wheatstone_bridge.svg)
 
 ### 7.2 Vì sao phanh load cell tốt hơn potentiometer?
 

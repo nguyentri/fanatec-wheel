@@ -32,6 +32,12 @@ Sim racing handbrakes rely on two primary sensing architectures to capture user 
 | **Load Cell** | Measures physical force (pressure) using a strain gauge. | Mirrors hydraulic brake systems; relies on muscle memory. |
 | **Hall Effect** | Measures physical displacement (lever travel) using magnetic flux. | Non-contact, highly durable, lower complexity. |
 
+The two paradigms differ in what they physically measure. A load cell senses *force* through a strain-gauge bridge (shown below left); a Hall sensor senses *position* through a moving magnet (below right). A force-based handbrake rewards muscle memory the way a real hydraulic lever does; a position-based one is simpler and wears less.
+
+![Load cell strain gauges in a Wheatstone bridge](./load_cell_wheatstone_bridge.svg)
+
+![Hall-effect sensor operation](./hall_effect_sensor.svg)
+
 **Figure 2-1: Handbrake Sensor Data Flow**
 
 ```mermaid
@@ -52,6 +58,10 @@ graph TD
 ### 2.2 Dual-Mode Shifter Mechanisms
 
 Dual-mode shifters provide both traditional H-pattern and sequential shifting within a single unit. The mechanical architecture uses constrained pathways and physical locking mechanisms to route the shifter shaft.
+
+![H-pattern shifter gate](./h_pattern_gate.svg)
+
+In H-pattern mode a machined gate plate limits where the lever can travel, so only real gear positions are reachable; a microswitch or Hall sensor at each position reports the selected gear, and firmware rejects impossible states. Switching to sequential mode blocks the sideways channel, leaving a single up/down lane (push = one direction, pull = the other).
 
 The shifter hardware should incorporate heavy-duty springs and spring-loaded detents to provide tactile resistance and a distinct "click" upon gear engagement.
 

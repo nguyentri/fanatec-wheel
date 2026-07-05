@@ -28,6 +28,10 @@ A motion platform physically moves the cockpit to cue the driver's vestibular sy
 
 As **verified public** general knowledge, hobby and prosumer platforms are commonly described by their actuated degrees of freedom: heave (vertical), pitch, roll, surge, sway, and yaw. Small platforms often actuate a subset (for example, pitch and roll); larger rigs add more. The exact DOF and geometry are platform-specific.
 
+![Six degrees of freedom of a motion platform](./motion_dof.svg)
+
+Each axis cues a different sensation: surge conveys acceleration and braking, sway conveys cornering load, heave conveys bumps and crests, while pitch (nose up/down), roll (leaning into corners), and yaw (rotation, e.g. the onset of a spin) are the three rotations. A cueing strategy chooses which of these a given platform can render and how strongly.
+
 ## 4. Controller Architecture
 
 **Figure 4-1: Motion Control Path**

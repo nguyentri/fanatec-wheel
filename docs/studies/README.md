@@ -1,12 +1,13 @@
 # Sim Racing Study Index
 
-> Version: 1.1
-> Reviewed: 2026-07-02
+> Version: 1.2
+> Reviewed: 2026-07-05
 
 ## Document Change Log
 
 | Version | Date | Changes |
 |---|---|---|
+| 1.2 | 2026-07-05 | Systematic explanation + illustration pass. Added original SVG illustrations for physical/power-electronics concepts across the subsystem docs (three-phase inverter, PWM/ADC timing, thermal derating, servo cross-section, load cell / Hall / potentiometer-encoder sensors, ADC resolution, button-matrix ghosting, H-pattern gate, quick-release coupling, cockpit flex, 6-DOF motion, comms stack, telemetry latency, tactile crossover), each with accompanying plain-language explanation. Illustrations are original diagrams, not manufacturer artwork. |
 | 1.1 | 2026-07-02 | Added version header and change log; added the five newer subsystem docs (telemetry, tactile, motion, compatibility-matrix, communication-protocols) to the reading path and dependency map; captioned the dependency-map diagram. |
 
 This folder is a developer-oriented study map for sim-racing hardware and firmware. It separates public facts, community evidence, and engineering recommendations so implementation work can proceed without assuming proprietary Fanatec internals.
@@ -74,6 +75,8 @@ flowchart TD
 | Community implementation | Working or documented public implementation | GitHub repositories, project wikis |
 | Engineering inference | Reasoned design conclusion from public evidence | Multiple sources plus embedded/control-system practice |
 | Unknown | Not public enough to claim | Requires approved schematic, BOM, trace, descriptor, or vendor spec |
+
+> **On the illustrations (added v1.2).** The SVG diagrams added in this pass are original, schematic teaching illustrations of general engineering principles (motor construction, three-phase inversion, PWM timing, strain-gauge bridges, quadrature encoding, button matrices, and so on). They are **not** reproductions of any manufacturer's schematics or product artwork, and they depict generic concepts rather than any specific product's internals. Where a value would be product-specific (pole count, PWM rate, resolution, resonance frequency), the illustration is labelled as illustrative and the text defers to measurement or an approved specification. They sit at the "engineering inference / verified public general knowledge" confidence level, not "verified product behavior."
 
 ## Safety and Scope Rules
 

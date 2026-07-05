@@ -438,6 +438,112 @@ A true servo system requires:
 - **Dynamic response:** It can react instantly to FFB transients (like hitting a kerb or losing traction).
 - **Torque control:** It allows the firmware to deliver exactly the requested torque without losing steps or lagging behind.
 
+#### 5.4.1 Open-loop vs. closed-loop: why "servo" means feedback
+
+An **open-loop** actuator is told what to do and simply does it, with no way of checking whether it actually happened. A basic stepper-motor move (send N pulses, assume N steps occurred) is open-loop: if the motor stalls or the load is too high, the controller never finds out.
+
+A **closed-loop** (servo) system instead measures the real outcome and continuously feeds it back into the decision:
+
+```mermaid
+flowchart LR
+    Ref[Torque / position command] --> Sum(("+/-"))
+    Sum --> Ctrl[Controller: PID / FOC current loop]
+    Ctrl --> Plant[Motor + inverter]
+    Plant --> Shaft[Steering shaft torque]
+    Shaft --> Sense[Encoder + current sensor]
+    Sense -->|measured angle, speed, current| Sum
+```
+
+> The controller repeatedly compares "what we asked for" against "what the sensors say is actually happening," and corrects the error thousands of times per second. Remove the feedback path and it is no longer a servo — it becomes an open-loop actuator that can only guess.
+
+This is precisely why the wheel base's encoder (5.5) and current sensing (5.3) are not optional extras: they are the "feedback" half of the closed loop that makes servo behavior possible at all.
+
+#### 5.4.2 Inside the motor: stator, rotor, and pole pairs
+
+Most modern direct-drive bases use a **three-phase permanent-magnet synchronous motor (PMSM)**, closely related to a BLDC motor. It has two main parts:
+
+![Direct-drive servo motor cross-section](./servo_motor_cross_section.svg)
+
+- **Stator (stationary part):** A stack of thin steel laminations shaped into teeth, with insulated copper wire wound around each tooth. Three sets of coils, spaced 120° apart electrically, form the three phases (U, V, W).
+- **Rotor (rotating part):** A steel hub carrying permanent magnets around its circumference, arranged with alternating North and South poles. The rotor is mechanically fixed to the steering shaft.
+- **Air gap:** A very small physical gap (well under a millimeter) separates the stator teeth from the rotor magnets. Torque is produced by the magnetic interaction across this gap, so its size and evenness directly affect torque ripple and cogging.
+
+**Pole pairs matter for more than torque.** A motor with `p` pole pairs completes `p` electrical cycles for every one mechanical revolution of the shaft:
+
+```text
+electrical_angle = p × mechanical_angle
+```
+
+This is why motor control firmware always needs to know the pole-pair count: the encoder reports a *mechanical* angle, but the FOC math (5.4.3) needs the *electrical* angle to commutate the motor correctly. Get the pole-pair count wrong and the motor will run rough, weak, or not at all.
+
+#### 5.4.3 Field-Oriented Control (FOC): the loop that actually drives the motor
+
+FOC is the standard technique for controlling a PMSM/BLDC servo smoothly. Instead of switching current on and off in six crude steps (as simple BLDC "trapezoidal" drivers do), FOC treats the three-phase currents as a rotating vector and controls it directly:
+
+```mermaid
+flowchart LR
+    Iabc["Phase currents<br/>(Ia, Ib, Ic)"] --> Clarke[Clarke transform]
+    Clarke --> IaB["I-alpha, I-beta<br/>(2-axis, stationary frame)"]
+    IaB --> Park[Park transform]
+    Theta["Rotor electrical angle<br/>from encoder"] --> Park
+    Park --> Idq["Id, Iq<br/>(rotating frame)"]
+    Idq --> PI[Id / Iq PI controllers]
+    PI --> Vdq[Vd, Vq]
+    Vdq --> InvPark[Inverse Park]
+    Theta --> InvPark
+    InvPark --> VaB[V-alpha, V-beta]
+    VaB --> SVPWM[Space-vector PWM]
+    SVPWM --> Inverter[3-phase inverter]
+    Inverter --> Motor[PMSM]
+    Motor --> Iabc
+```
+
+In plain terms:
+
+- The three measured phase currents are mathematically rotated into a frame that spins with the rotor. In that spinning frame, a steady-state AC problem becomes a simple DC problem: two numbers, `Id` and `Iq`.
+- `Iq` is the torque-producing current — this is the same `Iq` used in `T ≈ Kt × Iq` from section 5.3. `Id` is normally held near zero for a surface-magnet PMSM; it mainly matters for flux-weakening at very high speed, which is rarely relevant to sim racing wheel bases.
+- Two fast PI controllers hold `Id` and `Iq` at their commanded values, producing voltage commands that are rotated back and turned into PWM duty cycles via space-vector modulation.
+- This entire loop must run fast (see the 10–40 kHz current-loop rate in section 13.2) and needs an accurate, low-latency rotor angle — which is exactly what the encoder in section 5.5 supplies.
+
+The practical takeaway: **FOC is what turns raw current control into precise, low-ripple torque control**, which is what lets a direct-drive base render fine road texture instead of a lumpy, notchy approximation of it.
+
+#### 5.4.4 Motor types compared
+
+| Motor type | Feedback needed? | Torque smoothness | Typical sim racing use |
+|---|---|---|---|
+| Stepper (open-loop) | No (but loses sync if overloaded) | Noticeable detent steps | Rare in wheel bases; sometimes used in accessories |
+| Brushed DC | Optional | Moderate; commutator adds friction/noise | Older/entry hardware, small actuators |
+| BLDC, trapezoidal (six-step) commutation | Yes (Hall sectors) | Torque ripple at each 60° commutation step | Lower-cost belt/gear-driven bases |
+| PMSM with FOC | Yes (encoder, high resolution) | Smooth, continuous torque control | Modern direct-drive bases |
+
+#### 5.4.5 Cogging torque and torque ripple
+
+Two related but distinct imperfections affect how "clean" the torque feels:
+
+- **Cogging torque** exists even with the motor unpowered. It comes from the magnets wanting to align with the stator teeth (magnetic reluctance), so turning the shaft by hand on some motors produces a faint detent feel. It repeats every slot/pole combination per revolution.
+- **Torque ripple** is the small torque variation that appears *while the motor is driven*, caused by non-ideal back-EMF shape, current-measurement offsets, or PWM/encoder timing errors.
+
+Both are perceived by the driver as roughness, notchiness, or a faint "buzz" — most noticeable at low speed and near the steering center, where FFB gain effectively magnifies small errors. Manufacturers reduce these effects through motor design (higher pole/slot counts, skewed magnets), better manufacturing tolerances, and firmware compensation (torque ripple maps, careful current-sensor offset calibration). This is also why the encoder resolution and current-sensing quality in a direct-drive base matter just as much as its peak torque figure — a motor can have huge peak torque and still feel poor if cogging and ripple are not well controlled.
+
+#### 5.4.6 The inverter: turning DC into three-phase current
+
+FOC decides *how much* torque-producing current is wanted; the **inverter** is the power stage that actually delivers it. A three-phase motor cannot be driven from raw DC — it needs three currents offset 120° from each other — so six power MOSFETs, arranged as three half-bridges, chop the DC bus into those three phases.
+
+![Three-phase inverter driving the motor](./three_phase_inverter.svg)
+
+Each phase has a high-side switch (to DC+) and a low-side switch (to DC−). Two safety-critical details follow directly:
+
+- The two switches in one leg must **never** be on at the same time, or they short the DC bus (*shoot-through*) and destroy themselves. A tiny **dead-time** gap where both are off is inserted on every transition.
+- The small **shunt resistors** in the low-side legs are how phase current is measured — the feedback the FOC current loop depends on.
+
+#### 5.4.7 PWM timing and when current is measured
+
+The switches are driven with PWM: a triangular carrier is compared against each phase's duty command, and where the carrier is below the command the high-side switch is on. Because the switching edges are electrically noisy, the current is sampled at the *quiet* point in the middle of the PWM period rather than near an edge.
+
+![PWM carrier, duty cycle, and the ADC sample point](./foc_pwm_timing.svg)
+
+Sampling at the carrier peak captures a clean average current away from the switching transients, and the dead-time zoom shows the both-off gap that keeps the leg from shorting. This is the practical reason firmware ties the ADC trigger to the PWM timer instead of sampling on a free-running clock.
+
 ### 5.5 Encoder and steering angle
 
 The encoder measures the steering shaft position/angle. It is important because:
@@ -679,6 +785,14 @@ It has two jobs:
 1. **Mechanical:** transfer torque from the wheel base to the wheel.
 2. **Electrical/data:** when the wheel has electronics, the QR may transfer power and data.
 
+```mermaid
+flowchart LR
+    Motor[Motor Shaft] -->|mechanical torque coupling| QR{Quick Release}
+    QR -->|mechanical torque| Wheel[Steering Wheel Hub]
+    BaseMCU[Base MCU] <-->|pins / slip ring / wireless + inductive power| QR
+    QR <-->|power + data| RimMCU[Rim MCU]
+```
+
 A QR may use:
 
 - Pin contacts.
@@ -761,6 +875,21 @@ A load-cell brake can experience very high foot force. If the pedal deck or seat
 - Brake input is no longer repeatable.
 - Stable trail braking becomes difficult.
 
+**Where the energy goes** — in a stiff rig, torque/force reaches the driver's hands and feet almost unchanged. In a flexible rig, some of it is silently absorbed by the structure instead:
+
+```mermaid
+flowchart LR
+    Base[Wheel Base Torque] --> Upright[Wheelbase Upright]
+    Upright --> Frame[Rig Frame]
+    Frame --> Floor[Floor / Ground]
+    Upright -.->|"lost to flex<br/>(feels soft/delayed)"| Flex1[Frame Deformation]
+    Pedal[Pedal Force] --> Deck[Pedal Deck]
+    Deck --> Frame
+    Deck -.->|"lost to flex<br/>(inconsistent braking)"| Flex2[Deck Deformation]
+```
+
+A stiffer rig simply leaves less of the path shown with dotted arrows for the structure to absorb.
+
 ### 10.2 Areas that must be stiff
 
 | Area | Why it matters |
@@ -785,9 +914,17 @@ Correct seating posture reduces fatigue and improves accuracy:
 
 ## 11. Sensors in sim racing
 
+![Potentiometer vs rotary encoder](./potentiometer_and_encoder.svg)
+
 ### 11.1 Potentiometer
 
 A potentiometer is a mechanical variable resistor. When the shaft rotates, resistance changes and produces a different analog voltage.
+
+Physically, it is a resistive track (carbon film or conductive plastic) with a spring-loaded wiper that slides along it as the shaft turns. Read as a simple voltage divider:
+
+```text
+V_out = V+ × (wiper position / full track length)
+```
 
 Advantages:
 
@@ -805,6 +942,10 @@ Disadvantages:
 
 A Hall sensor measures magnetic field. When a magnet moves near the sensor, the output voltage changes.
 
+![Hall-effect sensor operation](./hall_effect_sensor.svg)
+
+Physically, a small current flows through a thin semiconductor element inside the sensor. A nearby magnetic field deflects the moving charge carriers sideways (the Hall effect), producing a small voltage across the element that is proportional to the field strength. That voltage is amplified and, in linear Hall sensors, output as an analog signal; in switch-type Hall sensors, it is compared against a threshold and output as a clean digital high/low.
+
 Advantages:
 
 - Contactless.
@@ -814,29 +955,41 @@ Advantages:
 Notes:
 
 - Magnet and sensor placement must be correct.
-- Linearity must be checked.
+- Linearity must be checked, and calibration should keep travel inside the sensor's linear operating range (the output saturates outside it, as shown above).
 - Min/max calibration is required.
 
 ### 11.3 Load cell
 
 A load cell measures force through a strain gauge. When compressed or pulled, the strain gauge resistance changes by a very small amount.
 
+![Load cell strain gauges in a Wheatstone bridge](./load_cell_wheatstone_bridge.svg)
+
+A strain gauge is a thin conductive foil bonded to a metal beam. As the beam bends, the foil stretches or compresses along with it, changing its resistance slightly (this ratio is called the gauge factor). Because that resistance change is far too small to read directly, a real load cell wires four gauges into a **Wheatstone bridge**: two gauges are bonded where the beam stretches (tension) and two where it compresses, on opposite arms of the bridge. As force is applied, opposite arms move in opposite directions, which roughly doubles the usable signal and cancels out temperature drift that affects all four gauges equally. The result is still only microvolts-to-millivolts, so an instrumentation amplifier (INA) sits between the bridge and the ADC to boost it to a usable range.
+
 Characteristics:
 
 - Very small signal, usually microvolts to millivolts.
 - Requires an instrumentation amplifier or dedicated ADC.
-- Requires tare and span calibration.
+- Requires tare (zeroing) and span (scaling to a known reference force) calibration.
 - Very suitable for brake pedals.
 
 ### 11.4 Encoder
 
-An encoder measures angle or rotational speed.
+An encoder measures angle or rotational speed. See the incremental-encoder illustration in the figure above (panel B).
 
 Applications:
 
 - Measure steering angle.
 - Measure rotor position for motor control.
 - Measure rotational speed.
+
+**Resolution:** an incremental encoder's raw resolution is set by how many slits or poles pass the sensor per revolution:
+
+```text
+resolution (degrees per count) = 360 / counts_per_revolution
+```
+
+Most quadrature encoders output two channels (A and B) offset by 90°. Because each channel produces both a rising and a falling edge per slit, and there are two channels, firmware commonly decodes all four edges per slit — a technique called **4x decoding** — which multiplies the effective resolution by four without adding hardware. The phase order of A relative to B (which one leads) tells the firmware which direction the shaft is turning.
 
 Issues to handle:
 
@@ -1223,6 +1376,12 @@ The system should default to no torque when:
 | E-stop / torque-off | Independently remove torque |
 | Fault latch | Prevent automatic re-enable after a serious fault |
 
+**Thermal derating in detail.** Of these layers, thermal derating is worth seeing as a curve. Rather than allowing full torque right up to a hard cutoff, firmware lowers the torque ceiling gradually as the motor and inverter heat up:
+
+![Thermal derating curve](./thermal_derating_curve.svg)
+
+Below the derate-start temperature, full torque is available. Between derate-start and shutdown, the ceiling ramps down; above shutdown, torque is removed. Recovery uses hysteresis — torque is only restored after the temperature falls well back below derate-start — so the wheel does not flicker in and out of derating at the threshold. This keeps a hard-driven base usable and safe as it warms instead of failing abruptly mid-corner.
+
 ### 15.3 Warnings for DIY or reverse engineering
 
 Do not:
@@ -1441,6 +1600,24 @@ External ecosystem sources used for the 2026-07-02 refresh:
 - [Fanatec platform compatibility](https://www.fanatec.com/us-en/platforms) — platform license ownership.
 - [OC Racing ecosystem guide, 2026-06-07](https://ocracing.com/guides/fanatec-ecosystem-explained-for-dummies/) — current community onboarding model.
 - [Sim Racing Setups ecosystem guide, 2026-01-13](https://simracingsetup.com/product-guides/fanatec-ecosystem-explained/) — buyer-oriented modular-system explanation; current torque/flagship claims require newer official cross-checks.
+
+### 20.1 2026-07-05 explanation and illustration pass
+
+This revision expanded sections that were text-only and thin on visuals — most notably §5.4 (servo motor / FOC) and §11 (sensors) — with additional explanation, Mermaid diagrams, and hand-built SVG illustrations. Nothing in the added explanatory text is manufacturer- or product-specific; it describes general motor-control and sensor principles (FOC, PMSM construction, Wheatstone bridges, Hall-effect sensing, quadrature encoding) consistent with the standards and reference material already cited in `sim_racing_research.md`, in particular:
+
+- [Infineon PMSM FOC reference](https://documentation.infineon.com/aurixtc3xx/docs/kbv1711616051757) — Clarke/Park transform pipeline, current sampling.
+- [TI sensored FOC library guide](https://software-dl.ti.com/msp430/esd/MSPM0-SDK/2_04_00_06/docs/english/middleware/motor_control_pmsm_sensored_foc/doc_guide/doc_guide-srcs/Sensored_FOC_Motor_Control_Library.html) — sensored FOC control structure.
+
+New illustrations added in this pass (original diagrams created for this document, not sourced from any manufacturer):
+
+| File | Purpose |
+|---|---|
+| `servo_motor_cross_section.svg` | Simplified 12-slot/8-pole PMSM cross-section — stator, winding, air gap, rotor poles, shaft |
+| `load_cell_wheatstone_bridge.svg` | Cantilever beam strain gauges plus the full Wheatstone bridge they form |
+| `hall_effect_sensor.svg` | Contactless magnet/sensor arrangement and a typical output-vs-position curve |
+| `potentiometer_and_encoder.svg` | Side-by-side potentiometer wiper vs. incremental encoder disc with A/B quadrature waveforms |
+
+This section, and this note, exist so a reader can tell which parts of the document are grounded in an external reference and which parts are original explanatory material or illustration.
 
 ---
 

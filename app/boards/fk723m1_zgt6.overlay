@@ -77,16 +77,15 @@
 		};
 		slot0_partition: partition@20000 {
 			label = "image-0";
-			reg = <0x00020000 DT_SIZE_K(256)>;
+			reg = <0x00020000 DT_SIZE_K(384)>;
 		};
-		slot1_partition: partition@60000 {
+		slot1_partition: partition@80000 {
 			label = "image-1";
-			reg = <0x00060000 DT_SIZE_K(256)>;
+			reg = <0x00080000 DT_SIZE_K(384)>;
 		};
-		/* sector 5 spare (future scratch/expansion) */
-		storage_partition: partition@c0000 {
+		storage_partition: partition@e0000 {
 			label = "storage";
-			reg = <0x000c0000 DT_SIZE_K(256)>;
+			reg = <0x000e0000 DT_SIZE_K(128)>;
 		};
 	};
 };
@@ -152,3 +151,15 @@
 &iwdg {
 	status = "okay";
 };
+
+/* Race-display LCD (spec 4-S1): lcd_svc renders an LVGL race screen
+ * when a panel is chosen. The bench board has no panel; PCB rev A
+ * adds one, e.g.:
+ *
+ *	/ { chosen { zephyr,display = &lcd0; }; };
+ *	&spi4 {
+ *		status = "okay";
+ *		lcd0: st7789v@0 { compatible = "sitronix,st7789v"; ... };
+ *	};
+ *
+ * and enables CONFIG_DISPLAY=y + CONFIG_LVGL=y (see prj.conf). */

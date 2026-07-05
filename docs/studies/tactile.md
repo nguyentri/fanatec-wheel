@@ -41,6 +41,10 @@ flowchart LR
 
 The source is typically the telemetry pipeline (see [telemetry.md](./telemetry.md)) or a dedicated low-frequency audio channel. A crossover/low-pass stage **shall** restrict energy to the transducer's intended low-frequency band so higher-frequency content is not dumped into the structure.
 
+![Tactile transducers: keep energy in a low-frequency band](./tactile_crossover.svg)
+
+Keeping the shaker inside its intended low band (green) is what stops its energy from summing into the wheel's FFB detail band (purple) or driving a structural resonance of the rig (red). The exact resonance frequencies are rig-specific and must be measured rather than assumed — see §6.
+
 ## 5. Mechanical Isolation (Answering cockpits.md §6)
 
 The open question in [cockpits.md](./cockpits.md) §6 asks how transducers should be isolated from the primary structural profiles to avoid destructive interference with DD high-frequency FFB. As **engineering inference** consistent with that document's guidance:

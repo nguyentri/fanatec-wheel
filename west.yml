@@ -25,5 +25,6 @@ manifest:
           - cmsis_6
           - mcuboot
           - hal_stm32
+          - lvgl
           - picolibc
           - segger

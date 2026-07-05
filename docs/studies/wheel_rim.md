@@ -273,6 +273,10 @@ flowchart LR
 | Thumb joystick | Dual Hall/potentiometer axes | ADC, center calibration, circular/square mapping |
 | Mode switch | Multi-position digital/analog | Stable mode state and capability mapping |
 
+Several of these inputs are rotary or analog. A rotary encoder reports incremental steps as an A/B quadrature pair, where the phase order of the two channels encodes direction; an analog clutch paddle or thumb joystick instead uses a Hall sensor or potentiometer read through the ADC. The comparison below contrasts the contact-based potentiometer with the contactless encoder disc and its A/B waveforms.
+
+![Potentiometer vs. rotary encoder](./potentiometer_and_encoder.svg)
+
 ### 7.2 Output Architecture
 
 | Output | Driver | Data origin | Update policy |
@@ -324,6 +328,10 @@ sequenceDiagram
 | Future bases/rims | Unknown | Approved specifications and capability negotiation shall be required |
 
 Current commercial compatibility has a separate mechanical boundary. Fanatec-store wheels and bases are QR2 by default as of 2026-02-16, while QR1 is discontinued. QR2 requires matching Base-Side and Wheel-Side components; a legacy SPI observation does not establish QR2 mechanical fit, torque approval, or current protocol compatibility.
+
+![Quick release: mechanical coupling and power/data bridge](./quick_release_exploded.svg)
+
+The QR is where the rim's electrical link physically crosses to the base: a Wheel-Side half on the rim mates with a Base-Side half on the shaft, carrying torque mechanically and, for a smart rim, power and data across spring-pin contacts. Both halves must be the same generation to mate at all, so a matching rim bolt pattern alone never proves QR or protocol compatibility.
 
 Platform licensing is also separate from the rim data link. Xbox compatibility comes from a licensed steering wheel or hub, while PlayStation compatibility comes from a licensed wheel base. Do not infer console-authentication messages from the community SPI projects.
 
