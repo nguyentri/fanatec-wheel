@@ -1,65 +1,70 @@
-# Sim Racing Công cụ phát triển và tài liệu tham khảo
+# Công cụ Phát triển và Tài liệu Tham khảo Sim Racing
 
-Tài liệu này liệt kê các công cụ thực tế và các nguồn tham khảo cho các nhà phát triển nghiên cứu hoặc tạo mẫu các thiết bị ngoại vi đua xe mô phỏng. Đây là điểm khởi đầu, không phải là danh sách phê duyệt sản phẩm.
+Tài liệu này liệt kê các công cụ thực tế và các nguồn tham khảo cho các nhà phát triển đang nghiên cứu hoặc tạo mẫu các thiết bị ngoại vi sim racing. Đây là một điểm khởi đầu, không phải là danh sách phê duyệt sản phẩm.
 
-## 1. Tiêu chuẩn và tham chiếu giao diện
+## 1. Tiêu chuẩn và Tham chiếu Giao diện
 
-| Cần | Tham khảo | Sử dụng |
+| Nhu cầu | Tham chiếu | Sử dụng |
 |---|---|---|
-| Thiết bị đầu vào USB | [Công cụ và thông số kỹ thuật USB-IF HID] (https://www.usb.org/hid) | Mô tả HID, cách sử dụng, mô hình báo cáo, công cụ tác giả mô tả. |
-| Thiết bị phản hồi lực [USB-IF PID Class 1.0] (https://www.usb.org/sites/default/files/documents/pid1_01.pdf) | Báo cáo thiết bị giao diện vật lý cho bánh xe phản hồi lực và thiết bị haptic. |
-| Linux input và FF API | [Linux force-feedback documentation](https://www.kernel.org/doc/html/latest/input/ff.html) | Host-side effect upload/playback concepts. |
-| Truy cập HIDRAW | [Linux HIDRAW documentation](https://docs.kernel.org/hid/hidraw.html) | Direct HID descriptor/report access for tools and compatibility layers. |
+| Thiết bị đầu vào USB | [USB-IF HID specifications and tools](https://www.usb.org/hid) | Mô tả HID (HID descriptors), cách sử dụng, mô hình báo cáo, công cụ tạo mô tả. |
+| Thiết bị phản hồi lực (Force feedback) | [USB-IF PID Class 1.0](https://www.usb.org/sites/default/files/documents/pid1_01.pdf) | Báo cáo Thiết bị Giao diện Vật lý (PID) cho vô lăng phản hồi lực và thiết bị haptic. |
+| API đầu vào và FF của Linux | [Linux force-feedback documentation](https://www.kernel.org/doc/html/latest/input/ff.html) | Các khái niệm về tải lên/phát lại hiệu ứng từ phía máy chủ (host). |
+| Truy cập HIDRAW | [Linux HIDRAW documentation](https://docs.kernel.org/hid/hidraw.html) | Truy cập trực tiếp vào mô tả/báo cáo HID cho các công cụ và lớp tương thích. |
 
-## 2. Hệ sinh thái và tài liệu tham khảo tương thích
+## 2. Hệ sinh thái và Tham chiếu Tương thích
 
-| Cần | Tham khảo | Sử dụng |
+| Nhu cầu | Tham chiếu | Sử dụng |
 |---|---|---|
-| Nguồn tin cậy và ngày tháng | [Sổ đăng ký nguồn hệ sinh thái Fanatec](./references.md) | Kiểm tra xem yêu cầu bồi thường là chính thức, bối cảnh cộng đồng hiện tại hay tài liệu hướng dẫn người mua cũ. |
-| Thuật ngữ khách hàng | [Fanatec customer glossary](./glossary.md) | Sử dụng thành phần nhất quán, nền tảng, QR, điều chỉnh và ngôn ngữ khắc phục sự cố. |
-| Cấp độ cơ sở bánh xe hiện tại [Fanatec Wheel Bases FAQ](https://help.fanatec.com/hc/en-us/articles/43766204938257-Wheel-Bases-A-FAQ) | Xác minh các hạn chế về định vị và kết nối CSL, ClubSport và Podium hiện tại. |
-| Cấp phép nền tảng [Tương thích nền tảng Fanatec] (https://www.fanatec.com/us-en/platforms) | Xác minh quyền sở hữu cơ sở Xbox wheel/hub và PlayStation. |
-| Các thế hệ QR | [Hướng dẫn chuyển đổi Fanatec QR2](https://help.fanatec.com/hc/en-us/articles/30011253510289-Which-products-can-be-converted-to-QR2) | Kiểm tra thế hệ Base-Side / Wheel-Side, đường dẫn nâng cấp và các hạn chế dành riêng cho mô hình. |
+| Độ tin cậy của nguồn và ngày tháng | [Fanatec ecosystem source register](./references.md) | Kiểm tra xem một tuyên bố là chính thức, bối cảnh cộng đồng hiện tại hay tài liệu hướng dẫn người mua đã cũ. |
+| Thuật ngữ khách hàng | [Fanatec customer glossary](./glossary.md) | Sử dụng ngôn ngữ nhất quán về thành phần, nền tảng, QR, tuning và khắc phục sự cố. |
+| Phân khúc wheel-base hiện tại | [Fanatec Wheel Bases FAQ](https://help.fanatec.com/hc/en-us/articles/43766204938257-Wheel-Bases-A-FAQ) | Xác minh các hạn chế về định vị và kết nối của CSL, ClubSport và Podium hiện tại. |
+| Cấp phép nền tảng | [Fanatec platform compatibility](https://www.fanatec.com/us-en/platforms) | Xác minh quyền sở hữu cơ sở vô lăng/hub Xbox và PlayStation. |
+| Các thế hệ QR | [Fanatec QR2 conversion guidance](https://help.fanatec.com/hc/en-us/articles/30011253510289-Which-products-can-be-converted-to-QR2) | Kiểm tra thế hệ Base-Side/Wheel-Side, lộ trình nâng cấp và các hạn chế theo từng mẫu cụ thể. |
 
-## 3. Phần mềm Sim-Racing công cộng
+## 3. Phần mềm Sim-Racing Công cộng
 
-| Công cụ | Nguồn | Sử dụng cho nhà phát triển |
+| Công cụ | Nguồn | Sử dụng cho Nhà phát triển |
 |---|---|---|
-| OpenFFBoard [OpenFFBoard wiki] (https://github.com/Ultrawipf/OpenFFBoard/wiki/) | Nghiên cứu các khái niệm firmware FFB mô-đun, trình điều khiển động cơ, bộ mã hóa và tích hợp HID / PID. |
-| hid-fanatecff | [gotzl/hid-fanatecff](https://github.com/gotzl/hid-fanatecff) | Nghiên cứu bản dịch Fanatec HID/FFB phía Linux, ID thiết bị, tách sysfs LED / hiển thị và hành vi HIDRAW. |
-| hid-fanatecff-tools | [gotzl/hid-fanatecff-tools](https://github.com/gotzl/hid-fanatecff-tools) | Nghiên cứu các mẫu cầu trò chơi từ xa cho đèn LED, màn hình và giá trị điều chỉnh. |
-SimHub [SimHub wiki] (https://github.com/SHWotever/SimHub/wiki) | Nghiên cứu bảng điều khiển từ xa, màn hình Arduino, đèn LED, hộp nút và tích hợp thiết bị nối tiếp. |
+| OpenFFBoard | [OpenFFBoard wiki](https://github.com/Ultrawipf/OpenFFBoard/wiki/) | Nghiên cứu các khái niệm firmware FFB mô-đun, trình điều khiển động cơ, bộ mã hóa (encoders) và tích hợp HID/PID. |
+| hid-fanatecff | [gotzl/hid-fanatecff](https://github.com/gotzl/hid-fanatecff) | Nghiên cứu bản dịch HID/FFB của Fanatec phía Linux, ID thiết bị, phân tách sysfs LED/màn hình và hành vi HIDRAW. |
+| hid-fanatecff-tools | [gotzl/hid-fanatecff-tools](https://github.com/gotzl/hid-fanatecff-tools) | Nghiên cứu các mẫu cầu nối telemetry của trò chơi cho đèn LED, màn hình và các giá trị tuning. |
+| SimHub | [SimHub wiki](https://github.com/SHWotever/SimHub/wiki) | Nghiên cứu bảng điều khiển telemetry, màn hình Arduino, đèn LED, hộp nút (button boxes) và tích hợp thiết bị nối tiếp. |
 
-## 4. Công cụ khởi động phần cứng và phần cứng
+## 4. Công cụ Kiểm tra Phần mềm và Phần cứng
 
-| Lớp công cụ | Ví dụ | Dùng |
+| Lớp Công cụ | Ví dụ | Sử dụng |
 |---|---|---|
-| Logic analyzer | Saleae-class analyzer, sigrok/PulseView | Validate SPI/UART/CAN timing, ranh giới giao dịch QR, và thời hạn boot-to-response. |
-| Máy hiện sóng | 2 + kênh DSO | Xác minh đường ray, thiết lập lại, thời gian PWM, tín hiệu mã hóa, thời gian hiện tại và nguồn cấp dữ liệu QR. |
-| Trình phân tích/phần mềm USB | Wireshark USBPcap, Linux `usbmon`, hid-tools | Kiểm tra liệt kê, mô tả, báo cáo, và thời gian máy/thiết bị. |
-| Firmware debug | SWD/JTAG, RTT, semihosting bị vô hiệu hóa trong các đường dẫn thời gian thực | Debug startup, state machines, and diagnostics without disturbing critical link timing. |
-Thiết bị HIL Trình mô phỏng giao thức, thiết bị nguồn giới hạn hiện tại, động cơ giả / tải Xác minh xử lý lỗi trước khi vận hành phần cứng thương mại hoặc toàn năng.
+| Máy phân tích logic | Máy phân tích lớp Saleae, sigrok/PulseView | Xác thực thời gian SPI/UART/CAN, ranh giới giao dịch QR và thời hạn khởi động-đến-phản hồi (boot-to-response). |
+| Máy hiện sóng (Oscilloscope) | DSO 2+ kênh | Xác minh các đường điện (rails), reset, thời gian PWM, tín hiệu mã hóa, thời gian cảm biến dòng điện và dòng điện ngược từ QR. |
+| Phần mềm/máy phân tích USB | Wireshark USBPcap, Linux `usbmon`, hid-tools | Kiểm tra quá trình liệt kê (enumeration), mô tả, báo cáo và thời gian host/device. |
+| Gỡ lỗi Firmware | SWD/JTAG, RTT, vô hiệu hóa semihosting trong các luồng thời gian thực | Gỡ lỗi quá trình khởi động, máy trạng thái và chẩn đoán mà không làm xáo trộn thời gian liên kết quan trọng. |
+| Thiết bị thử nghiệm HIL | Trình mô phỏng giao thức, bộ nguồn giới hạn dòng điện, động cơ/tải giả | Xác minh khả năng xử lý lỗi trước khi vận hành phần cứng thương mại hoặc sử dụng toàn bộ năng lượng. |
 
-## 5. Danh sách kiểm tra xác thực theo hệ thống con
+## 5. Danh sách Kiểm tra Xác thực theo Hệ thống con
 
-| Hệ thống con | Dụng cụ tối thiểu |
+| Hệ thống con | Công cụ Tối thiểu |
 |---|---|
-Cơ sở bánh xe Máy hiện sóng, máy phân tích logic, nguồn cung cấp giới hạn hiện tại, dấu vết USB, thiết bị phun E-stop / lỗi.
-| Vành lái | Phân tích logic, vật cố định pinout QR, kiểm tra đường ray / nguồn cấp dữ liệu ngược, kiểm tra trả lại đầu vào, kiểm tra ứng suất hiển thị / LED.
-Bàn đạp DMM, chụp ADC, vật cố định trọng lượng / lực đã biết, dấu vết USB HID, kiểm tra độ bền hiệu chuẩn.
-| Shifter/handbrake | GPIO/ADC capture, debounce timing trace, impossible-state injection.
-Bảng điều khiển / hộp nút USB / dấu vết nối tiếp, hồ sơ SimHub, hiển thị kiểm tra căng thẳng làm mới.
-Buồng lái Đo độ lệch dưới mô-men xoắn bánh xe và tải trọng phanh, kiểm tra mô-men xoắn fastener, kiểm tra cách ly cộng hưởng / đầu dò xúc giác.
+| Wheel base | Máy hiện sóng, máy phân tích logic, bộ nguồn giới hạn dòng điện, theo dõi USB, thiết bị thử nghiệm E-stop/tiêm lỗi. |
+| Steering rim | Máy phân tích logic, thiết bị ghim QR, kiểm tra đường điện/dòng điện ngược, kiểm tra dội đầu vào (bounce), kiểm tra độ bền màn hình/LED. |
+| Bàn đạp | DMM, chụp ADC, thiết bị thử nghiệm lực/trọng lượng đã biết, theo dõi USB HID, kiểm tra độ bền hiệu chuẩn. |
+| Shifter/handbrake | Chụp GPIO/ADC, theo dõi thời gian chống dội (debounce), tiêm trạng thái không hợp lệ. |
+| Dashboard/button box | Theo dõi USB/serial, cấu hình SimHub, kiểm tra độ bền làm mới màn hình. |
+| Buồng lái (Cockpit) | Đo độ võng dưới mô-men xoắn vô lăng và tải trọng phanh, kiểm tra mô-men xoắn ốc vít, kiểm tra cách ly cảm biến rung/chạm. |
 
-## 6. Quy tắc xử lý nguồn
+## 6. Quy tắc Xử lý Nguồn
 
-- Sử dụng các tiêu chuẩn chính thức cho tuyên bố giao thức.
-- Sử dụng hướng dẫn sử dụng của nhà sản xuất để thiết lập công khai, cập nhật, an toàn và hành vi kết nối.
-- Chỉ sử dụng các dự án cộng đồng/GitHub cho các triển khai công khai đã được chứng minh.
-- Biên giới thế hệ kỷ lục. Trình giả lập vành Fanatec SPI kế thừa không phải là bằng chứng cho hành vi ClubSport DD / DD +.
-- Liên kết nguồn chính xác được sử dụng; không trích dẫn kết quả tìm kiếm kho lưu trữ làm bằng chứng cho một yêu cầu cụ thể.
-- Ngày hướng dẫn người mua cộng đồng. Kiểm tra lại mô-men xoắn, tính khả dụng, QR, nền tảng và phần sụn tuyên bố chống lại sự hỗ trợ của nhà sản xuất hiện tại trước khi tái sử dụng.
+- Sử dụng các tiêu chuẩn chính thức cho các tuyên bố về giao thức.
+- Sử dụng hướng dẫn của nhà sản xuất về thiết lập công khai, cập nhật, an toàn và hành vi kết nối.
+- Chỉ sử dụng các dự án GitHub/cộng đồng cho các triển khai công khai đã được chứng minh.
+- Ghi chép ranh giới thế hệ. Một trình giả lập SPI rim cũ của Fanatec không phải là bằng chứng cho hành vi của ClubSport DD/DD+.
+- Liên kết đến nguồn chính xác được sử dụng; không trích dẫn kết quả tìm kiếm repo như là bằng chứng cho một tuyên bố cụ thể.
+- Ghi ngày cho các hướng dẫn mua hàng từ cộng đồng. Kiểm tra lại các tuyên bố về mô-men xoắn, tính khả dụng, QR, nền tảng và firmware so với hỗ trợ hiện tại của nhà sản xuất trước khi tái sử dụng.
 
-## Câu hỏi chưa được giải quyết
+## Sổ Đăng ký Câu hỏi (Đã giải quyết và Mở)
 
-- Công cụ kiểm tra mô tả USB / HID nào nên được chuẩn hóa khi mã nguồn tồn tại?
+Được review vào ngày 2026-07-05.
+
+### Đã giải quyết
+
+- **Công cụ kiểm tra mô tả USB/HID nào nên được tiêu chuẩn hóa sau khi có mã nguồn?**
+  **Khuyến nghị kỹ thuật (các công cụ công khai đã được xác minh).** Tiêu chuẩn hóa một bộ nhỏ, đa nền tảng thay vì một công cụ: để giải mã descriptor, hãy sử dụng **USB-IF HID Descriptor Tool** hoặc bộ giải mã report-descriptor HID trực tuyến; để bắt/giải mã trực tiếp, sử dụng **Wireshark với USBPcap** (Windows) hoặc **usbmon** (Linux); đối với đọc/ghi HID thô và kiểm tra báo cáo FFB nhanh, sử dụng **hidapitester** hoặc `usbhid-dump` + `evtest` của Linux; và xác thực hành vi của trục/nút/FFB bằng bảng điều khiển kiểm tra joystick/HID của hệ điều hành. Đặc biệt trên Linux, trình điều khiển `hid-fanatecff` cùng với `evtest`/`fftest` là đường dẫn xác minh FFB thực tế. Chọn bộ giải mã descriptor làm tiêu chuẩn chính và giữ các công cụ chụp/HID thô làm chuỗi công cụ hỗ trợ.

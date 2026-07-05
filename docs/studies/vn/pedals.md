@@ -1,206 +1,218 @@
-# Sim Racing Bàn đạp Kiến trúc
+# Kiến trúc Bàn đạp Sim Racing
 
 > Ngày nghiên cứu: 2026-07-02
-> Mô hình bằng chứng: tiêu chuẩn công cộng, hướng dẫn sử dụng / hỗ trợ của nhà sản xuất và các dự án cộng đồng. Các dự án cộng đồng là bằng chứng thực hiện, không phải thông số kỹ thuật của nhà cung cấp chính thức.
+> Mô hình bằng chứng: tiêu chuẩn công khai, hướng dẫn sử dụng/hỗ trợ của nhà sản xuất, và các dự án cộng đồng. Các dự án cộng đồng là bằng chứng triển khai, không phải là thông số kỹ thuật chính thức từ nhà cung cấp.
 > Tài liệu liên quan: [sim_racing_research.md](./sim_racing_research.md), [wheel_base.md](./wheel_base.md), [add_ons.md](./add_ons.md), [repos.md](./repos.md).
 
 ## 1. Giới thiệu và Phạm vi
 
-Tài liệu này cung cấp một cái nhìn tổng quan kỹ thuật về kiến trúc phần cứng và phần mềm của bàn đạp đua xe sim hiện đại. Nó được thiết kế để giới thiệu các khái niệm cơ bản về thiết bị ngoại vi đua xe sim cho các kỹ sư trong khi chi tiết các hệ thống nhúng điều khiển chúng. Người đọc nên có một sự hiểu biết cơ bản về vi điều khiển và xử lý tín hiệu tương tự trước khi đọc đặc điểm kỹ thuật này.
+Tài liệu này cung cấp một cái nhìn tổng quan kỹ thuật về kiến trúc phần cứng và phần mềm của bàn đạp mô phỏng đua xe (sim racing) hiện đại. Nó được thiết kế để giới thiệu các khái niệm cơ bản về thiết bị ngoại vi sim racing cho các kỹ sư, đồng thời trình bày chi tiết về các hệ thống nhúng điều khiển chúng. Người đọc nên có một sự hiểu biết cơ bản về vi điều khiển và xử lý tín hiệu analog trước khi đọc đặc điểm kỹ thuật này.
 
-Tài liệu này mô tả các công nghệ cảm biến vật lý, chuỗi tín hiệu analog-to-digital, các giao thức truyền thông được sử dụng để giao tiếp với hệ thống máy chủ và lớp phần mềm chịu trách nhiệm hiệu chuẩn và đo từ xa.
+Tài liệu này mô tả các công nghệ cảm biến vật lý, chuỗi tín hiệu analog-to-digital, các giao thức truyền thông được sử dụng để giao tiếp với hệ thống máy chủ, và lớp phần mềm chịu trách nhiệm hiệu chuẩn và telemetry.
 
 ---
 
-## 2. Công nghệ cảm biến
+## 2. Công nghệ Cảm biến
 
-Phần này nêu chi tiết các cảm biến vật lý được sử dụng để chuyển động bàn đạp cơ học thành tín hiệu điện. Hiểu các cảm biến này là rất quan trọng để đánh giá độ bền, độ chính xác và cảm giác thực tế của bộ bàn đạp.
+Phần này trình bày chi tiết về các cảm biến vật lý được sử dụng để chuyển đổi chuyển động cơ học của bàn đạp thành các tín hiệu điện. Việc hiểu các cảm biến này là rất quan trọng để đánh giá độ bền, độ chính xác và cảm giác thực tế của một bộ bàn đạp.
 
-### 2.1 Potentiometers
+### 2.1 Chiết áp (Potentiometers)
 
-Potentiometers là điện trở quay dựa trên tiếp xúc đo khoảng cách di chuyển (vị trí) của bàn đạp. Khi bàn đạp được nhấn, một cần gạt nước cơ học di chuyển trên một rãnh điện trở, tạo ra đầu ra điện áp thay đổi.
+Chiết áp là các điện trở quay dựa trên tiếp xúc để đo khoảng cách di chuyển (vị trí) của bàn đạp. Khi bàn đạp được nhấn, một cần gạt cơ học di chuyển trên một dải điện trở, tạo ra một đầu ra điện áp biến thiên.
 
-![Potentiometer vs. bộ mã hóa quay](../assets/potentiometer_and_encoder.svg)
+![Chiết áp so với bộ mã hóa quay](../assets/potentiometer_and_encoder.svg)
 
-Đọc như một bộ chia điện áp, đầu ra chỉ đơn giản là 'V_out = V + × (vị trí gạt nước / rãnh đầy đủ)'. Điều này rẻ và tầm thường đối với ADC để đọc, nhưng tiếp điểm trượt cũng là điểm yếu: nó mòn và các rãnh mòn phát triển tiếng ồn và các điểm chết. (Bảng điều khiển bên phải hiển thị bộ mã hóa quay để tương phản - một giải pháp thay thế không tiếp xúc được sử dụng để cảm biến góc lái và rôto thay vì di chuyển bằng bàn đạp.)
+Được đọc dưới dạng một bộ chia điện áp, đầu ra đơn giản là `V_out = V+ × (vị trí cần gạt / toàn dải)`. Điều này vừa rẻ vừa đơn giản để ADC có thể đọc được, nhưng điểm tiếp xúc trượt cũng chính là điểm yếu: nó sẽ bị mài mòn, và các dải bị mòn sẽ sinh ra nhiễu và điểm chết (dead spots). (Bảng bên phải hiển thị một bộ mã hóa quay để so sánh — một giải pháp thay thế không tiếp xúc được sử dụng cho góc lái và cảm biến rô-to thay vì chuyển động của bàn đạp.)
 
-* Hệ thống ** sẽ ** cung cấp điện áp tham chiếu ổn định cho chiết áp.
-* Potentiometers dễ bị hao mòn cơ học theo thời gian, trong đó giới thiệu tiếng ồn hoặc "điểm chết" vào tín hiệu.
+*   Hệ thống **phải** cung cấp một điện áp tham chiếu ổn định cho chiết áp.
+*   Chiết áp dễ bị hao mòn cơ học theo thời gian, điều này sẽ tạo ra nhiễu hoặc "điểm chết" trong tín hiệu.
 
-### 2.2 Cảm biến hiệu ứng Hall
+### 2.2 Cảm biến Hiệu ứng Hall
 
-Cảm biến Hall Effect là thiết bị không tiếp xúc đo sự thay đổi trong từ trường để xác định vị trí bàn đạp. Một nam châm gắn vào cánh tay bàn đạp di chuyển tương đối so với cảm biến, làm thay đổi từ thông.
+Cảm biến Hiệu ứng Hall là các thiết bị không tiếp xúc đo lường sự thay đổi trong từ trường để xác định vị trí bàn đạp. Một nam châm gắn vào tay đòn bàn đạp di chuyển tương đối so với cảm biến, làm thay đổi từ thông.
 
-![Hoạt động cảm biến Hall-effect](../assets/hall_effect_sensor.svg)
+![Hoạt động của cảm biến hiệu ứng Hall](../assets/hall_effect_sensor.svg)
 
-Bởi vì không có tiếp xúc vật lý giữa nam châm và cảm biến, không có gì để hao mòn. Sự đánh đổi là độ nhạy vị trí: kích thước nam châm, khoảng cách không khí và căn chỉnh phải đúng và hiệu chuẩn phải giữ cho bàn đạp di chuyển bên trong phạm vi tuyến tính của cảm biến (đầu ra bão hòa bên ngoài nó, như đường cong ở trên cho thấy).
+Bởi vì không có sự tiếp xúc vật lý giữa nam châm và cảm biến, nên không có gì bị mài mòn. Sự đánh đổi là độ nhạy với vị trí: kích thước nam châm, khoảng cách không khí và sự căn chỉnh phải chuẩn xác, và việc hiệu chuẩn nên giữ hành trình của bàn đạp bên trong phạm vi tuyến tính của cảm biến (đầu ra sẽ bão hòa nếu nằm ngoài phạm vi này, như đường cong ở trên cho thấy).
 
-* Triển khai Hiệu ứng Hall ** sẽ ** sử dụng tham chiếu từ cố định để đảm bảo theo dõi vị trí lặp lại.
-* Bởi vì chúng thiếu tiếp xúc vật lý, cảm biến Hall Effect có độ bền cao và miễn dịch với sự mài mòn ma sát liên quan đến chiết áp.
+*   Các triển khai Hiệu ứng Hall **phải** sử dụng một tham chiếu từ tính cố định để đảm bảo việc theo dõi vị trí có thể lặp lại chính xác.
+*   Bởi vì chúng không có tiếp xúc vật lý, cảm biến Hiệu ứng Hall có độ bền cực cao và miễn nhiễm với sự mài mòn do ma sát thường thấy ở chiết áp.
 
-### 2.3 Tải ô
+### 2.3 Load Cell
 
-Các tế bào tải đo lực vật lý (áp suất) được áp dụng cho bàn đạp thay vì vị trí của nó. Họ sử dụng đồng hồ đo biến dạng dưới áp suất, thay đổi điện trở của chúng và tạo ra tín hiệu chênh lệch mức microvolt. Điều này bắt chước các hệ thống phanh thủy lực trong thế giới thực, nơi áp suất bàn đạp ra lệnh cho lực phanh.
+Load cell đo lường lực vật lý (áp lực) được tác dụng lên bàn đạp thay vì vị trí của nó. Chúng sử dụng các cảm biến đo biến dạng (strain gauges) biến dạng dưới tác dụng của áp lực, làm thay đổi điện trở của chúng và tạo ra một tín hiệu vi sai ở mức microvolt. Điều này mô phỏng các hệ thống phanh thủy lực trong thế giới thực, nơi áp lực bàn đạp quyết định lực phanh.
 
-! [Tải đồng hồ đo biến dạng tế bào trong cầu Wheatstone] (./load_cell_wheatstone_bridge.svg)
+![Các cảm biến biến dạng của load cell trong một cầu Wheatstone](../assets/load_cell_wheatstone_bridge.svg)
 
-Lý do tín hiệu thô quá nhỏ - và tại sao bộ khuếch đại không thể thương lượng - có thể nhìn thấy trong cây cầu ở trên. Bốn đồng hồ đo căng thẳng được nối vào cầu Wheatstone, hai trong căng thẳng và hai trong nén, do đó, áp dụng lực không cân bằng cầu và tạo ra điện áp chênh lệch. Sự sắp xếp này tăng gấp đôi độ nhạy và hủy bỏ sự trôi dạt nhiệt độ, nhưng đầu ra vẫn chỉ là microvolts đến millivolts, vì vậy một bộ khuếch đại thiết bị nằm giữa cầu và ADC.
+Lý do tín hiệu thô quá nhỏ — và tại sao một bộ khuếch đại là điều kiện bắt buộc — có thể được nhìn thấy trong sơ đồ cầu ở trên. Bốn cảm biến biến dạng được đấu dây vào một cầu Wheatstone, hai cái chịu lực kéo và hai cái chịu lực nén, do đó việc tác dụng lực làm mất cân bằng cầu và tạo ra một điện áp vi sai. Sự sắp xếp này tăng gấp đôi độ nhạy và triệt tiêu sự trôi dạt nhiệt độ, nhưng đầu ra vẫn chỉ ở mức microvolt đến millivolt, vì vậy một bộ khuếch đại đo lường (instrumentation amplifier) được đặt giữa cầu và ADC.
 
-* Bàn đạp phanh dựa trên tế bào tải ** sẽ ** được ghép nối với môi trường kháng cơ học thích hợp (ví dụ: chất đàn hồi hoặc lò xo) để cung cấp phản hồi vật lý.
-* Tín hiệu thô từ một ô tải ** sẽ ** được khuếch đại bằng bộ khuếch đại thiết bị trước khi chuyển đổi tương tự sang kỹ thuật số.
+*   Một bàn đạp phanh dựa trên load cell **phải** được kết hợp với một môi trường cản cơ học thích hợp (ví dụ: chất đàn hồi hoặc lò xo) để cung cấp phản hồi vật lý.
+*   Tín hiệu thô từ một load cell **phải** được khuếch đại bằng một bộ khuếch đại đo lường trước khi chuyển đổi từ analog sang digital.
 
-**Bảng 2-1: So sánh công nghệ cảm biến **
+**Bảng 2-1: So sánh Công nghệ Cảm biến**
 
-| Loại cảm biến | Đo lường | Loại tiếp xúc | Độ bền | Ứng dụng tiêu biểu |
+| Loại Cảm biến | Đo lường | Loại Tiếp xúc | Độ bền | Ứng dụng Tiêu biểu |
 |-------------|-------------|--------------|------------|---------------------|
-| Potentiometer | Vị trí | Liên hệ | Thấp | Bàn đạp đầu vào |
-Hiệu ứng Hall | Vị trí | Không tiếp xúc | Cao | Throttle, Clutch |
-| Load Cell | Force | Không tiếp xúc | Cao | Phanh |
+| Chiết áp | Vị trí | Tiếp xúc | Thấp | Bàn đạp phổ thông |
+| Hiệu ứng Hall | Vị trí | Không tiếp xúc | Cao | Ga, Côn |
+| Load Cell | Lực | Không tiếp xúc | Cao | Phanh |
 
 ---
 
-## 3. Kiến trúc phần cứng và chuỗi tín hiệu
+## 3. Kiến trúc Phần cứng và Chuỗi Tín hiệu
 
-Phần này bao gồm việc định tuyến và xử lý tín hiệu điện tử cần thiết để số hóa các đầu vào cảm biến analog.
+Phần này đề cập đến việc định tuyến tín hiệu điện tử và xử lý cần thiết để số hóa các đầu vào cảm biến analog.
 
-Chuỗi tín hiệu phần cứng chuyển đổi đầu vào vật lý thành giá trị kỹ thuật số có thể được xử lý bởi vi điều khiển. Bàn đạp cao cấp yêu cầu Bộ chuyển đổi Analog-to-Digital (ADC) chính xác để đảm bảo độ ồn tối thiểu và độ nhạy cao.
+Chuỗi tín hiệu phần cứng chuyển đổi đầu vào vật lý thành một giá trị digital có thể được xử lý bởi một vi điều khiển. Các bàn đạp cao cấp đòi hỏi các Bộ chuyển đổi Analog-to-Digital (ADC) có độ chính xác cao để đảm bảo nhiễu ở mức tối thiểu và độ nhạy cao.
 
-**Hình 3-1: Chuỗi tín hiệu phần cứng bàn đạp **
+**Hình 3-1: Chuỗi Tín hiệu Phần cứng Bàn đạp**
 
-```nàng tiên cá
-đồ thị LR
-A [Đầu vào cơ khí] -> B [Cảm biến]
-B -> C [Tín hiệu tương tự]
-C -> D [ADC / Amplifier]
-D -> E [Microcontroller]
-E -> F [Đầu ra kỹ thuật số]
+```mermaid
+graph LR
+    A[Mechanical Input] --> B[Sensor]
+    B --> C[Analog Signal]
+    C --> D[ADC / Amplifier]
+    D --> E[Microcontroller]
+    E --> F[Digital Output]
 ```
 
 ### 3.1 Chuyển đổi Analog-to-Digital
 
-Các tín hiệu analog thô từ các cảm biến phải được số hóa. Độ phân giải của ADC ảnh hưởng trực tiếp đến độ chính xác của đầu vào bàn đạp.
+Các tín hiệu analog thô từ các cảm biến phải được số hóa. Độ phân giải của ADC tác động trực tiếp đến độ chính xác của đầu vào bàn đạp.
 
 ![Độ phân giải ADC](../assets/adc_sampling_resolution.svg)
 
-Một ADC ghi lại tín hiệu tương tự liên tục dưới dạng một loạt các bước rời rạc. Nhiều bit hơn có nghĩa là nhiều bước hơn, vì vậy cầu thang được ghi lại ôm tín hiệu thực sự chặt chẽ hơn và bàn đạp di chuyển trơn tru hơn là trong các bước nhảy có thể nhìn thấy. Đây là lý do tại sao một tế bào tải - có tín hiệu có thể sử dụng là nhỏ ngay cả sau khi khuếch đại - được hưởng lợi từ chuyển đổi 16-bit hoặc cao hơn, trong khi cảm biến vị trí là đủ ở 12-bit. Cảnh báo quan trọng là các bit bổ sung chỉ giúp ích nếu tín hiệu tương tự sạch; không có tham chiếu ổn định và lọc thích hợp, các bit bổ sung chỉ đơn giản là số hóa nhiễu.
+Một ADC ghi lại tín hiệu analog liên tục thành một loạt các bước rời rạc. Nhiều bit hơn có nghĩa là có nhiều bước hơn, do đó cầu thang được ghi lại sẽ bám sát tín hiệu thực một cách chặt chẽ hơn và bàn đạp di chuyển trơn tru hơn thay vì những bước nhảy rõ rệt. Đây là lý do tại sao một load cell — có tín hiệu khả dụng là rất nhỏ ngay cả sau khi được khuếch đại — lại được hưởng lợi từ việc chuyển đổi 16-bit hoặc cao hơn, trong khi các cảm biến vị trí là đủ với mức 12-bit. Có một lưu ý quan trọng là các bit bổ sung chỉ hữu ích nếu tín hiệu analog là sạch; nếu không có một tham chiếu ổn định và bộ lọc thích hợp, các bit bổ sung đơn giản chỉ số hóa sự nhiễu.
 
-* Hệ thống ** sẽ ** số hóa tín hiệu tế bào tải khuếch đại bằng cách sử dụng ADC có độ phân giải cao (ví dụ: HX711 hoặc ADS1115).
-* Độ phân giải ADC ** nên ** ít nhất 12-bit cho chiết áp và cảm biến Hiệu ứng Hall, và 16-bit hoặc cao hơn cho các tế bào tải.
-* Phần cứng ** sẽ ** thực hiện lọc thông thấp để giảm thiểu nhiễu điện tần số cao trước pha lấy mẫu ADC.
+*   Hệ thống **phải** số hóa tín hiệu load cell đã khuếch đại bằng cách sử dụng một ADC có độ phân giải cao (ví dụ: HX711 hoặc ADS1115).
+*   Độ phân giải ADC **nên** ít nhất là 12-bit cho chiết áp và cảm biến Hiệu ứng Hall, và 16-bit hoặc cao hơn cho các load cell.
+*   Phần cứng **phải** triển khai lọc thông thấp (low-pass filtering) để giảm thiểu nhiễu điện tần số cao trước giai đoạn lấy mẫu của ADC.
 
 ---
 
-## 4. Giao diện truyền thông
+## 4. Giao diện Giao tiếp
 
-Phần này giải thích hai phương pháp chính để kết nối bàn đạp đua sim với hệ thống máy chủ: kết nối USB trực tiếp và ủy nhiệm RJ12 thông qua chân đế.
+Phần này giải thích hai phương pháp chính để kết nối bàn đạp sim racing với một hệ thống máy chủ: kết nối USB trực tiếp và ủy quyền (proxying) qua cổng RJ12 tới wheel base.
 
-Bàn đạp phải truyền trạng thái kỹ thuật số của họ đến phần mềm mô phỏng. Sự lựa chọn giao diện ảnh hưởng đến sự tiện lợi, khả năng tương thích hệ sinh thái và đôi khi là tỷ lệ bỏ phiếu.
+Bàn đạp phải truyền trạng thái kỹ thuật số của chúng tới phần mềm mô phỏng. Việc lựa chọn giao diện ảnh hưởng đến sự tiện lợi, khả năng tương thích hệ sinh thái, và đôi khi là tốc độ lấy mẫu (polling rate).
 
-**Hình 4-1: Cấu trúc liên kết truyền thông **
+**Hình 4-1: Cấu trúc Giao tiếp**
 
-```nàng tiên cá
-đồ thị TD
-P[Pedals] -->|USB| PC[Host PC]
-P -->|RJ12| W[Chân đế]
-W -> |USB| PC
-W -->|Proprietary| C[Bảng điều khiển]
+```mermaid
+graph TD
+    P[Pedals] -->|USB| PC[Host PC]
+    P -->|RJ12| W[Wheelbase]
+    W -->|USB| PC
+    W -->|Proprietary| C[Console]
 ```
 
-### 4.1 USB (Trực tiếp đến máy chủ)
+### 4.1 USB (Trực tiếp tới Máy chủ)
 
-Kết nối bàn đạp trực tiếp với PC chủ thông qua USB cho phép bàn đạp hoạt động như một Thiết bị giao diện con người độc lập (HID).
+Kết nối bàn đạp trực tiếp với PC chủ qua USB cho phép bàn đạp hoạt động như một Thiết bị Giao diện Con người (Human Interface Device - HID) độc lập.
 
-* Tỷ lệ bỏ phiếu / báo cáo, đường dẫn cập nhật firmware và các điều khiển hiệu chuẩn có sẵn là sản phẩm cụ thể.
-* USB trực tiếp là đường dẫn kết nối PC. Phụ kiện Fanatec phải kết nối thông qua đế bánh xe Fanatec để sử dụng bảng điều khiển.
-* Bàn đạp CSL cơ bản không bao gồm USB độc lập. Đường dẫn USB được hỗ trợ yêu cầu Bộ tải di động CSL Pedals hoặc Bộ chuyển đổi USB ClubSport.
-* Bàn đạp USB của bên thứ ba có thể hoạt động độc lập trên PC nhưng không thể kết nối trực tiếp với cổng bàn đạp cơ sở bánh xe Fanatec.
+*   Tần suất lấy mẫu/báo cáo, đường dẫn cập nhật firmware, và các công cụ hiệu chuẩn có sẵn là cụ thể cho từng sản phẩm.
+*   USB trực tiếp là đường dẫn kết nối PC. Các phụ kiện Fanatec phải kết nối qua một wheel base của Fanatec để sử dụng trên console.
+*   Bàn đạp CSL Pedals cơ bản không đi kèm kết nối USB độc lập. Đường dẫn USB được hỗ trợ đòi hỏi phải có CSL Pedals Load Cell Kit hoặc ClubSport USB Adapter.
+*   Bàn đạp USB của bên thứ ba có thể hoạt động độc lập trên PC nhưng không thể kết nối trực tiếp vào cổng bàn đạp của wheel base Fanatec.
 
-### 4.2 Ủy nhiệm RJ12 (thông qua Chân đế)
+### 4.2 Ủy quyền qua RJ12 (thông qua Wheelbase)
 
-Kết nối bàn đạp với chân đế thông qua cáp RJ12 cho phép chân đế hoạt động như một proxy, dịch tín hiệu bàn đạp thành giao thức truyền thông của riêng nó.
+Kết nối bàn đạp với wheel base qua cáp RJ12 cho phép wheel base hoạt động như một proxy, biên dịch các tín hiệu bàn đạp thành giao thức giao tiếp của riêng nó.
 
-* Các cơ sở tổng hợp các trục bàn đạp vào báo cáo máy chủ của nó và cung cấp đường dẫn giao diện điều khiển cần thiết.
-* Bàn đạp tải được hỗ trợ có thể hiển thị điều chỉnh Lực phanh (BRF) thông qua Menu Điều chỉnh cơ sở.
-* Thực hiện theo hướng dẫn đạp chính xác để lựa chọn USB / RJ12. Không giả định kết nối đồng thời được phép trên tất cả các mô hình.
+*   Base sẽ tổng hợp các trục bàn đạp vào báo cáo gửi máy chủ của mình và cung cấp đường dẫn console cần thiết.
+*   Các bàn đạp load cell được hỗ trợ có thể hiển thị điều chỉnh Lực Phanh (Brake Force - BRF) thông qua Tuning Menu của base.
+*   Tuân thủ hướng dẫn sử dụng chính xác của bàn đạp để lựa chọn USB / RJ12. Không giả định rằng việc kết nối đồng thời được phép trên tất cả các mẫu.
 
-**Bảng 4-1: So sánh giao diện**
+**Bảng 4-1: So sánh Giao diện**
 
-| Tính năng | USB | RJ12 (Wheelbase Proxy) |
+| Tính năng | USB | RJ12 (Proxy qua Wheelbase) |
 |---------|-----|------------------------|
-| Độ phân giải/tỷ lệ báo cáo | Sản phẩm cụ thể | Sản phẩm/cơ sở cụ thể |
-| Nền tảng | Đường dẫn PC được hỗ trợ | PC và các bảng điều khiển được hỗ trợ thông qua một cơ sở tương thích |
-| Điều chỉnh | Sản phẩm phần mềm/Ứng dụng | Cơ sở/Ứng dụng hành vi phụ thuộc vào mô hình bàn đạp |
-| Cập nhật firmware | Sản phẩm cụ thể | Thực hiện theo hướng dẫn hiện tại / App workflow |
+| Độ phân giải/tốc độ báo cáo | Tùy thuộc vào sản phẩm | Tùy thuộc vào sản phẩm/base |
+| Nền tảng | Đường dẫn PC được hỗ trợ | PC và các console được hỗ trợ thông qua base tương thích |
+| Tinh chỉnh | Phần mềm sản phẩm/App | Hành vi Base/App phụ thuộc vào mẫu bàn đạp |
+| Cập nhật firmware | Tùy thuộc vào sản phẩm | Tuân thủ hướng dẫn hiện hành/luồng làm việc của App |
 
 ---
 
-## 5. Kiến trúc phần mềm
+## 5. Kiến trúc Phần mềm
 
-Phần này mô tả logic phần mềm chịu trách nhiệm xử lý các giá trị kỹ thuật số thô và ánh xạ chúng đến các đầu vào trò chơi được chuẩn hóa.
+Phần này mô tả logic phần mềm chịu trách nhiệm xử lý các giá trị digital thô và ánh xạ chúng đến các đầu vào tiêu chuẩn của game.
 
-Phần sụn nhúng và phần mềm máy tính chủ hoạt động song song để hiệu chỉnh bàn đạp, áp dụng các đường cong tùy chỉnh và cung cấp phản hồi xúc giác.
+Firmware nhúng và phần mềm trên PC chủ hoạt động cùng nhau để hiệu chuẩn bàn đạp, áp dụng các đường cong tùy chỉnh, và cung cấp phản hồi xúc giác (haptic feedback).
 
-# 5.1 Hiệu chuẩn và lọc
+### 5.1 Hiệu chuẩn và Lọc
 
-* Firmware bàn đạp ** sẽ ** cho phép người dùng xác định các giới hạn tối thiểu (deadzone) và tối đa (bão hòa) hợp lý cho mỗi trục.
-* Phần mềm ** nên ** thực hiện lọc động (ví dụ: bộ lọc trung bình động hoặc bộ lọc Kalman) để làm mịn jitter tế bào tải mà không giới thiệu độ trễ quá mức.
-* Các thông số hiệu chuẩn ** sẽ ** được lưu trữ trong bộ nhớ không bay hơi trên bộ điều khiển bàn đạp để đảm bảo sự bền bỉ trong các chu kỳ năng lượng.
+*   Firmware bàn đạp **phải** cho phép người dùng xác định các giới hạn tối thiểu (deadzone) và tối đa (saturation) cho mỗi trục.
+*   Phần mềm **nên** triển khai bộ lọc động (ví dụ: bộ lọc trung bình động hoặc Kalman filter) để làm mịn sự rung lắc của load cell mà không gây ra độ trễ quá mức.
+*   Các tham số hiệu chuẩn **phải** được lưu trữ trong bộ nhớ không bay hơi (non-volatile memory) trên bộ điều khiển bàn đạp để đảm bảo chúng vẫn được duy trì qua các lần tắt mở nguồn.
 
-### 5.2 Lập bản đồ và từ xa HID
+### 5.2 Ánh xạ HID và Telemetry
 
-* Bộ điều khiển ** sẽ ** báo cáo các giá trị bàn đạp được hiệu chỉnh theo trục cần điều khiển HID tiêu chuẩn.
-* Nếu được trang bị bộ truyền động haptic (ví dụ: động cơ rung), phần mềm ** có thể ** đọc từ xa trò chơi (như kích hoạt ABS hoặc trượt bánh xe) để kích hoạt phản hồi vật lý thông qua mặt bàn đạp.
+*   Bộ điều khiển **phải** báo cáo các giá trị bàn đạp đã được hiệu chuẩn thành các trục joystick HID tiêu chuẩn.
+*   Nếu được trang bị các bộ truyền động xúc giác (ví dụ: động cơ rung), phần mềm **có thể** đọc telemetry của game (chẳng hạn như khi kích hoạt ABS hoặc trượt bánh xe) để kích hoạt phản hồi vật lý thông qua mặt bàn đạp.
 
 ---
 
-## 6. Phân tích kho
+## 6. Phân tích Kho chứa (Repository Analysis)
 
-Phần này khám phá cách các dự án nguồn mở cộng đồng tiếp cận mô phỏng bàn đạp và chuyển đổi giao diện.
+Phần này khám phá cách các dự án mã nguồn mở cộng đồng tiếp cận việc giả lập bàn đạp và chuyển đổi giao diện.
 
-# 6.1 `jssting/ArduinoTec-Pedals`
+### 6.1 `jssting/ArduinoTec-Pedals`
 
-| Khía cạnh | Tìm kiếm |
+| Khía cạnh | Khám phá |
 |---|---|
-| Goal | Thay bộ điều khiển bàn đạp CSP V1 bằng USB MCU độc lập |
-Leonardo, Pro Micro, hoặc Teensy sử dụng ArduinoJoystickLibrary
-| Cảm biến | Cảm biến Hall tuyến tính hiện có; tế bào tải thông qua bộ khuếch đại hiện có hoặc bên ngoài |
-| Đầu ra | trục cần điều khiển USB; hiệu chuẩn máy chủ |
-| Đầu ra thêm | Động cơ rung bàn đạp qua bóng bán dẫn / PWM |
-Bàn đạp sẽ hoạt động như một nút cảm biến / USB riêng biệt; AFE tế bào tải, hành vi Hall tương tự và ổ đĩa truyền động yêu cầu quyền sở hữu riêng biệt.
+| Mục tiêu | Thay thế bộ điều khiển bàn đạp CSP V1 bằng một MCU USB độc lập |
+| Bộ điều khiển | Leonardo, Pro Micro, hoặc Teensy sử dụng ArduinoJoystickLibrary |
+| Cảm biến | Cảm biến Hall tuyến tính hiện có; load cell thông qua bộ khuếch đại hiện có hoặc bên ngoài |
+| Đầu ra | Trục joystick USB; hiệu chuẩn trên máy chủ |
+| Đầu ra bổ sung | Động cơ rung bàn đạp qua bóng bán dẫn/PWM |
+| Bài học sản phẩm | Bàn đạp phải hoạt động như một cảm biến/nút USB riêng biệt; bộ xử lý tín hiệu analog (AFE) của load cell, hành vi của cảm biến Hall analog, và truyền động động cơ yêu cầu các quyền sở hữu riêng biệt. |
 
 ### 6.2 `GeekyDeaks/fanatec-pedal-emulator`
 
-| Khía cạnh | Tìm kiếm |
+| Khía cạnh | Khám phá |
 |---|---|
-Proxy bàn đạp USB của bên thứ ba vào chiều dài cơ sở Fanatec thông qua RJ12
-Raspberry Pi Pico (RP2040) hoạt động như máy chủ USB và trình giả lập tương tự RJ12
-| Động lực | Cho phép sử dụng bàn đạp không phải Fanatec trên bàn điều khiển, bỏ qua bảo mật bàn điều khiển |
-| Bài học sản phẩm | Cổng bàn đạp chân đế là một giao diện analog/digital (không phải USB), có thể được giả mạo bởi DACs/PWM bên ngoài để proxy các thiết bị khác. |
+| Mục tiêu | Proxy bàn đạp USB của bên thứ ba vào wheel base Fanatec qua RJ12 |
+| Nền tảng | Raspberry Pi Pico (RP2040) hoạt động như một máy chủ USB và trình giả lập tín hiệu analog RJ12 |
+| Động lực | Cho phép sử dụng bàn đạp không phải của Fanatec trên các console, vượt qua hệ thống bảo mật của console |
+| Bài học sản phẩm | Cổng bàn đạp của wheel base là một giao diện analog/digital (không phải USB), có thể bị giả lập bởi DAC/PWM bên ngoài để proxy cho các thiết bị khác. |
 
-## 7. Câu hỏi chưa được giải quyết
+## 7. Sổ đăng ký Câu hỏi (Đã giải quyết và Mở)
 
-* Ngân sách độ trễ chấp nhận được (tính bằng mili giây) từ khởi động bàn đạp vật lý đến truyền gói USB HID cho thể thao điện tử cạnh tranh là gì?
-* Phần sụn có nên hỗ trợ các đường cong gamma tùy chỉnh, phi tuyến tính cho các ứng dụng bướm ga trực tiếp trên vi điều khiển không hoặc điều này có nên được ủy quyền cho phần mềm PC chủ không?
-* Có các giao thức chiều dài cơ sở độc quyền trên RJ12 yêu cầu cấp phép hoặc kỹ thuật đảo ngược để tương thích chéo không?
+Được đánh giá: 2026-07-05.
 
-## 8. Tài liệu tham khảo
+### 7.1 Đã giải quyết
 
-# 8.1 Nguồn chính thức và tiêu chuẩn
+- **Ngân sách độ trễ chấp nhận được (ms) từ khi nhấn bàn đạp vật lý cho đến khi truyền gói tin USB HID đối với thể thao điện tử cạnh tranh là bao nhiêu?**
+  **Suy luận kỹ thuật.** Yếu tố chiếm ưu thế, có thể kiểm soát được là khoảng thời gian báo cáo (report interval): một thiết bị HID 1000 Hz (khoảng thời gian 1 ms) sẽ giới hạn độ trễ lượng tử hóa ở khoảng ~1 ms, so với ~8 ms ở 125 Hz. Do đó, một mục tiêu mang tính cạnh tranh là **khoảng thời gian lấy mẫu 1 ms** cộng với một độ trễ lấy mẫu/lọc được giới hạn, giữ cho khoảng thời gian từ lúc nhấn đến khi báo cáo nằm thoải mái dưới một khung hình game (≈16.7 ms ở 60 Hz). Hãy coi 1 ms như là ngân sách *vận chuyển* và đo lường độ trễ của cảm biến + bộ lọc riêng biệt (xem [`telemetry.md`](./telemetry.md) §6 cho phương pháp cộng dồn từng giai đoạn); việc lọc quá mức (lấy trung bình quá nhiều) thường là thủ phạm thực sự gây ra độ trễ chứ không phải do USB.
+- **Firmware nên hỗ trợ các đường cong gamma phi tuyến tính tùy chỉnh trên MCU, hay ủy quyền cho phần mềm máy chủ?**
+  **Suy luận kỹ thuật: hỗ trợ cả hai, MCU ưu tiên cho tính di động.** Một đường cong trên thiết bị (bảng tra cứu qua phạm vi đã hiệu chuẩn) hoạt động ở khắp mọi nơi bao gồm cả trên console và không phụ thuộc vào phần mềm máy chủ, và là lựa chọn mặc định an toàn hơn; một đường cong trên máy chủ cung cấp khả năng chỉnh sửa phong phú hơn, dễ dàng hơn. Mô hình phổ biến là: MCU áp dụng hiệu chuẩn + một đường cong tùy chọn được lưu trữ; các công cụ trên máy chủ sẽ chỉnh sửa và upload đường cong đó. Giữ cho trục thô có sẵn để đường cong không bao giờ có tính phá hủy (destructive).
+- **Có các giao thức wheel base độc quyền qua RJ12 đòi hỏi cấp phép hay kỹ thuật dịch ngược để tương thích chéo không?**
+  **Bằng chứng cộng đồng (xác minh về điện).** Đường dẫn bàn đạp analog qua RJ12 rất đơn giản và đã được cộng đồng ghi chép — ví dụ: `fanatec-pedal-emulator` của GeekyDeaks báo cáo liên kết giữa bàn đạp CSL Elite và base là một **giao thức UART** thông thường (CP2102, chịu được 5 V) và công bố sơ đồ chân RJ12 (chân 1 = 3.3 V, chân 6 = GND, tín hiệu analog nằm ở giữa; phía wheel base mang theo RX/TX/Vcc). Không cần giấy phép cho chính đường dẫn bàn đạp *analog/serial*; điều bị cấp phép/độc quyền chính là **xác thực console** mà base thực hiện ở hệ thống tuyến trên, vốn là một vấn đề tách biệt với liên kết bàn đạp. Các mô-đun CSL Elite LC cũ hơn sử dụng PIC18F26J53. Hãy xác nhận bất kỳ sơ đồ chân nào trên phần cứng chính xác của bạn trước khi kết nối.
 
-- [Công cụ và thông số kỹ thuật USB-IF HID] (https://www.usb.org/hid) - Mô tả HID và mô hình báo cáo cho bàn đạp USB độc lập.
-- [Hướng dẫn sử dụng Fanatec Podium DD1] (https://assets.fanatec.com/fanatec-pwa/image/upload/downloads-prod/pdfs/P-WB-DD1-Manual-EN_web.pdf) - bối cảnh cập nhật / hiệu chuẩn phía cơ sở công cộng và các ràng buộc tích hợp phụ kiện.
-- [Fanatec Wheel Bases FAQ] (https://help.fanatec.com/hc/en-us/articles/43766204938257-Wheel-Bases-A-FAQ) - tập hợp bảng điều khiển, thiết bị ngoại vi độc lập PC và ranh giới bàn đạp của bên thứ ba.
-- [Fanatec CSL Pedals hướng dẫn USB trực tiếp] (https://help.fanatec.com/hc/en-us/articles/30312127196945-How-can-I-connect-CSL-Pedals-directly-to-a-PC-via-USB) - Load Cell Kit và ClubSport USB Adapter yêu cầu.
+### 7.2 Mở — dành cho nhà phát triển tự điều tra
 
-# # 8.2 Nguồn thực hiện cộng đồng
+- **Giới hạn điện và gán chân RJ12 chính xác cho từng mẫu trên toàn bộ dòng sản phẩm.**
+  *Cách làm:* sơ đồ chân từ cộng đồng ở trên chỉ bao gồm các mô hình được chọn; hãy đo chân cắm trên thiết bị mục tiêu của bạn (điện áp tham chiếu, phạm vi tín hiệu, giới hạn dòng điện) trước khi ủy quyền cho phần cứng bên thứ ba, và không bao giờ được vượt qua giới hạn của nguồn cấp trên base.
 
-- [jssting/ArduinoTec-Pedals] (https://github.com/jssting/ArduinoTec-Pedals) - Bộ điều khiển thay thế Arduino Leonardo / Pro Micro / Teensy cho bàn đạp Fanatec ClubSport cũ hơn.
-- [GeekyDeaks/fanatec-pedal-emulator] (https://github.com/GeekyDeaks/fanatec-pedal-emulator) - Bàn đạp USB ủy quyền cho chiều dài cơ sở Fanatec thông qua mô phỏng cổng bàn đạp.
-- [adamcrawley/fanatec-pedal-emulator-vrs] (https://github.com/adamcrawley/fanatec-pedal-emulator-vrs) - Ngã ba tập trung vào VRS của mẫu giả lập bàn đạp.
-- [FendtXerion3800/Fanatec-Pinout] (https://github.com/FendtXerion3800/Fanatec-Pinout) - quan sát kết nối bàn đạp cộng đồng /shifter/handbrake; xác minh trước khi sử dụng phần cứng.
-- [Fanatec đăng ký nguồn hệ sinh thái] (./references.md) - niềm tin nguồn và ghi chú tiền tệ.
+## 8. Tài liệu Tham khảo
 
-### 8.3 Thiết kế theo dõi
+### 8.1 Nguồn Chính thức và Tiêu chuẩn
 
-- Xây dựng ma trận tương thích bàn đạp ngăn cách hành vi USB HID trực tiếp với hành vi proxy cổng chân đế.
-- Nắm bắt các giới hạn điện đã biết từ hướng dẫn sử dụng được phê duyệt hoặc đo băng ghế dự bị trước khi kết nối phần cứng của bên thứ ba.
+- [Thông số kỹ thuật và công cụ USB-IF HID](https://www.usb.org/hid) — Descriptor HID và mô hình báo cáo cho các bàn đạp USB độc lập.
+- [Hướng dẫn sử dụng Fanatec Podium DD1](https://assets.fanatec.com/fanatec-pwa/image/upload/downloads-prod/pdfs/P-WB-DD1-Manual-EN_web.pdf) — ngữ cảnh cập nhật/hiệu chuẩn công khai phía wheel base và các ràng buộc về tích hợp phụ kiện.
+- [Fanatec Wheel Bases FAQ](https://help.fanatec.com/hc/en-us/articles/43766204938257-Wheel-Bases-A-FAQ) — tổng hợp console, thiết bị ngoại vi PC độc lập, và ranh giới bàn đạp của bên thứ ba.
+- [Hướng dẫn kết nối USB trực tiếp cho Fanatec CSL Pedals](https://help.fanatec.com/hc/en-us/articles/30312127196945-How-can-I-connect-CSL-Pedals-directly-to-a-PC-via-USB) — yêu cầu của Load Cell Kit và ClubSport USB Adapter.
+
+### 8.2 Nguồn Triển khai Cộng đồng
+
+- [jssting/ArduinoTec-Pedals](https://github.com/jssting/ArduinoTec-Pedals) — Bộ điều khiển thay thế Arduino Leonardo/Pro Micro/Teensy cho bàn đạp Fanatec ClubSport cũ hơn.
+- [GeekyDeaks/fanatec-pedal-emulator](https://github.com/GeekyDeaks/fanatec-pedal-emulator) — ủy quyền bàn đạp USB vào wheel base Fanatec thông qua giả lập cổng bàn đạp.
+- [adamcrawley/fanatec-pedal-emulator-vrs](https://github.com/adamcrawley/fanatec-pedal-emulator-vrs) — Bản fork tập trung vào VRS của mẫu trình giả lập bàn đạp.
+- [FendtXerion3800/Fanatec-Pinout](https://github.com/FendtXerion3800/Fanatec-Pinout) — quan sát đầu nối bàn đạp/shifter/handbrake từ cộng đồng; hãy xác minh trước khi sử dụng phần cứng.
+- [Đăng ký nguồn hệ sinh thái Fanatec](./references.md) — độ tin cậy của nguồn và các ghi chú hiện hành.
+
+### 8.3 Theo dõi Thiết kế
+
+- Xây dựng một ma trận tương thích bàn đạp phân tách rõ hành vi của USB HID trực tiếp với hành vi proxy qua cổng wheel base.
+- Nắm bắt các giới hạn điện đã biết từ các sách hướng dẫn đã được phê duyệt hoặc thông qua đo lường thủ công trước khi kết nối phần cứng của bên thứ ba.

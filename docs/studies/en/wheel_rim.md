@@ -1,8 +1,8 @@
 # Steering Rim Hardware and Software Architecture
 
 > Research date: 2026-07-02
-> Scope: steering rim / steering wheel electronics, wheel-base link, host integration, and adjacent pedal architecture.  
-> Evidence: public GitHub projects and public documentation supplied by the requester.  
+> Scope: steering rim / steering wheel electronics, wheel-base link, host integration, and adjacent pedal architecture.
+> Evidence: public GitHub projects and public documentation supplied by the requester.
 > Constraint: community observations are not official Fanatec specifications. No proprietary firmware extraction or security bypass.
 > Related docs: [sim_racing_research.md](./sim_racing_research.md), [wheel_base.md](./wheel_base.md), [accessories.md](./accessories.md), [tools.md](./tools.md), and [repos.md](./repos.md).
 

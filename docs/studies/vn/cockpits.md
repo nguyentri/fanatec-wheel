@@ -1,120 +1,130 @@
-# Sim Racing Buồng lái: Kiến trúc cơ khí & Độ cứng
+# Buồng lái Sim Racing: Kiến trúc Cơ khí & Độ cứng
 
 > Ngày nghiên cứu: 2026-07-02
-> Mô hình bằng chứng: sản phẩm công cộng / thông tin hướng dẫn sử dụng cộng với suy luận kỹ thuật. Khuyến nghị độ cứng buồng lái là hướng dẫn thiết kế, không phải là yêu cầu của nhà cung cấp phổ quát.
+> Mô hình bằng chứng: thông tin sản phẩm/hướng dẫn sử dụng công khai cộng với suy luận kỹ thuật. Các khuyến nghị về độ cứng của buồng lái là hướng dẫn thiết kế, không phải là một yêu cầu bắt buộc chung từ nhà sản xuất.
 > Tài liệu liên quan: [sim_racing_research.md](./sim_racing_research.md), [wheel_base.md](./wheel_base.md), [pedals.md](./pedals.md).
 
 ## 1. Giới thiệu
 
-Buồng lái đua xe mô phỏng đóng vai trò là mặt phẳng nối đất cơ học cho tất cả các đầu vào và đầu ra hệ thống của người dùng. Đối với một kỹ sư hệ thống nhúng, buồng lái có thể được xem như khung gầm cấu trúc chứa các bộ truyền động chính (chiều dài cơ sở truyền động trực tiếp) và cảm biến (bàn đạp Load Cell). Bất kỳ độ cong cơ học nào trong khung gầm này hoạt động như một bộ lọc thông thấp ngoài ý muốn cho tín hiệu Phản hồi lực (FFB) và đưa tiếng ồn vào các chỉ số áp suất phanh. Tài liệu này nêu chi tiết các tiêu chuẩn kiến trúc, yêu cầu độ cứng và phương pháp tích hợp cho buồng lái đua xe bằng nhôm ép đùn (8020).
+Buồng lái (cockpit) sim racing đóng vai trò là mặt phẳng nền tảng cơ học cho tất cả các đầu vào của người dùng và đầu ra của hệ thống. Đối với một kỹ sư hệ thống nhúng, buồng lái có thể được xem như bộ khung gầm cấu trúc chứa các bộ truyền động (actuators) chính (Direct Drive wheelbases) và cảm biến (bàn đạp Load Cell). Bất kỳ sự uốn cong (flex) cơ học nào trong bộ khung này cũng hoạt động như một bộ lọc thông thấp (low-pass filter) ngoài ý muốn đối với các tín hiệu Force Feedback (FFB) và gây nhiễu cho các thông số áp lực phanh. Tài liệu này nêu chi tiết các tiêu chuẩn kiến trúc, yêu cầu độ cứng và phương pháp tích hợp cho các buồng lái sim racing làm bằng nhôm định hình (8020).
 
-## 2. Tổng quan về kiến trúc hệ thống
+## 2. Tổng quan về Kiến trúc Hệ thống
 
-Các thiết bị đua xe mô phỏng độ trung thực cao hiện đại dựa trên các cấu hình nhôm ép đùn khe chữ T mô-đun. Cách tiếp cận này cung cấp khả năng điều chỉnh vô hạn và tỷ lệ độ cứng trên trọng lượng to lớn. Kiến trúc cô lập các điểm căng thẳng khác nhau bằng cách phân phối chúng trên một khung cơ sở cứng nhắc.
+Các hệ thống sim racing có độ trung thực cao hiện đại (modern high-fidelity sim racing rigs) phụ thuộc vào các thanh nhôm định hình có khe chữ T (T-slot extruded aluminum profiles). Phương pháp này cung cấp khả năng điều chỉnh vô hạn và tỷ lệ độ cứng trên trọng lượng (stiffness-to-weight ratio) cực lớn. Kiến trúc này cô lập các điểm chịu ứng suất khác nhau bằng cách phân bổ chúng trên một khung cơ sở cứng cáp.
 
-**Hình 2-1: Hệ thống phân cấp thành phần buồng lái tiêu chuẩn **
+**Hình 2-1: Cấu trúc Hệ thống Thành phần Buồng lái Tiêu chuẩn**
 
-```nàng tiên cá
-đồ thị TD
-RigBase [Khung cơ sở chính] -> WheelUprights [Wheelbase Uprights]
-RigBase -> PedalDeck [Bàn đạp]
-RigBase -> SeatCrossmembers [Thành viên chéo ghế]
-    
-WheelUprights -> DDMount [Ổ đĩa trực tiếp gắn kết]
-PedalDeck -> LCPedals [Tải bàn đạp di động]
-SeatCrossmembers -> Chân đế ghế [Giá đỡ ghế / Thanh trượt]
-Chân đế -> DriverSeat [Driver Seat]
+```mermaid
+graph TD
+    RigBase[Main Base Frame] --> WheelUprights[Wheelbase Uprights]
+    RigBase --> PedalDeck[Pedal Deck]
+    RigBase --> SeatCrossmembers[Seat Cross-members]
+
+    WheelUprights --> DDMount[Direct Drive Mount]
+    PedalDeck --> LCPedals[Load Cell Pedals]
+    SeatCrossmembers --> SeatBrackets[Seat Brackets / Sliders]
+    SeatBrackets --> DriverSeat[Driver Seat]
 ```
 
-Khung cơ sở là vòng lặp cấu trúc nền tảng. Tất cả các cấu trúc thứ cấp (thẳng đứng, sàn và thành viên chéo) phân nhánh khỏi cơ sở này để hỗ trợ trình điều khiển và phần cứng.
+Khung cơ sở (base frame) là vòng lặp cấu trúc nền tảng. Tất cả các cấu trúc phụ (thanh đứng, mặt bàn, và thanh ngang) đều phân nhánh từ khung cơ sở này để hỗ trợ người lái và phần cứng.
 
-## 3. Độ cứng kết cấu và độ trung thực tín hiệu
+## 3. Độ cứng Cấu trúc và Độ trung thực Tín hiệu
 
-Cấu trúc flex giới thiệu tổn thất ký sinh trùng cho hệ thống. Hiểu cách flex ảnh hưởng đến cả độ trung thực đầu ra và tính nhất quán đầu vào là rất quan trọng để thiết kế một giàn khoan hiệu suất cao.
+Độ cong cấu trúc (structural flex) tạo ra những tổn hao ký sinh cho hệ thống. Hiểu được cách độ cong ảnh hưởng đến cả độ trung thực của đầu ra và tính nhất quán của đầu vào là rất quan trọng để thiết kế một hệ thống hiệu suất cao.
 
-! [Cockpit rigidity: nơi lực đi trong một giàn khoan cứng so với linh hoạt] (./cockpit_flex_forces.svg)
+![Cockpit rigidity: where force goes in a stiff vs. flexible rig](../assets/cockpit_flex_forces.svg)
 
-Hình minh họa làm cho ý tưởng cốt lõi cụ thể: trong một giàn khoan cứng, mô-men xoắn FFB của chiều dài cơ sở và lực phanh của người lái chuyển gần như hoàn toàn sang tay và chân. Trong một giàn khoan linh hoạt, một phần năng lượng đó uốn cong khung thay vào đó - người đứng thẳng nghiêng dưới mô-men xoắn và bàn đạp di chuyển trở lại dưới phanh. Năng lượng hấp thụ đó chính xác là chi tiết mà người lái xe mất: bánh xe cảm thấy mềm hoặc bị trì hoãn, và phanh trở nên khó lặp lại.
+Hình minh họa làm cho ý tưởng cốt lõi trở nên cụ thể: trong một hệ thống cứng cáp, lực xoắn FFB của wheelbase và lực phanh của người lái được truyền gần như hoàn toàn đến tay và chân. Trong một hệ thống thiếu độ cứng, một phần năng lượng đó sẽ làm cong khung — thanh đứng bị nghiêng dưới lực xoắn và mặt bàn đạp lùi lại khi phanh. Phần năng lượng bị hấp thụ đó chính xác là những chi tiết mà người lái bị mất đi: vô lăng có cảm giác mềm mại hoặc bị trễ, và cảm giác phanh trở nên khó lặp lại chuẩn xác.
 
-3.1. Động lực mô-men xoắn trực tiếp
+### 3.1. Động lực học Mô-men xoắn Direct Drive
 
-Chiều dài cơ sở truyền động trực tiếp (DD) kết hợp một động cơ servo lớn trực tiếp với vô lăng, có khả năng tạo ra các gai mô-men xoắn thoáng qua vượt quá 20Nm. Những động cơ này hoạt động với băng thông cao để cung cấp kết cấu đường chi tiết và phản hồi góc trượt.
+Các wheelbase Direct Drive (DD) kết nối trực tiếp một động cơ servo lớn vào vô lăng, có khả năng tạo ra các xung mô-men xoắn đột ngột vượt quá 20Nm. Những động cơ này hoạt động với băng thông cao để truyền tải chi tiết kết cấu mặt đường và phản hồi góc trượt (slip angle feedback).
 
-Nếu chiều dài cơ sở thẳng đứng uốn cong, cấu trúc cơ học hấp thụ các FFB tần số cao thoáng qua.
+Nếu các thanh đứng của wheelbase bị cong, cấu trúc cơ học sẽ hấp thụ các xung động FFB tần số cao.
 
-* Chiều cao cơ sở ** sẽ ** được xây dựng từ cấu hình không nhỏ hơn 40x80mm để chống lại uốn cong xoắn.
-* Các khung gắn kết nối các uprights với khung cơ sở ** nên ** sử dụng miếng đệm góc hạng nặng và tấm bánh sandwich để loại bỏ chơi.
-* Gắn cột lái ** sẽ ** đảm bảo độ lệch ngang hoặc dọc bằng mô-men xoắn vận hành cực đại.
+* Các thanh đứng của wheelbase **phải** được thi công từ thanh định hình không nhỏ hơn 40x80mm để chống lại sự uốn cong do xoắn (torsional flex).
+* Các giá đỡ gắn kết (mounting brackets) nối các thanh đứng với khung cơ sở **nên** sử dụng các ke góc chịu lực (heavy-duty corner gussets) và tấm ốp kẹp (sandwich plates) để loại bỏ độ rơ.
+* Giá treo trụ lái **phải** đảm bảo không có độ lệch ngang hoặc dọc dưới mô-men xoắn vận hành tối đa.
 
-### 3.2. Lực lệch phanh tế bào tải
+### 3.2. Lực Độ võng Phanh Load Cell
 
-Không giống như các chiết áp tiêu chuẩn đo chuyển vị góc, bàn đạp tế bào tải đo lực vật lý thực tế áp dụng cho mặt phanh (thường lên đến hoặc vượt quá 100kg lực). Điều này bắt chước áp suất thủy lực trong một chiếc xe đua thực sự, dựa vào bộ nhớ cơ bắp của con người rất nhạy cảm với áp suất nhưng kém ở khoảng cách đo.
+Không giống như các chiết áp tiêu chuẩn đo sự dịch chuyển góc, các bàn đạp load cell đo lực vật lý thực tế tác dụng lên mặt phanh (thường lên đến hoặc vượt quá 100kg lực). Điều này mô phỏng áp suất thủy lực trong một chiếc xe đua thực tế, dựa vào trí nhớ cơ bắp của con người, vốn rất nhạy cảm với áp lực nhưng lại kém trong việc đo đạc khoảng cách.
 
-Khi người lái xe tác dụng 100kg lực, bất kỳ lực uốn cong ngược nào trong bàn đạp hoặc ghế của người lái sẽ tạo ra "mất năng lượng" và thay đổi vị trí không gian của bàn đạp so với người lái. Điều này làm thay đổi động tỷ lệ áp suất trên chuyển vị, phá hủy tính nhất quán đầu vào trong các giai đoạn phanh đường mòn quan trọng.
+Khi người lái tác dụng lực 100kg, bất kỳ sự cong lùi nào ở mặt bàn đạp hoặc ghế người lái sẽ tạo ra "năng lượng mất mát" và thay đổi vị trí không gian của bàn đạp so với người lái. Điều này làm thay đổi động lực học tỷ lệ giữa áp suất và chuyển vị (pressure-to-displacement ratio), phá hủy tính nhất quán của đầu vào trong các giai đoạn rà phanh (trail-braking) quan trọng.
 
-* Bàn đạp và hệ thống lắp ghế ** sẽ ** vẫn hoàn toàn cứng nhắc dưới lực dọc tối thiểu 100kg.
-* Độ cứng bàn đạp tế bào tải ** nên ** được điều chỉnh thông qua chất đàn hồi hoặc lò xo để cho phép di chuyển tối thiểu, có thể dự đoán mà không gây ra uốn cong khung gầm.
+* Bàn đạp và hệ thống gắn ghế **phải** duy trì độ cứng hoàn toàn dưới tác dụng lực tối thiểu 100kg theo chiều dọc.
+* Độ cứng của bàn đạp load cell **nên** được tinh chỉnh bằng chất đàn hồi (elastomers) hoặc lò xo để cho phép một khoảng di chuyển nhỏ, có thể dự đoán được mà không làm cong khung gầm.
 
-## 4. Thành phần Kích thước và Thông số kỹ thuật
+## 4. Kích thước và Thông số Thành phần
 
-Cấu hình nhôm được phân loại theo kích thước mặt cắt ngang của chúng. Lựa chọn đúng là rất quan trọng để đáp ứng các yêu cầu về độ cứng mà không có chi phí không cần thiết.
+Các thanh nhôm định hình được phân loại theo kích thước mặt cắt ngang của chúng. Lựa chọn đúng là rất quan trọng để đáp ứng các yêu cầu về độ cứng mà không gây lãng phí chi phí.
 
-| Kích thước hồ sơ | Ứng dụng chính | Xếp hạng độ cứng kết cấu | Yêu cầu sử dụng |
+| Profile Size | Primary Application | Structural Rigidity Rating | Usage Requirement |
 |--------------|---------------------|----------------------------|-------------------|
-** 40x40mm ** | Phụ kiện, giá đỡ màn hình | Thấp ** Không ** được sử dụng cho các đường dẫn tải cấu trúc chính. |
-** 40x80mm ** | Khung cơ sở, Uprights, Pedal Deck | Cao ** Sẽ ** là tiêu chuẩn tối thiểu cho khung gầm chính và uprights. |
-| ** 40x120mm + ** | Uprights hạng nặng, xây dựng thẩm mỹ | Cực | ** Có thể ** được sử dụng cho các cơ sở ổ đĩa trực tiếp mô-men xoắn cực cao (20Nm +). |
+| **40x40mm**  | Phụ kiện, giá treo màn hình | Thấp | **Không được** sử dụng cho các đường truyền lực cấu trúc chính. |
+| **40x80mm**  | Khung cơ sở, Thanh đứng, Mặt bàn đạp | Cao | **Phải** là tiêu chuẩn tối thiểu cho khung gầm chính và các thanh đứng. |
+| **40x120mm+**| Thanh đứng chịu lực, Xây dựng thẩm mỹ | Cực cao | **Có thể** được sử dụng cho các wheelbase Direct Drive mô-men xoắn siêu cao (20Nm+). |
 
-## 5. Tích hợp ghế và công thái học
+## 5. Tích hợp Ghế và Công thái học
 
-Kiến trúc lắp ghế phải thu hẹp khoảng cách bên giữa các đường ray cơ sở chính trong khi chứa các trình điều khiển có kích cỡ khác nhau. Tính mô đun đạt được thông qua cách tiếp cận nhiều lớp của các thành viên chéo và đường ray trượt.
+Kiến trúc gắn ghế phải lấp đầy khoảng trống ngang giữa các thanh ray chính (main base rails) trong khi vẫn có thể điều chỉnh phù hợp cho những người lái có kích thước khác nhau. Tính mô-đun (Modularity) đạt được thông qua cách tiếp cận xếp lớp các thanh ngang (cross-members) và ray trượt (sliding rails).
 
-** Hình 5-1: Kiến trúc lắp đặt ghế và đường dẫn tải **
+**Hình 5-1: Kiến trúc Lắp Ghế và Đường truyền lực**
 
-```nàng tiên cá
-đồ thị LR
-MainRails [40x80mm Base Rails] -> Crossmembers [40x40mm Cross-thành viên]
-Crossmembers -> Thanh trượt [Ghế trượt]
-Thanh trượt -> Chân đế [Chân đế bên FIA]
-Chân đế -> Ghế [Racing Bucket Seat]
+```mermaid
+graph LR
+    MainRails[40x80mm Base Rails] --> Crossmembers[40x40mm Cross-members]
+    Crossmembers --> Sliders[Seat Sliders]
+    Sliders --> Brackets[FIA Side Brackets]
+    Brackets --> Seat[Racing Bucket Seat]
 ```
 
-* Hệ thống ** sẽ ** cung cấp một giao diện lắp đặt an toàn, phẳng để ngăn chặn ràng buộc trong đường ray trượt.
-* Ghế ngồi chéo thành viên ** nên ** kéo dài chiều rộng chính xác giữa các kênh bên trong của đường ray cơ sở.
-* Nếu ghế ô tô được sử dụng, miếng đệm hoặc tấm bộ chuyển đổi ** có thể ** được yêu cầu để tuôn ra gắn đường ray ghế nhà máy không đồng đều với các cấu hình nhôm phẳng.
+* Hệ thống **phải** cung cấp một giao diện lắp đặt phẳng và chắc chắn để ngăn tình trạng kẹt (binding) trong các ray trượt.
+* Các thanh ngang gắn ghế **nên** trải dài bằng chính xác độ rộng giữa các rãnh bên trong của thanh ray cơ sở.
+* Nếu sử dụng ghế ô tô tiêu chuẩn, có thể cần đến các miếng chêm (spacers) hoặc tấm chuyển đổi (adapter plates) để lắp phẳng các ray ghế không đồng đều lên các thanh nhôm định hình phẳng.
 
-# 5.1 Ví dụ lắp đặt hệ sinh thái
+### 5.1 Ví dụ về Hệ sinh thái Gắn kết
 
-Hướng dẫn buồng lái ClubSport GT công cộng của Fanatec tuyên bố rằng tấm đáy tiêu chuẩn của nó hỗ trợ các cơ sở Fanatec hiện tại bao gồm CSL DD, Gran Turismo DD Pro, ClubSport DD / DD + và Podium DD2 QR2. Núi trước ổ đĩa trực tiếp tùy chọn là một đường dẫn lắp riêng. Đây là bằng chứng cụ thể về sản phẩm, không phải là bằng chứng cho thấy mọi buồng lái hoặc mẫu lỗ đều hỗ trợ mọi cơ sở.
+Hướng dẫn công khai về buồng lái ClubSport GT của Fanatec nêu rõ tấm gắn phía dưới tiêu chuẩn của nó hỗ trợ các base Fanatec hiện tại, bao gồm CSL DD, Gran Turismo DD Pro, ClubSport DD/DD+, và Podium DD2 QR2. Việc lắp theo mặt trước (Direct Drive Front Mount) cho base Direct Drive là một tùy chọn lắp đặt riêng. Đây là bằng chứng thiết kế theo từng sản phẩm cụ thể, không phải là bằng chứng cho thấy mọi buồng lái hay mọi mẫu lỗ đều sẽ hỗ trợ mọi base.
 
-Để liên lạc với khách hàng, tách ba câu hỏi:
+Để truyền đạt thông tin cho khách hàng, hãy tách biệt ba câu hỏi:
 
-1. Tấm lắp có mẫu lỗ và độ sâu dây buộc được phê duyệt cho đế chính xác không?
-2. Cấu trúc có được đánh giá và đủ cứng cho mô-men xoắn và lực đạp có sẵn của đế không?
-3. Ghế, bánh xe, bàn đạp, cần số và phanh tay có thể điều chỉnh công thái học cùng nhau không?
+1. Tấm lắp có đúng mẫu lỗ và độ sâu ốc vít được cho phép đối với loại base đó không?
+2. Cấu trúc có được thiết kế và đủ cứng cáp để đáp ứng mô-men xoắn của base và lực của bàn đạp không?
+3. Ghế, vô lăng, bàn đạp, shifter và phanh tay có thể điều chỉnh công thái học cùng với nhau không?
 
-## 6. Câu hỏi chưa được giải quyết
+## 6. Danh sách Câu hỏi (Đã giải quyết và Đang mở)
 
-- Dung sai có thể đo lường, chấp nhận được đối với micro-flex (tính bằng milimét) dưới tải trọng phanh 100kg trước khi nó tác động rõ rệt đến tính nhất quán của cảm biến tế bào tải là gì?
-- Đầu dò rung (ví dụ: đầu dò xúc giác hoặc "máy lắc bass") nên được cách ly cơ học với các cấu hình cấu trúc chính để tránh nhiễu phá hủy với FFB tần số cao Direct Drive như thế nào?
-- Có tần số cộng hưởng cụ thể trong các cấu trúc nhôm 40x80mm tiêu chuẩn phù hợp với tần số tín hiệu FFB phổ biến không, và nếu có, làm thế nào chúng có thể được làm ẩm?
+Đã kiểm tra vào ngày 2026-07-05.
 
-## 7. Tài liệu tham khảo
+### 6.1 Đã giải quyết
 
-# 7.1 Nhà sản xuất và bối cảnh sản phẩm
+- **Nên cách ly cơ học các bộ biến đổi xúc giác ("bass shakers") khỏi các thanh định hình cấu trúc chính như thế nào để tránh làm nhiễu tín hiệu FFB tần số cao của hệ thống DD?**
+  **Đã giải quyết ([`tactile.md`](./tactile.md) §4–5).** Hãy gắn các bộ biến đổi (transducers) vào ghế hoặc vào một tấm bảng riêng thay vì gắn trực tiếp và cứng nhắc vào đường truyền lực chính của FFB; trong trường hợp bắt buộc phải gắn trên khung, hãy dùng các ngàm cách ly (compliant/isolating mounts); và giới hạn bộ biến đổi ở băng tần số thấp mục tiêu của nó bằng bộ phân tần (crossover) để năng lượng của nó không cộng gộp vào dải FFB chi tiết của vô lăng. Vận hành riêng rẽ hệ thống xúc giác (tactile system) trước khi chạy đồng thời với FFB mô-men xoắn cao.
 
-- [Sim-Lab P1X Pro cockpit] (https://sim-lab.eu/products/p1x-pro-sim-racing-cockpit) - ví dụ công khai về hệ sinh thái buồng lái bằng nhôm với các phụ kiện lắp bánh xe, bàn đạp, ghế ngồi, màn hình, cần số và phanh tay.
-- [Hướng dẫn sử dụng Fanatec Podium DD1] (https://assets.fanatec.com/fanatec-pwa/image/upload/downloads-prod/pdfs/P-WB-DD1-Manual-EN_web.pdf) - thiết lập cơ sở mô-men xoắn cao công cộng, hiệu chuẩn và bối cảnh an toàn.
-- [Fanatec ClubSport GT Tương thích cơ sở bánh xe buồng lái] (https://www.fanatec.com/us/en/explorer/products/cockpit/wheel-bases-fit-on-the-fanatec-clubsport-gt-cockpit/) - ví dụ sản phẩm gắn phía dưới và tùy chọn phía trước.
-- [Đăng ký nguồn hệ sinh thái Fanatec] (./references.md) - ngày nguồn và giới hạn hướng dẫn người mua cộng đồng.
+### 6.2 Đang mở — dành cho các nhà phát triển tự điều tra
 
-### 7.2 Tham chiếu nội bộ liên quan
+- **Độ uốn vi mô (micro-flex) bao nhiêu mm là chấp nhận được (dưới tải trọng phanh 100 kg) trước khi nó ảnh hưởng một cách rõ rệt đến độ ổn định của load-cell?**
+  *Cách thức:* điều này phụ thuộc vào đo đạc cụ thể cho từng hệ thống và bộ load cell — không có một con số chung. Phương pháp: áp dụng một lực tĩnh (static load) đã biết, dùng đồng hồ so (dial indicator) để đo độ lệch ở mặt bàn đạp, và thiết lập tương quan với độ lặp lại của load-cell. Chỉ coi hệ thống là một hệ quy chiếu (reference frame) ổn định khi độ võng nhỏ so với độ phân giải của load cell; hãy ghi lại mô-men siết của các ốc vít và loại giá đỡ (bracket) để có thể tái tạo kết quả (xem mục Ghi chú Thực hiện).
+- **Các cấu trúc nhôm chuẩn 40×80 mm có hiện tượng cộng hưởng (resonances) trùng với các tần số phổ biến của hệ thống FFB hay không, và cách triệt tiêu chúng như thế nào?**
+  *Cách thức:* **Chưa biết nếu không đo trên kết cấu thực tế** — sự cộng hưởng phụ thuộc vào chiều dài, thanh giằng, các điểm nối, và khối lượng được lắp. Phương pháp (theo [`tactile.md`](./tactile.md) §6 và [`tools.md`](./tools.md) §5): kích thích cấu trúc (thực hiện quét hàm sin (swept sine) qua một bộ transducer) kết hợp với một gia tốc kế (accelerometer) được gắn trên đó để tìm ra các vị trí cộng hưởng, sau đó tránh để năng lượng của transducer và các dải hiệu ứng FFB chủ đạo rơi vào những tần số đó, đồng thời bổ sung các thanh giằng, vật liệu khối lượng/ngàm cách ly vào những điểm có sự trùng lặp (overlap).
 
-- [Kiến trúc cơ sở bánh xe] (./wheel_base.md) - tạo mô-men xoắn, an toàn động cơ và các ràng buộc FFB.
-- [Kiến trúc bàn đạp] (./pedals.md) - đường dẫn lực tải và độ nhạy hiệu chuẩn.
+## 7. Tài liệu Tham khảo
 
-## 8. Ghi chú thực hiện
+### 7.1 Bối cảnh về Nhà sản xuất và Sản phẩm
 
-- Đo độ lệch của buồng lái theo lực phanh đỉnh dự kiến và mô-men xoắn bánh xe trước khi coi giàn khoan như một khung tham chiếu ổn định.
-- Xử lý các đầu dò xúc giác như một hệ thống rung riêng biệt; cách ly và thử nghiệm chúng để chúng không che lấp FFB hoặc chẩn đoán cảm biến.
-- Ghi mô-men xoắn dây buộc, loại khung và kích thước hồ sơ trong báo cáo băng ghế dự bị để kết quả cơ học có thể tái tạo.
+- [Buồng lái Sim-Lab P1X Pro](https://sim-lab.eu/products/p1x-pro-sim-racing-cockpit) — ví dụ công khai về hệ sinh thái buồng lái bằng nhôm định hình đi kèm với các phụ kiện lắp ráp vô lăng, bàn đạp, ghế, màn hình, shifter, và phanh tay.
+- [Hướng dẫn sử dụng Fanatec Podium DD1](https://assets.fanatec.com/fanatec-pwa/image/upload/downloads-prod/pdfs/P-WB-DD1-Manual-EN_web.pdf) — thông tin công khai về thiết lập, hiệu chuẩn, và các quy định an toàn cho hệ thống base mô-men xoắn cao.
+- [Khả năng tương thích giữa wheelbase và buồng lái Fanatec ClubSport GT](https://www.fanatec.com/us/en/explorer/products/cockpit/wheel-bases-fit-on-the-fanatec-clubsport-gt-cockpit/) — ví dụ sản phẩm chính thức cho cách lắp mặt dưới và mặt trước tùy chọn.
+- [Đăng ký nguồn hệ sinh thái Fanatec](./references.md) — ngày cập nhật thông tin và giới hạn của các hướng dẫn mua sắm từ cộng đồng.
+
+### 7.2 Các Tham chiếu Nội bộ Liên quan
+
+- [Kiến trúc wheelbase](./wheel_base.md) — cơ chế tạo mô-men xoắn, an toàn động cơ, và các giới hạn về FFB.
+- [Kiến trúc Bàn đạp](./pedals.md) — đường dẫn lực cho load-cell và độ nhạy trong việc hiệu chuẩn.
+
+## 8. Ghi chú Thực hiện
+
+- Đo độ võng của buồng lái dưới lực phanh tối đa dự kiến và lực xoắn của vô lăng trước khi sử dụng hệ thống như một bộ khung tham chiếu ổn định.
+- Hãy coi các bộ biến đổi xúc giác (tactile transducers) như một hệ thống rung riêng biệt; cách ly và thử nghiệm chúng độc lập để tránh che khuất tín hiệu FFB hoặc các quy trình chẩn đoán (diagnostics) của cảm biến.
+- Ghi lại lực siết ốc, loại giá đỡ, và kích thước thanh định hình trong các báo cáo thử nghiệm (bench reports) để có thể tái tạo (reproducible) các kết quả cơ học.

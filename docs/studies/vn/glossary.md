@@ -1,408 +1,408 @@
-# Fanatec Sim-Racing Thuật ngữ khách hàng
+# Thuật ngữ Khách hàng Fanatec Sim-Racing
 
 > Ngày nghiên cứu: 2026-07-02
-> Khán giả: hỗ trợ khách hàng, bán hàng, nhà phát triển, nhà văn kỹ thuật và các tay đua sim mới
-> Phạm vi: sản phẩm Fanatec hiện tại và thường gặp, khả năng tương thích, thiết lập, điều chỉnh, ngoại vi và ngôn ngữ khắc phục sự cố
+> Đối tượng: hỗ trợ khách hàng, bán hàng, nhà phát triển, người viết tài liệu kỹ thuật, và những người mới chơi sim-racing
+> Phạm vi: sản phẩm Fanatec hiện tại và thường gặp, khả năng tương thích, thiết lập, điều chỉnh, thiết bị ngoại vi, và ngôn ngữ khắc phục sự cố
 
-Bảng thuật ngữ này chuẩn hóa các từ được sử dụng khi thảo luận về các sản phẩm Fanatec với khách hàng. Nó không chính thức và không thay thế trang sản phẩm, Hướng dẫn nhanh, hướng dẫn sử dụng hoặc hướng dẫn Hỗ trợ Fanatec cho một phiên bản sản phẩm và phần sụn cụ thể.
+Bảng thuật ngữ này chuẩn hóa các từ được sử dụng khi thảo luận về các sản phẩm Fanatec với khách hàng. Nó không phải là tài liệu chính thức và không thay thế cho trang sản phẩm, Hướng dẫn nhanh (Quick Guide), sách hướng dẫn (manual), hoặc các hướng dẫn Hỗ trợ Fanatec cho một sản phẩm và phiên bản firmware cụ thể.
 
 ## Nội dung
 
-- [Làm thế nào để sử dụng thuật ngữ này] (#how-to-use-this-glossary)
-- [Từ vựng tiếp nhận khách hàng] (#customer-intake-vocabulary)
-- [Thương hiệu, Sản phẩm và Bundle Terms] (#brand-product-and-bundle-terms)
-- [Fanatec DD Wheel-Base Model Families] (#fanatec-dd-wheel-base-model-families)
-- [Điều khoản nền tảng và tương thích] (#platform-and-compatibility-terms)
-- [Điều khoản cơ sở bánh xe, mô-men xoắn và lắp đặt] (# thuật ngữ cơ sở bánh xe và mô-men xoắn)
-- [Điều khoản lái và điều khiển] (# điều khoản lái và điều khiển)
-- [Điều khoản Pedal, Shifter và Handbrake] (# pedal-shifter-and-handbrake-terms)
-- [Phần mềm, Firmware và Điều khoản thiết lập] (#software-firmware-and-setup-terms)
-- [Tuning Menu Abbreviations](#tuning-menu-abbreviations)
-- [Điều khoản chung của FFB và Sim-Racing] (#general-ffb-and-sim-racing-terms)
-- [Điều khoản khắc phục sự cố] (#troubleshooting-terms)
-- [Chỉ số nhanh viết tắt] (#abbreviation-quick-index)
-- [Tham khảo](#tham khảo)
+- [Cách sử dụng Bảng thuật ngữ này](#cach-su-dung-bang-thuat-ngu-nay)
+- [Từ vựng Tiếp nhận Khách hàng](#tu-vung-tiep-nhan-khach-hang)
+- [Thuật ngữ Thương hiệu, Sản phẩm và Bundle](#thuat-ngu-thuong-hieu-san-pham-va-bundle)
+- [Các Dòng Wheel Base Fanatec DD](#cac-dong-wheel-base-fanatec-dd)
+- [Thuật ngữ Nền tảng và Tương thích](#thuat-ngu-nen-tang-va-tuong-thich)
+- [Thuật ngữ Wheel Base, Mô-men xoắn, và Lắp đặt](#thuat-ngu-wheel-base-mo-men-xoan-va-lap-dat)
+- [Thuật ngữ Vô lăng và Điều khiển](#thuat-ngu-vo-lang-va-dieu-khien)
+- [Thuật ngữ Bàn đạp, Cần số, và Phanh tay](#thuat-ngu-ban-dap-can-so-va-phanh-tay)
+- [Thuật ngữ Phần mềm, Firmware, và Thiết lập](#thuat-ngu-phan-mem-firmware-va-thiet-lap)
+- [Các từ viết tắt trong Tuning Menu](#cac-tu-viet-tat-trong-tuning-menu)
+- [Thuật ngữ FFB và Sim-Racing chung](#thuat-ngu-ffb-va-sim-racing-chung)
+- [Thuật ngữ Khắc phục sự cố](#thuat-ngu-khac-phuc-su-co)
+- [Bảng tra cứu nhanh Từ viết tắt](#bang-tra-cuu-nhanh-tu-viet-tat)
+- [Tài liệu tham khảo](#tai-lieu-tham-khao)
 
-## Làm thế nào để sử dụng thuật ngữ này
+## Cách sử dụng Bảng thuật ngữ này
 
 ### Nhãn bằng chứng
 
 | Nhãn | Ý nghĩa |
 |---|---|
-| Official | Sản phẩm Fanatec, hỗ trợ, Explorer, hoặc ngôn ngữ thủ công. |
-| Chuẩn | Sử dụng chung USB, hệ thống điều khiển, điện hoặc xe thể thao. |
-Ngôn ngữ đua xe mô phỏng được sử dụng rộng rãi; việc triển khai chính xác có thể khác nhau tùy theo sản phẩm hoặc trò chơi.
-Ngôn ngữ sản phẩm/phần mềm Fanatec cũ mà khách hàng vẫn có thể sử dụng.
+| Official | Ngôn ngữ từ sản phẩm Fanatec, hỗ trợ, Explorer, hoặc sách hướng dẫn. |
+| Standard | Cách sử dụng chung trong USB, hệ thống điều khiển, điện, hoặc motorsport. |
+| Common | Ngôn ngữ sim-racing được sử dụng rộng rãi; việc triển khai chính xác có thể khác nhau tùy theo sản phẩm hoặc trò chơi. |
+| Legacy | Ngôn ngữ phần mềm/sản phẩm Fanatec cũ mà khách hàng vẫn có thể sử dụng. |
 
-Sản phẩm hiện tại tuyên bố tuổi nhanh chóng. [Sổ đăng ký nguồn hệ sinh thái] (./references.md) ghi lại ngày xem xét và các xung đột đã biết. Đặc biệt, hướng dẫn cộng đồng tháng 1 năm 2026 có trước bản cập nhật mô-men xoắn ClubSport DD / DD + hiện tại và định vị hàng đầu Podium DD.
+Các tuyên bố về sản phẩm hiện tại rất nhanh bị lỗi thời. [Sổ đăng ký nguồn hệ sinh thái](./references.md) ghi lại ngày đánh giá và các xung đột đã biết. Đặc biệt, một hướng dẫn cộng đồng vào tháng 1 năm 2026 có trước bản cập nhật mô-men xoắn của ClubSport DD/DD+ hiện tại và định vị flagship Podium DD.
 
-# # Quy tắc giao tiếp
+### Quy tắc giao tiếp
 
-- Nói **Fanatec **, không phải “Fantec”
-- Hỏi chính xác tên sản phẩm, nền tảng, đường dẫn kết nối, phiên bản Fanatec App và phiên bản firmware trước khi chẩn đoán.
-- Tách ** vô lăng ** khỏi ** đế bánh xe **. Khách hàng thường gọi một trong hai là “bánh xe”
-- Nói ** cường độ FFB ** cho một cài đặt và ** mô-men xoắn trong Nm ** cho đầu ra vật lý. Chúng có liên quan nhưng không thể hoán đổi cho nhau.
-- Không hứa hẹn khả năng tương thích từ hình dạng kết nối một mình. Sản phẩm, nền tảng, firmware, thế hệ phát hành nhanh và đường dẫn kết nối đều quan trọng.
-- Xử lý “Xbox Ready” và “PlayStation Ready” là nhãn có điều kiện, không giống như khả năng tương thích được cấp phép.
-- Xác minh hỗ trợ mô-men xoắn QR2 dành riêng cho sản phẩm hiện tại. Hành vi QR2 Lite đã thay đổi cho các bánh xe được chọn thông qua cập nhật phần sụn. [F4]
+- Gọi là **Fanatec**, không phải "Fantec".
+- Yêu cầu cung cấp tên sản phẩm chính xác, nền tảng, đường dẫn kết nối, phiên bản Fanatec App, và phiên bản firmware trước khi chẩn đoán.
+- Phân biệt rõ **steering wheel** (vô lăng) với **wheel base** (đế bánh xe). Khách hàng thường gọi chung cả hai là "the wheel".
+- Dùng **cường độ FFB** cho một cài đặt và **mô-men xoắn tính bằng Nm** cho lực đầu ra vật lý. Chúng có liên quan nhưng không thể thay thế cho nhau.
+- Không hứa hẹn khả năng tương thích chỉ dựa vào hình dạng cổng kết nối. Sản phẩm, nền tảng, firmware, thế hệ quick-release, và đường dẫn kết nối đều rất quan trọng.
+- Xử lý "Xbox Ready" và "PlayStation Ready" như là các nhãn có điều kiện, không giống như khả năng tương thích được cấp phép đầy đủ.
+- Xác minh hỗ trợ mô-men xoắn QR2 cho từng sản phẩm hiện tại. Hành vi của QR2 Lite đã thay đổi đối với một số wheel thông qua các bản cập nhật firmware. [F4]
 
-## Từ vựng lấy khách hàng
+## Từ vựng Tiếp nhận Khách hàng
 
-Thu thập những sự kiện này trước. Điều này ngăn chặn hầu hết các lỗi hỗ trợ theo thuật ngữ.
+Hãy thu thập những thông tin này trước. Điều này ngăn chặn hầu hết các lỗi hỗ trợ do thuật ngữ gây ra.
 
-| Hỏi khách hàng | Ý nghĩa của nó | Ví dụ hữu ích |
+| Hỏi Khách hàng Về | Ý nghĩa | Ví dụ Hữu ích |
 |---|---|---|
-| Nền tảng | Máy chủ chạy trò chơi | Windows PC, Xbox Series X \|S, PS5 |
-Cơ sở bánh xe Đơn vị trung tâm động cơ và USB CSL DD, ClubSport DD +, Podium DD1
-| Vô lăng hoặc trung tâm | Bộ điều khiển có thể tháo rời | Công thức V2.5X, CSL Universal Hub V2 |
-| Nhanh chóng phát hành | Khớp nối bánh xe cơ khí / điện | QR1, QR2 Lite, QR2 Pro |
-| Thiết bị ngoại vi | Bàn đạp, bộ chuyển đổi, phanh tay hoặc mái chèo tĩnh | Bàn đạp CSL, ClubSport Shifter SQ V1.5 |
-| Đường dẫn kết nối | Cách mỗi thiết bị ngoại vi đến máy chủ | Bàn đạp đến chân đế bằng RJ12; chân đế đến PC bằng USB |
-| Phiên bản phần mềm | Gói phần mềm máy chủ và thiết bị | Fanatec App cộng với phiên bản phần mềm cơ sở / bánh xe |
-Chế độ Nền tảng hiện tại hoặc chế độ tương thích Chế độ PC, chế độ Xbox, chế độ tương thích
-| Triệu chứng | Thất bại quan sát được, không giả định nguyên nhân | “Cơ sở được phát hiện nhưng không có FFB” |
-| Kích hoạt | Hành động sau khi vấn đề bắt đầu | Cập nhật firmware, trao đổi QR, cập nhật trò chơi |
+| Platform | Máy chủ (host) đang chạy trò chơi | Windows PC, Xbox Series X\|S, PS5 |
+| Wheel base | Bộ phận động cơ và hub USB | CSL DD, ClubSport DD+, Podium DD1 |
+| Steering wheel hoặc hub | Cụm điều khiển có thể tháo rời | Formula V2.5X, CSL Universal Hub V2 |
+| Quick release | Khớp nối cơ/điện giữa wheel và base | QR1, QR2 Lite, QR2 Pro |
+| Peripherals | Bàn đạp, cần số, phanh tay, hoặc ngàm chuyển số tĩnh | CSL Pedals, ClubSport Shifter SQ V1.5 |
+| Connection path | Cách mỗi thiết bị ngoại vi kết nối với máy chủ | Bàn đạp nối với base bằng RJ12; base nối với PC bằng USB |
+| Software versions | Gói phần mềm trên máy chủ và firmware thiết bị | Fanatec App và phiên bản firmware của base/wheel |
+| Mode | Nền tảng hoặc chế độ tương thích hiện tại | PC mode, Xbox mode, compatibility mode |
+| Symptom | Lỗi có thể quan sát được, không phải nguyên nhân giả định | "Base được nhận diện nhưng không có FFB" |
+| Trigger | Hành động sau đó sự cố bắt đầu | Cập nhật firmware, thay QR, cập nhật trò chơi |
 
-## Điều khoản thương hiệu, sản phẩm và gói
+## Thuật ngữ Thương hiệu, Sản phẩm và Bundle
 
-| Thuật ngữ | Định nghĩa và giải thích khách hàng | Bằng chứng |
+| Thuật ngữ | Định nghĩa và Giải thích cho Khách hàng | Bằng chứng |
 |---|---|---|
-| Fanatec | Thương hiệu phần cứng đua xe mô phỏng. Sử dụng chữ viết hoa chính xác. | Official |
-| Hệ sinh thái | Bộ cơ sở, bánh xe, bàn đạp, cần số, phanh tay, bộ giải phóng nhanh, phần mềm và phụ kiện lắp đặt có thể tương thích với nhau. Nó không có nghĩa là mọi kết hợp đều hỗ trợ mọi nền tảng hoặc tính năng. | Chính thức [F1] |
-| CSL | CSL là viết tắt của ClubSport Light. Cấp sản phẩm Fanatec được phân loại là dòng sản phẩm cấp nhập cảnh. Đó là tên gia đình, không phải là đầu nối hoặc tiêu chuẩn tương thích. | Chính thức [F19] |
-| CSL Elite | Tên họ sản phẩm được sử dụng cho các bánh xe và bàn đạp được chọn. “Elite” không xác định khả năng tương thích nền tảng. | Chính thức |
-| ClubSport / CS | Hạng sản phẩm từ trung bình đến cao và tiền tố viết tắt phổ biến. Các sản phẩm như ClubSport DD và ClubSport Shifter vẫn khác biệt. | Chính thức |
-| Podium / P | Tầng sản phẩm cao cấp được sử dụng cho các cơ sở, trung tâm, mô-đun và phụ kiện hiệu suất cao. | Chính thức |
-| Ready2Race / R2R | Bundle dự định chứa các thành phần chính cần thiết để bắt đầu lái xe. Xác nhận hỗ trợ nền tảng, lắp đặt và nâng cấp tùy chọn trên trang của nó. | Chính thức |
-| Bánh xe đua | Có thể có nghĩa là một gói cơ sở và bánh xe hoàn chỉnh. Hỏi xem khách hàng có nghĩa là hệ thống hay chỉ có vô lăng có thể tháo rời. | Chính thức / Phổ biến |
-Cơ sở bánh xe Đơn vị cố định có chứa động cơ lái, trục, thiết bị điện tử điều khiển, giao diện USB và cổng ngoại vi. Nó tạo ra FFB. Chính thức
-| Tay lái | Bộ điều khiển trình điều khiển có thể tháo rời với tay nắm / vành, nút, mái chèo và thường là đèn LED / màn hình. Nó không tạo ra mô-men xoắn lái chính. | Chính thức
-| Vành bánh xe / Vành | Phần được giữ bởi người lái. Trong các hệ thống mô-đun, nó bu lông vào một trung tâm. Khách hàng cũng sử dụng “vành” cho toàn bộ vô lăng; làm rõ. | Chính thức / Phổ biến |
-| Hub | Giao diện giữa vành và đế, thường mang điều khiển, mái chèo, thiết bị điện tử và lắp nhanh. | Official [F3] |
-| Universal Hub | Modular Fanatec hub chấp nhận vành tương thích. Mô hình bu lông, đường kính, trọng lượng, điều khiển, QR và hỗ trợ nền tảng vẫn yêu cầu kiểm tra. | Chính thức [F3] |
-| Mô-đun nút | Bộ điều khiển / hiển thị bổ sung được gắn vào trung tâm hoặc vành tương thích. | Chính thức |
-| Mô-đun mái chèo | Bộ điều khiển phía sau bổ sung có chứa mái chèo dịch chuyển và, tùy thuộc vào kiểu máy, mái chèo ly hợp tương tự. | Chính thức |
-| V1 / V2 / V2.5 | Sửa đổi phần cứng trong tên sản phẩm. Đừng cho rằng các phụ kiện hoặc phần sụn có thể hoán đổi cho nhau qua các phiên bản. | Official |
-Sản phẩm bên ngoài phạm vi hiện tại nhưng vẫn có thể được hỗ trợ bởi trình điều khiển, phần sụn, hướng dẫn sử dụng hoặc phụ tùng thay thế.
+| Fanatec | Thương hiệu phần cứng sim-racing. Sử dụng chữ viết hoa chính xác. | Official |
+| Ecosystem | Tập hợp các base, wheel, bàn đạp, cần số, phanh tay, quick release, phần mềm, và phụ kiện lắp đặt có thể hoạt động cùng nhau. Nó không có nghĩa là mọi kết hợp đều hỗ trợ mọi nền tảng hoặc tính năng. | Official [F1] |
+| CSL | CSL là viết tắt của ClubSport Light. Cấp độ sản phẩm Fanatec được phân loại là dòng entry-level (cơ bản). Đây là tên của một dòng sản phẩm, không phải là chuẩn cổng kết nối hay tính tương thích. | Official [F19] |
+| CSL Elite | Tên dòng sản phẩm được sử dụng cho một số wheel và bàn đạp. "Elite" không xác định tính tương thích nền tảng. | Official |
+| ClubSport / CS | Cấp độ sản phẩm từ trung bình đến cao và là tiền tố viết tắt phổ biến. Các sản phẩm như ClubSport DD và ClubSport Shifter là hoàn toàn khác nhau. | Official |
+| Podium / P | Cấp độ sản phẩm cao cấp được sử dụng cho các base, hub, module, và phụ kiện hiệu suất cao. | Official |
+| Ready2Race / R2R | Bundle được thiết kế để chứa các thành phần chính cần thiết để bắt đầu đua. Cần xác nhận hỗ trợ nền tảng, thiết bị lắp đặt, và các nâng cấp tùy chọn trên trang của bundle đó. | Official |
+| Racing Wheel | Có thể có nghĩa là một gói hoàn chỉnh gồm cả base và wheel. Hãy hỏi rõ xem khách hàng đang nói đến toàn bộ hệ thống hay chỉ riêng vô lăng có thể tháo rời. | Official/Common |
+| Wheel Base | Đơn vị cố định chứa động cơ lái, trục, mạch điều khiển, giao diện USB, và các cổng cho thiết bị ngoại vi. Nó tạo ra FFB. | Official |
+| Steering Wheel | Cụm điều khiển của người lái có thể tháo rời với tay cầm/vành, các nút, paddle, và thường có đèn LED/màn hình. Nó không tạo ra mô-men xoắn lái chính. | Official |
+| Wheel Rim / Rim | Phần được người lái cầm nắm. Trong các hệ thống module, nó được gắn vít vào một hub. Khách hàng cũng thường dùng từ "rim" để chỉ toàn bộ steering wheel; hãy làm rõ. | Official/Common |
+| Hub | Giao diện giữa rim và base, thường mang các nút điều khiển, paddle, mạch điện tử, và ngàm quick-release. | Official [F3] |
+| Universal Hub | Hub dạng module của Fanatec chấp nhận các rim tương thích. Vẫn cần kiểm tra kiểu bắt vít, đường kính, trọng lượng, nút điều khiển, QR, và hỗ trợ nền tảng. | Official [F3] |
+| Button Module | Cụm điều khiển/màn hình bổ sung được gắn vào một hub hoặc rim tương thích. | Official |
+| Paddle Module | Cụm điều khiển phía sau bổ sung chứa các paddle sang số và, tùy thuộc vào mẫu mã, các paddle ly hợp analog. | Official |
+| V1 / V2 / V2.5 | Phiên bản phần cứng trong tên sản phẩm. Đừng mặc định rằng các phụ kiện hoặc firmware có thể hoán đổi giữa các phiên bản. | Official |
+| Discontinued / Legacy Product | Sản phẩm nằm ngoài danh mục hiện tại nhưng có thể vẫn được hỗ trợ bởi các driver, firmware, tài liệu, hoặc phụ tùng cũ. | Legacy |
 
-## Fanatec DD Các gia đình mô hình cơ sở bánh xe
+## Các Dòng Wheel Base Fanatec DD
 
-`DD` có nghĩa là ** Direct Drive **, nhưng khách hàng có thể sử dụng “DD” cho kiến trúc ổ đĩa, ClubSport DD hoặc sản phẩm Podium DD hiện tại. Luôn yêu cầu tên mô hình hoàn chỉnh.
+`DD` có nghĩa là **Direct Drive**, nhưng khách hàng có thể dùng "DD" để chỉ cấu trúc truyền động, ClubSport DD, hoặc sản phẩm Podium DD hiện tại. Luôn luôn hỏi tên mẫu mã (model) đầy đủ.
 
-| Mô hình | Vị trí sản phẩm | Mô-men xoắn quảng cáo | Tóm tắt nền tảng | Điểm khác biệt chính |
+| Model | Định vị Sản phẩm | Mô-men xoắn Quảng cáo | Tóm tắt Nền tảng | Điểm khác biệt chính |
 |---|---|---:|---|---|
-| CSL DD | Entry-level direct drive | 5 Nm; 8 Nm with supported Boost Kit | Windows PC; Xbox with an Xbox-licensed wheel or hub; not PlayStation licensed | Compact, lower-cost entry into the Fanatec DD ecosystem. [F13] |
-| Podium Wheel Base DD1 | flagship Podium thế hệ trước | Lên đến đỉnh 20 Nm | Mô hình tiêu chuẩn: Windows PC; Xbox với bánh xe hoặc trung tâm được cấp phép Xbox | Cơ sở Podium mô-men xoắn cao trước đó. Một gói / mô hình DD1 được cấp phép PlayStation lịch sử riêng biệt đã tồn tại, vì vậy hãy kiểm tra SKU chính xác. [F14] |
-| Podium Wheel Base DD2 | Flagship Podium thế hệ trước | Lên đến đỉnh 25 Nm | Windows PC; Xbox với bánh xe hoặc trung tâm được cấp phép Xbox | Mô hình DD1-era mạnh hơn; Podium Kill Switch được cung cấp làm tiêu chuẩn. [F14] |
-| ClubSport DD | Ổ đĩa trực tiếp ClubSport hiện tại | Mô-men xoắn giữ 15 Nm với phần sụn hiện tại | Windows PC; Xbox với bánh xe hoặc trung tâm được cấp phép Xbox; không được PlayStation cấp phép | Nền tảng QR2 và FullForce thế hệ hiện tại không có giấy phép PlayStation. [F15] |
-| ClubSport DD+ | Ổ đĩa trực tiếp ClubSport hiện tại | Mô-men xoắn giữ 18 Nm với firmware hiện tại | Windows PC và PlayStation; Xbox với bánh xe hoặc trung tâm được cấp phép Xbox | Mô hình ClubSport mạnh hơn với cấp phép PlayStation. [F15] |
-| Podium DD | Current Podium flagship introduced in 2026 | 25 Nm holding torque; up to 33 Nm peak overshoot | Kiểm tra trang sản phẩm khu vực hiện tại và bánh xe / trung tâm đính kèm để được hỗ trợ nền tảng | Kế nhiệm DD1 / DD2, dựa trên kiến trúc ClubSport DD mới hơn với FullForce. [F16] |
+| CSL DD | Direct drive entry-level | 5 Nm; 8 Nm với Boost Kit hỗ trợ | Windows PC; Xbox với wheel/hub được cấp phép Xbox; không cấp phép PlayStation | Sự lựa chọn nhỏ gọn, chi phí thấp để bước vào hệ sinh thái DD của Fanatec. [F13] |
+| Podium Wheel Base DD1 | Flagship Podium thế hệ trước | Đỉnh (peak) lên tới 20 Nm | Mẫu tiêu chuẩn: Windows PC; Xbox với wheel/hub được cấp phép Xbox | Base Podium mô-men xoắn cao thế hệ trước. Từng có một mẫu DD1/bundle cấp phép PlayStation lịch sử, nên hãy kiểm tra SKU chính xác. [F14] |
+| Podium Wheel Base DD2 | Flagship Podium thế hệ trước | Đỉnh (peak) lên tới 25 Nm | Windows PC; Xbox với wheel/hub được cấp phép Xbox | Mẫu mạnh hơn trong thời kỳ DD1; đi kèm Podium Kill Switch theo chuẩn. [F14] |
+| ClubSport DD | Direct drive ClubSport hiện tại | 15 Nm holding torque với firmware hiện tại | Windows PC; Xbox với wheel/hub được cấp phép Xbox; không cấp phép PlayStation | Nền tảng QR2 và FullForce thế hệ hiện tại không có cấp phép PlayStation. [F15] |
+| ClubSport DD+ | Direct drive ClubSport hiện tại | 18 Nm holding torque với firmware hiện tại | Windows PC và PlayStation; Xbox với wheel/hub được cấp phép Xbox | Mẫu ClubSport mạnh hơn có cấp phép PlayStation. [F15] |
+| Podium DD | Flagship Podium hiện tại ra mắt năm 2026 | 25 Nm holding torque; đỉnh lên tới 33 Nm | Kiểm tra trang sản phẩm theo khu vực hiện tại và wheel/hub gắn kèm để biết hỗ trợ nền tảng | Hậu duệ của DD1/DD2, dựa trên kiến trúc ClubSport DD mới hơn với FullForce. [F16] |
 
-### Đặt tên và so sánh cảnh báo
+### Cảnh báo khi gọi tên và so sánh
 
-- ** CSL DD ** là tên mô hình hoàn chỉnh: `CSL` là cấp sản phẩm và `DD` có nghĩa là Ổ đĩa trực tiếp.
-- ** DD1 ** và ** DD2 ** là mã định danh mô hình trong thế hệ Podium Wheel Base trước đó; “2” xác định biến thể đầu ra cao hơn, không phải “Phiên bản Drive trực tiếp 2.”
-- ** DD / DD + ** thường có nghĩa là ** ClubSport DD / ClubSport DD + ** trong cách viết tắt của khách hàng. `+` xác định mô hình ClubSport được cấp phép PlayStation mạnh hơn.
-- ** Podium DD ** không có số là một sản phẩm 2026 riêng biệt. Đừng nhầm lẫn nó với DD1, DD2 hoặc ổ đĩa trực tiếp chung.
-- Số liệu DD1 / DD2 được xuất bản dưới dạng ** mô-men xoắn cực đại **. ClubSport DD / DD + và Podium DD sử dụng ** giữ mô-men xoắn ** trong các tuyên bố sản phẩm hiện tại. Những con số này không tương đương trực tiếp.
-- ClubSport DD và DD + ban đầu được vận chuyển với mô-men xoắn giữ được quảng cáo là 12 Nm và 15 Nm. Phần mềm Fanatec V1.4.2.3 trở lên đã nâng chúng lên 15 Nm và 18 Nm vào tháng 5 năm 2026 mà không cần thay đổi phần cứng. Cập nhật thông qua Ứng dụng Fanatec mới nhất. [F15]
-- Mô-men xoắn có sẵn vẫn có thể bị giới hạn bởi vô lăng kèm theo, nhả nhanh, phần sụn hoặc Chế độ mô-men xoắn thấp. [F4]
+- **CSL DD** là tên mô hình hoàn chỉnh: `CSL` là cấp độ sản phẩm và `DD` có nghĩa là Direct Drive.
+- **DD1** và **DD2** là mã mô hình trong thế hệ Podium Wheel Base trước đó; số "2" xác định biến thể có công suất cao hơn, không phải "Direct Drive phiên bản 2".
+- **DD / DD+** trong cách gọi tắt của khách hàng thường có nghĩa là **ClubSport DD / ClubSport DD+**. Dấu `+` xác định mẫu ClubSport mạnh hơn, được cấp phép PlayStation.
+- **Podium DD** không có số là một sản phẩm năm 2026 hoàn toàn riêng biệt. Đừng nhầm lẫn với DD1, DD2, hoặc bất kỳ direct drive chung chung nào.
+- Số liệu của DD1/DD2 được công bố là **peak torque** (mô-men xoắn đỉnh). ClubSport DD/DD+ và Podium DD sử dụng **holding torque** (mô-men xoắn duy trì) trong các thông số sản phẩm hiện tại. Các con số này không tương đương trực tiếp.
+- ClubSport DD và DD+ ban đầu được bán với holding torque quảng cáo là 12 Nm và 15 Nm. Firmware Fanatec V1.4.2.3 hoặc mới hơn đã tăng lên 15 Nm và 18 Nm vào tháng 5 năm 2026 mà không thay đổi phần cứng. Hãy cập nhật qua Fanatec App mới nhất. [F15]
+- Lượng mô-men xoắn khả dụng vẫn có thể bị giới hạn bởi steering wheel gắn kèm, quick release, firmware, hoặc Low Torque Mode. [F4]
 
-## Điều khoản Nền tảng và Tương thích
+## Thuật ngữ Nền tảng và Tương thích
 
-| Thuật ngữ | Định nghĩa và giải thích khách hàng | Bằng chứng |
+| Thuật ngữ | Định nghĩa và Giải thích cho Khách hàng | Bằng chứng |
 |---|---|---|
-| Nền tảng | PC hoặc môi trường console mà trò chơi chạy. Hỗ trợ có thể phụ thuộc vào phần cứng cấp phép và đường dẫn kết nối ngoại vi. | Official [F2] |
-| Tương thích PC | Sản phẩm hoạt động trên các PC Windows được hỗ trợ thông qua kết nối được phê duyệt. Nó không hứa hẹn hỗ trợ trong mọi trò chơi hoặc hệ điều hành không phải Windows. | Chính thức [F2] |
-Tay lái hoặc hub chứa phần cứng cấp phép Xbox. Được gắn vào một cơ sở Fanatec tương thích, nó cho phép hệ thống được kết nối trên Xbox. | Official [F2] |
-| Xbox Ready | Nhãn có điều kiện: sản phẩm có thể sử dụng được trên Xbox khi kết hợp với vô lăng hoặc hub Fanatec được cấp phép bởi Xbox. | Official [F2] |
-| PlayStation Compatible / PS Licensed | Fanatec Cấp phép PlayStation nằm trong cơ sở bánh xe. Một cơ sở được cấp phép cho phép các thành phần đính kèm được hỗ trợ trên PlayStation. | Official [F2] |
-| PlayStation Ready / PS Ready | Conditional label: component có thể hoạt động trên PlayStation khi được kết nối thông qua cơ sở Fanatec được PlayStation cấp phép. | Official [F2] |
-| Thiết lập đa nền tảng | Bánh xe / trung tâm được cấp phép Xbox cộng với cơ sở được cấp phép PlayStation. Điều này có thể hỗ trợ PC và cả hai gia đình console; xác minh mọi trang sản phẩm. | Chính thức [F2] |
-| Khả năng tương thích với bảng điều khiển | Yêu cầu phần cứng được cấp phép và trò chơi được hỗ trợ. Các thiết bị ngoại vi thường kết nối qua cơ sở chứ không phải các cổng USB bảng điều khiển riêng biệt. | Official [F2][F8] |
-| Hỗ trợ trò chơi | Trò chơi thực hiện các trục, nút, FFB, màn hình, đèn LED hoặc đo từ xa có liên quan. Khả năng tương thích phần cứng không đảm bảo mọi tính năng. | Chính thức [F7] |
-| Chế độ gốc | Thiết bị xác định trong chế độ hiện tại dự định của nó. Tên chính xác và hành vi khác nhau tùy theo cơ sở và nền tảng. | Chính thức / Phổ biến |
-| Chế độ tương thích / Chế độ CSW | Cơ sở mô phỏng hoặc xác định tương tự như một cơ sở cũ hơn để các trò chơi không có hỗ trợ gốc có thể hoạt động. Các tính năng có thể khác nhau. | Chính thức / Legacy |
-Chế độ PC Chế độ cơ sở bánh xe dành cho Windows PC. Màu LED và quy trình chuyển đổi chế độ là sản phẩm cụ thể. | Chính thức |
-Chế độ Xbox Trạng thái được sử dụng với phần cứng được hỗ trợ trên Xbox. Giấy phép Xbox vẫn còn trong bánh xe hoặc trung tâm được cấp phép. Chính thức
-| Chế độ PlayStation | Trạng thái của cơ sở được cấp phép PlayStation trên bảng điều khiển PlayStation được hỗ trợ. Chỉ dẫn chính xác khác nhau. | Chính thức |
-| Độc lập | Thiết bị ngoại vi kết nối trực tiếp với PC, thường bằng USB hoặc ClubSport USB Adapter. USB độc lập thường không hoạt động trên máy chơi game console. | Official [F2][F8] |
-| Base-Connected | Peripheral connects to the base, which aggregates it into the base's host/console connection. | Official [F2] | Thông tin cơ bản
+| Platform | PC hoặc môi trường console mà trò chơi đang chạy trên đó. Hỗ trợ có thể phụ thuộc vào phần cứng cấp phép và đường dẫn kết nối thiết bị ngoại vi. | Official [F2] |
+| PC Compatible | Sản phẩm hoạt động trên các Windows PC được hỗ trợ qua kết nối được phê duyệt. Nó không hứa hẹn sẽ hỗ trợ trong mọi trò chơi hoặc các hệ điều hành không phải Windows. | Official [F2] |
+| Xbox Compatible / Xbox Licensed | Steering wheel hoặc hub có chứa phần cứng cấp phép Xbox. Khi được gắn vào một base Fanatec tương thích, nó kích hoạt hệ thống đó trên Xbox. | Official [F2] |
+| Xbox Ready | Nhãn có điều kiện: sản phẩm sẽ sử dụng được trên Xbox khi kết hợp với một steering wheel hoặc hub Fanatec được cấp phép Xbox. | Official [F2] |
+| PlayStation Compatible / PS Licensed | Việc cấp phép PlayStation của Fanatec nằm ở wheel base. Một base được cấp phép sẽ kích hoạt các thành phần gắn kèm được hỗ trợ trên PlayStation. | Official [F2] |
+| PlayStation Ready / PS Ready | Nhãn có điều kiện: thiết bị có thể hoạt động trên PlayStation khi được kết nối qua một base Fanatec được cấp phép PlayStation. | Official [F2] |
+| Cross-Platform Setup | Wheel/hub cấp phép Xbox cộng với base cấp phép PlayStation. Thiết lập này có thể hỗ trợ PC và cả hai dòng console; hãy xác minh từng trang sản phẩm. | Official [F2] |
+| Console Compatibility | Yêu cầu phần cứng được cấp phép và trò chơi hỗ trợ. Các thiết bị ngoại vi thường kết nối qua base thay vì các cổng USB riêng biệt của console. | Official [F2][F8] |
+| Game Support | Trò chơi có triển khai các trục, nút, FFB, màn hình, đèn LED, hoặc telemetry liên quan. Tính tương thích phần cứng không đảm bảo mọi tính năng đều có. | Official [F7] |
+| Native Mode | Thiết bị nhận diện ở chế độ hiện tại theo đúng dự định của nó. Tên gọi và hành vi chính xác khác nhau tùy base và nền tảng. | Official/Common |
+| Compatibility Mode / CSW Mode | Base mô phỏng hoặc nhận diện tương tự như một base cũ hơn để các trò chơi không có native support có thể hoạt động. Tính năng có thể khác biệt. | Official/Legacy |
+| PC Mode | Chế độ wheel-base dành cho Windows PC. Màu đèn LED và quy trình chuyển chế độ tùy thuộc vào sản phẩm. | Official |
+| Xbox Mode | Trạng thái được dùng với các phần cứng được hỗ trợ trên Xbox. Việc cấp phép Xbox vẫn nằm trong wheel hoặc hub được cấp phép. | Official |
+| PlayStation Mode | Trạng thái của một base cấp phép PlayStation trên console PlayStation được hỗ trợ. Chỉ báo chính xác có thể khác nhau. | Official |
+| Standalone | Thiết bị ngoại vi kết nối trực tiếp với PC, thường qua USB hoặc ClubSport USB Adapter. USB standalone thường không hoạt động trên console. | Official [F2][F8] |
+| Base-Connected | Thiết bị ngoại vi kết nối với base, base sẽ tổng hợp và truyền tín hiệu qua kết nối host/console của base. | Official [F2] |
 
-## Cơ sở bánh xe, mô-men xoắn và điều khoản lắp đặt
+## Thuật ngữ Wheel Base, Mô-men xoắn, và Lắp đặt
 
-| Thuật ngữ / Viết tắt | Định nghĩa và giải thích khách hàng | Bằng chứng |
+| Thuật ngữ / Viết tắt | Định nghĩa và Giải thích cho Khách hàng | Bằng chứng |
 |---|---|---|
-| DD - Truyền động trực tiếp | Trục động cơ điều khiển trực tiếp trục lái, không có đai hoặc giảm tốc. DD mô tả kiến trúc, không tự động mô-men xoắn hoặc chất lượng. | Chính thức / Phổ biến |
-| Belt Drive | Động cơ truyền lực qua đai và ròng rọc. Phổ biến trên cơ sở bánh xe cũ. | Common / Legacy |
-| FFB — Force Feedback | Motor-generated steering force based on game commands và base settings. | Official [F5]
-| Mô-men xoắn | Lực quay ở trục lái, thường được ghi bằng newton-mét. | Tiêu chuẩn |
-| Nm - Newton-mét | SI đơn vị mô-men xoắn. Nhiều Nm có nghĩa là mô-men xoắn cao hơn có thể, không tự động chi tiết hơn hoặc hiện thực. | Tiêu chuẩn |
-| Mô-men xoắn cực đại | Mô-men xoắn ngắn nhất trong các điều kiện được chỉ định. Không so sánh trực tiếp với mô-men xoắn giữ của sản phẩm khác. | Thông thường |
-| Giữ / Duy trì mô-men xoắn | Mô-men xoắn duy trì lâu hơn dưới giới hạn nhiệt và điện. Định nghĩa của nhà cung cấp và điều kiện thử nghiệm có thể khác nhau. | Thông thường |
-Chế độ mô-men xoắn cao Trạng thái cho phép nhiều hơn giới hạn mô-men xoắn thấp khi kết hợp bánh xe / QR được phê duyệt. Không bao giờ bỏ qua phát hiện hoặc cảnh báo. Chính thức [F4]
-Chế độ mô-men xoắn thấp Chế độ giới hạn an toàn cho bánh xe hoặc QR không được chấp thuận cho mô-men xoắn cơ sở đầy đủ. Hướng dẫn hiện tại mô tả 8 Nm trên các cơ sở đầu ra cao được liệt kê. Chính thức [F4]
-| QR - Phát hành nhanh | Khớp nối cơ / điện gắn vô lăng vào đế. Cả hai bên và thế hệ phải khớp. | Chính thức [F4] |
-| QR1 | Họ QR Fanatec thế hệ thứ nhất. QR1 và QR2 không giao phối. Fanatec tuyên bố QR1 đã ngừng hoạt động, mặc dù các đường dẫn chuyển đổi phần cứng và mô hình cụ thể vẫn còn. | Official [F4][F17] |
-| QR1 Lite | Composite wheel-side QR1 với giới hạn mô-men xoắn dành riêng cho sản phẩm. Nó không tương đương với QR2 Lite. | Official [F4] |
-| QR2 | Gia đình QR hiện tại với các thành phần Mặt đế và Mặt bánh xe riêng biệt. | Official [F4] |
-| QR2 Base-Side | Thành phần QR2 được lắp vào trục cơ sở. Loại C, Loại F hoặc Loại M là cơ sở cụ thể. | Chính thức [F4] |
-| QR2 Wheel-Side | Thành phần được trang bị cho bánh xe / trung tâm. Nó giao phối với các biến thể QR2 Base-Side chính thức, tùy thuộc vào sự chấp thuận của sản phẩm và mô-men xoắn. | Chính thức [F4] |
-| Mặt bánh xe Lite QR2 | Mặt bánh xe composite QR2. Hỗ trợ mô-men xoắn cao là bánh xe và phần sụn cụ thể; các sản phẩm được chọn đã được phê duyệt mô-men xoắn đầy đủ. | Chính thức [F4] |
-| QR2 Pro Wheel-Side | Biến thể kim loại định hướng thể thao cao cấp. “Pro” không ngụ ý hỗ trợ nền tảng phổ quát. | Chính thức [F4] |
-| Type-C / Type-F / Type-M | Biến thể cơ sở QR2 cơ sở cụ thể: Type-C cho CSL DD / GT DD Pro, Type-F cho ClubSport DD, Type-M cho Podium trong hướng dẫn hiện tại. | Official [F4] |
-| Trục | Thành viên đầu ra quay của đế bánh xe. QR Base-Side gắn vào nó. | Tiêu chuẩn |
-Flex Chuyển động đàn hồi không mong muốn trong buồng lái, giá treo, vành hoặc QR. Nó có thể làm giảm chi tiết cảm nhận mà không có lỗi điện tử. Phổ biến
-| Chơi / Phản ứng dữ dội | Chuyển động tự do trước khi chuyển tải. Hỏi ở đâu: QR, trục, hub, rim, bàn đạp, hoặc buồng lái. | Thông thường |
-| Gắn cứng | Thiết bị bu lông trực tiếp vào buồng lái / tấm bằng cách sử dụng các điểm được chỉ định. Sử dụng kích thước và độ sâu bu lông được phê duyệt. | Chính thức
-| Bảng kẹp | Phụ kiện bảo vệ cơ sở hoặc shifter để bàn. Sức mạnh của bàn và giới hạn mô-men xoắn có vấn đề. | Chính thức |
-Buồng lái / giàn khoan Khung kết cấu hỗ trợ ghế, đế, bàn đạp và phụ kiện. Độ cứng và điều chỉnh ảnh hưởng đến sự thoải mái và nhận thức FFB. Phổ biến
-| Boost Kit | Cung cấp năng lượng cao hơn cho các cơ sở được hỗ trợ cho phép cấu hình mô-men xoắn cao hơn được quảng cáo. Nó không phải là một ép xung chung. | Chính thức |
-| FullForce | Lớp giao thức / hiệu ứng FFB tần số cao Fanatec trên phần cứng và trò chơi được hỗ trợ. Kể từ tháng 6 năm 2026, hướng dẫn chính thức hiện tại bao gồm CSL DD và GT DD Pro cũng như các dòng ClubSport và Podium DD hiện tại; hỗ trợ trò chơi vẫn được yêu cầu. | Chính thức [F18] |
+| DD — Direct Drive | Trục động cơ truyền động trực tiếp trục lái, không qua dây đai hoặc bánh răng giảm tốc. DD mô tả cấu trúc, không tự động mang ý nghĩa mô-men xoắn hoặc chất lượng. | Official/Common |
+| Belt Drive | Động cơ truyền lực qua dây đai và puli. Thường thấy trên các wheel base đời cũ. | Common/Legacy |
+| FFB — Force Feedback | Lực lái do động cơ tạo ra dựa trên các lệnh từ trò chơi và cài đặt của base. | Official [F5] |
+| Torque | Lực xoay tại trục lái, thường được biểu thị bằng newton-mét (Nm). | Standard |
+| Nm — Newton-metre | Đơn vị SI của mô-men xoắn. Nhiều Nm hơn có nghĩa là mô-men xoắn khả thi cao hơn, không tự động có nghĩa là chi tiết hoặc chân thực hơn. | Standard |
+| Peak Torque | Mô-men xoắn cao nhất trong thời gian ngắn dưới các điều kiện quy định. Không so sánh trực tiếp nó với holding torque của một sản phẩm khác. | Common |
+| Holding / Sustained Torque | Mô-men xoắn duy trì được lâu hơn dưới các giới hạn về nhiệt và điện. Định nghĩa và điều kiện thử nghiệm của mỗi nhà cung cấp có thể khác nhau. | Common |
+| High Torque Mode | Trạng thái cho phép sử dụng quá mức giới hạn low-torque khi bộ đôi wheel/QR được phê duyệt. Không bao giờ bỏ qua cơ chế phát hiện hoặc các cảnh báo. | Official [F4] |
+| Low Torque Mode | Chế độ giới hạn an toàn đối với wheel hoặc QR không được phê duyệt cho lực kéo tối đa của base. Hướng dẫn hiện tại quy định là 8 Nm trên các base đầu ra cao được liệt kê. | Official [F4] |
+| QR — Quick Release | Khớp nối cơ/điện kết nối steering wheel với base. Cả hai phía và thế hệ QR phải khớp nhau. | Official [F4] |
+| QR1 | Hệ QR Fanatec thế hệ thứ nhất. QR1 và QR2 không kết nối được với nhau. Fanatec tuyên bố QR1 đã bị ngừng sản xuất, dù các phần cứng cũ và cách chuyển đổi tùy model vẫn tồn tại. | Official [F4][F17] |
+| QR1 Lite | QR1 wheel-side bằng vật liệu composite có giới hạn mô-men xoắn theo sản phẩm. Nó không tương đương với QR2 Lite. | Official [F4] |
+| QR2 | Hệ QR hiện tại với các thành phần Base-Side và Wheel-Side tách biệt. | Official [F4] |
+| QR2 Base-Side | Thành phần QR2 được lắp trên trục của base. Type-C, Type-F, hoặc Type-M tùy thuộc vào từng base. | Official [F4] |
+| QR2 Wheel-Side | Thành phần được lắp trên wheel/hub. Nó kết nối với các biến thể QR2 Base-Side chính thức, tùy thuộc vào sản phẩm và sự phê duyệt mô-men xoắn. | Official [F4] |
+| QR2 Lite Wheel-Side | QR2 wheel-side bằng composite. Hỗ trợ mô-men xoắn cao tùy thuộc vào wheel và firmware; các sản phẩm nhất định đã nhận được phê duyệt full-torque. | Official [F4] |
+| QR2 Pro Wheel-Side | Phiên bản kim loại cao cấp hướng tới motorsport. "Pro" không ngụ ý là tương thích hoàn toàn với mọi nền tảng. | Official [F4] |
+| Type-C / Type-F / Type-M | Các biến thể QR2 Base-Side tùy theo base: Type-C cho CSL DD/GT DD Pro, Type-F cho ClubSport DD, Type-M cho Podium trong hướng dẫn hiện tại. | Official [F4] |
+| Shaft | Trục xoay đầu ra của wheel base. QR Base-Side được lắp vào đây. | Standard |
+| Flex | Chuyển động đàn hồi không mong muốn ở buồng lái (cockpit), ngàm lắp, rim, hoặc QR. Nó có thể làm giảm chi tiết cảm nhận mà không phải do lỗi điện tử. | Common |
+| Play / Backlash | Chuyển động tự do trước khi tải được truyền đi. Hãy hỏi ở vị trí nào: QR, shaft, hub, rim, bàn đạp, hay cockpit. | Common |
+| Hard Mount | Bắt chặt thiết bị trực tiếp vào cockpit/bản kim loại bằng các điểm được chỉ định. Sử dụng kích thước và độ sâu bu lông được phê duyệt. | Official |
+| Table Clamp | Phụ kiện dùng để kẹp chặt base hoặc shifter vào bàn. Độ cứng của bàn và giới hạn mô-men xoắn là yếu tố quan trọng. | Official |
+| Cockpit / Rig | Khung kết cấu hỗ trợ ghế, base, bàn đạp, và phụ kiện. Độ cứng vững và sự điều chỉnh ảnh hưởng đến sự thoải mái và cảm nhận FFB. | Common |
+| Boost Kit | Bộ nguồn công suất cao hơn cho các base được hỗ trợ giúp kích hoạt cấu hình mô-men xoắn cao hơn đã quảng cáo. Đây không phải là overclock chung chung. | Official |
+| FullForce | Lớp hiệu ứng/giao thức FFB tần số cao của Fanatec trên các phần cứng và trò chơi được hỗ trợ. Tính đến tháng 6 năm 2026, hướng dẫn chính thức hiện tại bao gồm CSL DD và GT DD Pro cùng với các dòng ClubSport và Podium DD hiện tại; vẫn yêu cầu hỗ trợ từ phía trò chơi. | Official [F18] |
 
-## Điều khoản điều khiển và tay lái
+## Thuật ngữ Vô lăng và Điều khiển
 
-| Thuật ngữ / Viết tắt | Định nghĩa và giải thích khách hàng | Bằng chứng |
+| Thuật ngữ / Viết tắt | Định nghĩa và Giải thích cho Khách hàng | Bằng chứng |
 |---|---|---|
-| D-pad | Điều khiển kỹ thuật số bốn hướng, thường với báo chí trung tâm, được sử dụng cho các menu hoặc Điều chỉnh điều hướng Menu. | Thông thường |
-| FunkySwitch | Điều khiển đa chức năng Fanatec kết hợp chuyển động định hướng, xoay và đẩy trên bánh xe được hỗ trợ. | Official [F5] |
-| Bộ mã hóa quay | Núm tạo đầu vào bước lên / bước xuống khi được bật. Nó thường không báo cáo một vị trí tuyệt đối cố định. | Tiêu chuẩn |
-| Bộ mã hóa ngón tay cái | Bộ mã hóa quay được định vị cho thao tác ngón tay cái trong khi nắm bánh xe. | Thông thường |
-| MPS — Công tắc đa vị trí | Điều khiển đa vị trí được hiển thị dưới dạng bộ mã hóa, xung, hằng số hoặc hành vi do trò chơi chọn. | Official [F5] |
-| Button Cluster / Island | Nhóm các nút được gắn với nhau, thường có thể điều chỉnh trên Universal Hub. | Official [F3] |
-| Nút Caps | Nhãn có thể tháo rời phù hợp với chức năng nền tảng / trò chơi. Nhãn không thay đổi khả năng tương thích điện tử. | Chính thức |
-| Mái chèo từ | Mái chèo với hành động trở lại / tạm giam từ tính, thường báo cáo đầu vào dịch chuyển kỹ thuật số. | Thông thường
-| Mái chèo tương tự | Mái chèo trục thay đổi có thể cấu hình cho ly hợp, phanh tay, phanh / van tiết lưu hoặc trục bổ sung trên bánh xe được hỗ trợ. | Chính thức [F5] |
-| Ly hợp kép | Hai mái chèo tương tự được sử dụng cùng nhau để bắt đầu cuộc đua; một người có thể giữ điểm cắn được cấu hình. | Chính thức [F5] |
-| CbP — Clutch Bite Point | Configured clutch engagement percentage for repeatable starts with dual analogue paddles. | Chính thức [F5] |
-| RevLEDs | Các chỉ số RPM / vòng được điều khiển bằng phép đo từ xa trò chơi hoặc phần mềm được hỗ trợ. Chúng không chứng minh FFB đang hoạt động. | Chính thức [F7] |
-| FlagLEDs | Đèn LED nhiều màu cho cờ đua, pit / giới hạn và các chỉ báo trạng thái được hỗ trợ khác. | Chính thức [F7] |
-| RevStripe | Dải rev được chiếu sáng dành riêng cho sản phẩm. Hành vi phụ thuộc vào bánh xe, trò chơi, nền tảng và phần mềm. | Official [F7] |
-| OLED / LCD | Công nghệ hiển thị hiển thị tốc độ, bánh răng, điều chỉnh, đo từ xa hoặc trạng thái. Hỗ trợ nội dung khác nhau. | Tiêu chuẩn / Chính thức |
-| Từ xa | Dữ liệu được xuất trong trò chơi như RPM, tốc độ, bánh răng, cờ hoặc nhiên liệu. Nó điều khiển màn hình / đèn LED và tách biệt với FFB. | Thông thường |
-| Mái chèo Shifter tĩnh | Mái chèo cố định gắn vào chân đế / buồng lái thay vì xoay với bánh xe. Hành vi cổng là cơ sở cụ thể. | Chính thức [F8] |
+| D-pad | Điều khiển kỹ thuật số bốn hướng, thường có bấm ở giữa, dùng cho các menu hoặc điều hướng Tuning Menu. | Common |
+| FunkySwitch | Điều khiển đa chức năng của Fanatec kết hợp di chuyển theo hướng, xoay, và bấm trên các wheel được hỗ trợ. | Official [F5] |
+| Rotary Encoder | Núm vặn tạo ra tín hiệu tăng/giảm theo từng bước khi xoay. Thường không báo cáo một vị trí tuyệt đối cố định. | Standard |
+| Thumb Encoder | Rotary encoder được đặt ở vị trí ngón cái để dễ thao tác khi cầm vô lăng. | Common |
+| MPS — Multi-Position Switch | Điều khiển đa vị trí có thể xuất ra dưới dạng encoder, pulse, constant, hoặc hành vi do game tùy chọn. | Official [F5] |
+| Button Cluster / Island | Nhóm các nút được bố trí cùng nhau, thường có thể điều chỉnh trên một Universal Hub. | Official [F3] |
+| Button Caps | Các nắp phím có thể thay thế phù hợp với các chức năng của nền tảng/game. Nhãn hiệu không làm thay đổi tính tương thích điện tử. | Official |
+| Magnetic Shifter Paddle | Paddle với hành động trả về/chốt bằng từ tính, thường báo cáo tín hiệu sang số kỹ thuật số. | Common |
+| Analogue Paddle | Paddle sử dụng trục biến thiên có thể cấu hình cho ly hợp, phanh tay, phanh/ga, hoặc các trục bổ sung trên các wheel được hỗ trợ. | Official [F5] |
+| Dual Clutch | Hai paddle analog được sử dụng cùng lúc cho các pha xuất phát cuộc đua; một bên có thể giữ điểm cắt (bite point) đã thiết lập. | Official [F5] |
+| CbP — Clutch Bite Point | Tỷ lệ phần trăm bám ly hợp được cấu hình cho việc xuất phát lặp lại với các paddle analog kép. | Official [F5] |
+| RevLEDs | Đèn báo RPM/vòng tua do telemetry của game hoặc phần mềm hỗ trợ điều khiển. Chúng không chứng tỏ FFB đang hoạt động. | Official [F7] |
+| FlagLEDs | Đèn LED nhiều màu dùng cho các cờ đua, pit/giới hạn, và các trạng thái khác được hỗ trợ. | Official [F7] |
+| RevStripe | Dải đèn tua máy sáng đặc thù cho từng sản phẩm. Hành vi phụ thuộc vào wheel, game, nền tảng, và phần mềm. | Official [F7] |
+| OLED / LCD | Công nghệ hiển thị tốc độ, số, tuning, telemetry, hoặc trạng thái. Hỗ trợ hiển thị nội dung khác nhau. | Standard/Official |
+| Telemetry | Dữ liệu xuất từ game như RPM, tốc độ, số, cờ, hoặc nhiên liệu. Nó điều khiển màn hình/đèn LED và độc lập với FFB. | Common |
+| Static Shifter Paddles | Các paddle cố định được gắn vào base/cockpit thay vì quay cùng với wheel. Hoạt động của cổng tùy thuộc vào từng base. | Official [F8] |
 
-## Điều khoản Pedal, Shifter và Handbrake
+## Thuật ngữ Bàn đạp, Cần số, và Phanh tay
 
-| Thuật ngữ / Viết tắt | Định nghĩa và giải thích khách hàng | Bằng chứng |
+| Thuật ngữ / Viết tắt | Định nghĩa và Giải thích cho Khách hàng | Bằng chứng |
 |---|---|---|
-Bộ bàn đạp Bộ ga, phanh và bộ ly hợp tùy chọn. Khả năng kết nối và USB khác nhau tùy theo mô hình và bộ dụng cụ được cài đặt. Chính thức
-| Throttle / Accelerator | Pedal axis commanding engine power, usually position-sensed. | Thông thường |
-| Bàn đạp phanh | Trục bàn đạp chỉ huy phanh. Nó có thể đo hành trình, lực hoặc kết hợp. | Thông thường |
-| Bàn đạp ly hợp | Trục bàn đạp dùng để điều khiển ly hợp thủ công. | Thông thường |
-| Load Cell / LC | Cảm biến lực thường được sử dụng trong bàn đạp phanh; đo lực tác dụng thay vì vị trí. | Official [F6] |
-| Cảm biến Hall | Cảm biến từ không tiếp xúc thường đo vị trí bàn đạp hoặc đòn bẩy. | Official [F6] |
-| Potentiometer / Pot | Vị trí đo điện trở biến đổi dựa trên tiếp xúc. Mặc hoặc nhiễm bẩn có thể gây ra đọc ồn ào. | Tiêu chuẩn / Phổ biến |
-| Bàn đạp được trang bị thủy lực | Sử dụng hành vi kháng / áp suất dựa trên chất lỏng. Xác nhận xem mô hình chính xác cảm nhận áp suất, lực hoặc di chuyển. | Chính thức [F6] |
-| Chất đàn hồi | Phần tử polymer nén điều chỉnh điện trở bàn đạp / du lịch, đặc biệt là xung quanh phanh tế bào tải. | Chính thức [F6] |
-| Tải trước | Nén ban đầu hoặc lực trước khi di chuyển bàn đạp bình thường. Nó không phải là lực phanh tối đa. | Thông thường |
-| Bàn đạp Du lịch | Khoảng cách vật lý hoặc góc mà qua đó bàn đạp di chuyển. | Tiêu chuẩn |
-| BRF - Lực phanh | Cài đặt Fanatec cho lực tế bào tải vật lý tương ứng với đầu vào phanh tối đa. Nó không phải là sai lệch phanh. | Chính thức [F5] |
-| Sai lệch phanh | Cài đặt trong trò chơi phân phối phanh giữa trục trước / sau; không liên quan đến hiệu chuẩn BRF. | Thông thường |
-| Vùng chết | Phạm vi đầu vào bị bỏ qua gần đầu / cuối của một trục. Quá nhiều làm giảm độ phân giải có thể sử dụng. | Chung |
-| Hiệu chỉnh | Bản đồ vị trí vật lý tối thiểu, tối đa, trung tâm hoặc bánh răng theo các giá trị logic. | Chính thức [F8] |
-| H-Pattern | Bố trí cần số bằng tay với vị trí cổng vật lý cho mỗi bánh răng. | Official [F8] |
-| SQ - Tuần tự | Các hành động chuyển tiếp / lùi yêu cầu bánh răng tiếp theo / trước. “SQ” xác định khả năng tuần tự. | Chính thức [F8] |
-| Chất ức chế ngược | Cơ chế ngăn ngừa tình cờ đảo ngược, chẳng hạn như nhấn đòn bẩy xuống trước. | Chính thức [F8] |
-| Shifter 1 Port | Hỗ trợ mô hình H và các chế độ tuần tự cho ClubSport Shifter SQ V1.5 theo hướng dẫn hiện tại. | Official [F8] |
-| Shifter 2 Port | Hỗ trợ đầu vào tuần tự; hướng dẫn hiện tại cũng xác định sử dụng Paddles Shifter tĩnh. | Official [F8] |
-| Phanh tay | Thường là một trục đòn bẩy tương tự cho đầu vào rally / drift. Nó không phải là một nút kỹ thuật số trừ khi được ánh xạ theo cách đó. | Chính thức / Phổ biến |
-| ClubSport USB Adapter | Adapter cho phép các thiết bị ngoại vi được chọn hoạt động độc lập trên PC. Chế độ Adapter phải khớp với thiết bị ngoại vi. | Official [F9] |
-| RJ12 | Đầu nối mô đun dùng cho thiết bị ngoại vi Fanatec. Tên đầu nối không xác định giao thức hoặc đảm bảo khả năng tương thích. | Official/Common [F9] |
-| Đầu nối PS/2 | Mini-DIN được sử dụng trên một số đường dẫn cơ sở / chuyển đổi kế thừa. Nó không ngụ ý khả năng tương thích bàn phím / chuột PC. | Chính thức / Kế thừa [F8] |
-| Kết nối đồng thời USB và Base | Có khả năng không an toàn/không được hỗ trợ đối với một số bàn đạp. Làm theo hướng dẫn chính xác; không sử dụng cả hai trừ khi được cho phép rõ ràng. | Hướng dẫn chính thức dành riêng cho sản phẩm |
+| Pedal Set | Cụm chân ga, chân phanh, và ly hợp tùy chọn. Kết nối và khả năng USB khác nhau tùy thuộc vào từng model và kit đã lắp. | Official |
+| Throttle / Accelerator | Trục bàn đạp ra lệnh công suất động cơ, thường được cảm biến bằng vị trí. | Common |
+| Brake Pedal | Trục bàn đạp ra lệnh phanh. Nó có thể đo hành trình, lực, hoặc kết hợp cả hai. | Common |
+| Clutch Pedal | Trục bàn đạp dùng để điều khiển ly hợp thủ công. | Common |
+| Load Cell / LC | Cảm biến lực thường được dùng trong các bàn đạp phanh; đo lực tác động thay vì vị trí. | Official [F6] |
+| Hall Sensor | Cảm biến từ không tiếp xúc thường đo vị trí bàn đạp hoặc đòn bẩy. | Official [F6] |
+| Potentiometer / Pot | Biến trở đo vị trí có tiếp xúc. Hao mòn hoặc bụi bẩn có thể gây ra tín hiệu nhiễu. | Standard/Common |
+| Hydraulic-Equipped Pedal | Sử dụng điện trở/áp suất dựa trên chất lỏng. Hãy xác nhận xem mẫu cụ thể đó cảm biến áp suất, lực hay hành trình. | Official [F6] |
+| Elastomer | Phần tử polymer chịu nén để chỉnh độ cứng/hành trình của bàn đạp, đặc biệt là quanh phanh load-cell. | Official [F6] |
+| Preload | Lực nén ban đầu trước khi bàn đạp dịch chuyển bình thường. Nó không phải là lực phanh tối đa. | Common |
+| Pedal Travel | Khoảng cách hoặc góc vật lý mà qua đó bàn đạp dịch chuyển. | Standard |
+| BRF — Brake Force | Cài đặt Fanatec quy định mức lực load-cell vật lý tương ứng với tín hiệu phanh tối đa. Nó không phải là phân bổ lực phanh (brake bias). | Official [F5] |
+| Brake Bias | Cài đặt trong game phân bổ lực phanh giữa trục trước/sau; không liên quan đến hiệu chỉnh BRF. | Common |
+| Dead Zone | Vùng đầu vào bị bỏ qua ở phần đầu/cuối của một trục. Cài đặt quá nhiều sẽ giảm độ phân giải khả dụng. | Common |
+| Calibration | Ánh xạ các vị trí vật lý tối thiểu, tối đa, vị trí giữa, hoặc số sang các giá trị logic. | Official [F8] |
+| H-Pattern | Kiểu cần số thủ công với vị trí cửa vào (gate) vật lý cho từng số. | Official [F8] |
+| SQ — Sequential | Thao tác cần số tiến/lùi để lên/xuống số. "SQ" nhận diện khả năng tuần tự. | Official [F8] |
+| Reverse Inhibitor | Cơ cấu ngăn việc lùi số vô tình, ví dụ như phải ấn đòn bẩy xuống trước. | Official [F8] |
+| Shifter 1 Port | Hỗ trợ các chế độ H-pattern và sequential cho ClubSport Shifter SQ V1.5 trong hướng dẫn hiện tại. | Official [F8] |
+| Shifter 2 Port | Hỗ trợ đầu vào sequential; hướng dẫn hiện tại cũng xác nhận sử dụng Static Shifter Paddles. | Official [F8] |
+| Handbrake | Thường là trục đòn bẩy analog dùng cho drift/rally. Không phải là nút kỹ thuật số trừ khi được gán (mapped) như vậy. | Official/Common |
+| ClubSport USB Adapter | Adapter cho phép các thiết bị ngoại vi được chọn hoạt động standalone trên PC. Adapter mode phải khớp với thiết bị ngoại vi. | Official [F9] |
+| RJ12 | Cổng kết nối dạng module dùng cho các thiết bị ngoại vi Fanatec. Tên cổng không xác định giao thức hay đảm bảo tương thích. | Official/Common [F9] |
+| PS/2 Connector | Mini-DIN được sử dụng trên một số kết nối base/shifter đời cũ. Không ngụ ý tương thích với bàn phím/chuột PC. | Official/Legacy [F8] |
+| Simultaneous USB and Base Connection | Việc cắm cùng lúc USB và Base có thể không an toàn/không được hỗ trợ cho một số bàn đạp. Làm theo tài liệu hướng dẫn chính xác; không dùng cả hai trừ khi được cho phép rõ ràng. | Hướng dẫn official theo từng sản phẩm |
 
-## Điều khoản phần mềm, phần mềm và thiết lập
+## Thuật ngữ Phần mềm, Firmware, và Thiết lập
 
-| Thuật ngữ | Định nghĩa và giải thích khách hàng | Bằng chứng |
+| Thuật ngữ | Định nghĩa và Giải thích cho Khách hàng | Bằng chứng |
 |---|---|---|
-| Ứng dụng Fanatec | Phần mềm Windows hiện tại để hỗ trợ thiết lập, thử nghiệm, điều chỉnh, cấu hình LED / hiển thị và quản lý firmware. | Chính thức [F4][F8] |
-| Bảng điều khiển Fanatec / Trang thuộc tính bánh xe | Giao diện cấu hình Windows cũ trong trình điều khiển / tài liệu hỗ trợ cũ hơn. Hỏi gói nào khách hàng nhìn thấy. | Legacy [F5] |
-| FanaLab | Legacy/companion PC điều chỉnh và từ xa hồ sơ công cụ trong các thiết lập cũ. Xác minh phiên bản và hoạt động hồ sơ trước khi chẩn đoán. | Legacy |
-| Trình điều khiển | Phần mềm máy chủ cho phép Windows giao tiếp với phần cứng. Phiên bản trình điều khiển và phần sụn là các giá trị khác nhau. | Official [F10] |
-| Firmware / FW | Phần mềm được lưu trữ trong đế, bộ điều khiển động cơ, bánh xe, bàn đạp hoặc bộ chuyển đổi. Một thiết lập có thể có một số thành phần firmware. | Official [F10] |
-| Firmware Manager | Cập nhật/phục hồi quy trình làm việc để kiểm tra và flash firmware được hỗ trợ. | Official [F8][F10] |
-| Bộ nạp khởi động | Mã thiết bị tối thiểu được sử dụng để bắt đầu / khôi phục cập nhật. Chế độ cập nhật không nhất thiết có nghĩa là thiệt hại vĩnh viễn. | Tiêu chuẩn |
-| Cập nhật vi chương trình | Thay vi chương trình cho thiết bị. Giữ nguồn điện/cáp ổn định và làm theo hướng dẫn. | Official [F10] |
-| Cập nhật firmware thủ công | Quy trình làm việc nâng cao chọn firmware / thành phần thủ công. Chỉ sử dụng khi hướng dẫn chính thức yêu cầu nó. | Chính thức [F8] |
-| Chế độ Adapter | ClubSport USB Adapter firmware/personality selected for its attached peripheral. | Official [F8][F9] |
-| Phát hiện thiết bị | Phần mềm máy chủ nhận ra cơ sở / thành phần. Phát hiện tách biệt với lập bản đồ trò chơi và FFB. | Thông thường |
-| Hiệu chuẩn trung tâm | Lưu trữ vật lý thẳng về phía trước như trung tâm logic. Nó không sửa chữa sai lệch cơ học. | Chính thức
-| Shifter Calibration | Dạy vị trí bánh răng kiểu H; có thể được yêu cầu sau khi cập nhật firmware. | Official [F8] |
-| Hiệu chỉnh bàn đạp | Lưu trữ bàn đạp tối thiểu / tối đa hoặc phạm vi lực. Chế độ là sản phẩm / phần mềm cụ thể. | Chính thức |
-| Menu điều chỉnh | Cài đặt cơ bản có thể truy cập thông qua điều khiển bánh xe và phần mềm PC. Nó không thay thế cài đặt trong trò chơi. | Official [F5] |
-| Menu điều chỉnh chuẩn | Chế độ xem đơn giản hóa hiển thị các tham số lõi và ít cấu hình hơn. | Official [F5] |
-| Advanced Tuning Menu | Chế độ xem đầy đủ hiển thị các tham số bổ sung và nhiều khe tùy chỉnh. | Official [F5] |
-| A SET — Auto Setup | Cho phép một giá trị điều khiển trò chơi được hỗ trợ; giá trị mặc định được ghi lại áp dụng khi không sử dụng. | Official [F5] |
-| C SET — Custom Setup | Cấu hình do người dùng điều chỉnh trong Menu Điều chỉnh Chuẩn trên các cơ sở hiện tại được hỗ trợ. | Official [F5] |
-| S_1–S_5 / SET 1–5 | Cấu hình Advanced Tuning Menu do người dùng lưu trữ. Tính khả dụng phụ thuộc vào base/firmware. | Official [F5] |
-| Hồ sơ | Nhóm giá trị đã lưu. Ghi rõ chủ sở hữu của nó: base, Fanatec App, FanaLab, hoặc game. | Official/Common |
-| Factory Settings | Manufacturer baseline. Đặt lại cấu hình không phải là hạ cấp firmware hay gỡ cài đặt driver. | Official |
+| Fanatec App | Phần mềm Windows hiện tại dùng cho việc thiết lập, kiểm tra, điều chỉnh, cấu hình LED/hiển thị, và quản lý firmware được hỗ trợ. | Official [F4][F8] |
+| Fanatec Control Panel / Wheel Property Page | Giao diện cấu hình Windows cũ trong các driver/tài liệu hỗ trợ cũ. Hãy hỏi khách hàng đang xem gói nào. | Legacy [F5] |
+| FanaLab | Công cụ PC tinh chỉnh profile telemetry/vệ tinh cũ trong các thiết lập cũ. Xác minh phiên bản và profile đang hoạt động trước khi chẩn đoán. | Legacy |
+| Driver | Phần mềm host giúp Windows giao tiếp với phần cứng. Phiên bản Driver và firmware là các giá trị khác nhau. | Official [F10] |
+| Firmware / FW | Phần mềm được lưu trữ bên trong base, mạch điều khiển động cơ, wheel, bàn đạp, hoặc adapter. Một hệ thống có thể có nhiều thành phần firmware. | Official [F10] |
+| Firmware Manager | Chức năng quy trình cập nhật/khôi phục dùng để kiểm tra và nạp (flash) firmware được hỗ trợ. | Official [F8][F10] |
+| Bootloader | Đoạn mã thiết bị tối thiểu được sử dụng để khởi động/khôi phục các bản cập nhật. Chế độ cập nhật không nhất thiết có nghĩa là hư hỏng vĩnh viễn. | Standard |
+| Firmware Update | Thay thế firmware của thiết bị. Giữ nguồn/cáp ổn định và làm theo lời nhắc. | Official [F10] |
+| Manual Firmware Update | Quy trình nâng cao để chọn cấu hình firmware/thành phần thủ công. Chỉ sử dụng khi hướng dẫn chính thức yêu cầu. | Official [F8] |
+| Adapter Mode | Firmware/định dạng của ClubSport USB Adapter được chọn cho thiết bị ngoại vi gắn kèm. | Official [F8][F9] |
+| Device Detection | Phần mềm host nhận diện được base/thành phần. Việc nhận diện là riêng biệt với gán nút trong game và FFB. | Common |
+| Center Calibration | Lưu trữ vị trí đi thẳng vật lý làm tâm (center) logic. Nó không sửa chữa việc bị lệch tâm cơ học. | Official |
+| Shifter Calibration | Dạy (teach) các vị trí số H-pattern; có thể bị yêu cầu làm lại sau các bản cập nhật firmware. | Official [F8] |
+| Pedal Calibration | Lưu trữ dải tối thiểu/tối đa hoặc lực của bàn đạp. Các chế độ phụ thuộc vào sản phẩm/phần mềm. | Official |
+| Tuning Menu | Các cài đặt của base có thể truy cập qua điều khiển wheel và phần mềm PC. Nó không thay thế thiết lập (setup) trong game. | Official [F5] |
+| Standard Tuning Menu | Chế độ xem đơn giản hóa bộc lộ các tham số cốt lõi và ít profile hơn. | Official [F5] |
+| Advanced Tuning Menu | Chế độ xem đầy đủ bộc lộ thêm các tham số và nhiều slot tùy chỉnh. | Official [F5] |
+| A SET — Auto Setup | Cho phép một game được hỗ trợ kiểm soát các giá trị điều chỉnh; các giá trị mặc định được dùng khi tính năng này không kích hoạt. | Official [F5] |
+| C SET — Custom Setup | Profile có thể do người dùng tùy chỉnh trong Standard Tuning Menu trên các base hiện tại hỗ trợ tính năng này. | Official [F5] |
+| S_1–S_5 / SET 1–5 | Profile Advanced Tuning Menu do người dùng lưu. Tính khả dụng phụ thuộc vào base/firmware. | Official [F5] |
+| Profile | Nhóm các giá trị đã được lưu. Hãy nói rõ ai sở hữu nó: base, Fanatec App, FanaLab, hay game. | Official/Common |
+| Factory Settings | Cài đặt gốc của nhà sản xuất. Reset profile không phải là hạ cấp (downgrade) firmware hay gỡ cài đặt driver. | Official |
 
-## Điều chỉnh từ viết tắt menu
+## Các từ viết tắt trong Tuning Menu
 
-Phạm vi chính xác và tính khả dụng thay đổi theo cơ sở, bánh xe, bàn đạp, phần sụn và chế độ menu. Kiểm tra trang hướng dẫn sử dụng / hỗ trợ sản phẩm hiện tại trước khi đề xuất các giá trị. [F5]
+Dải đo chính xác và sự khả dụng khác nhau theo từng base, wheel, bàn đạp, firmware, và chế độ menu. Kiểm tra trang hướng dẫn sử dụng/hỗ trợ hiện hành của sản phẩm trước khi khuyến nghị các giá trị. [F5]
 
-| Viết tắt | Mở rộng | Giải thích thực tế |
+| Viết tắt | Ý nghĩa (Mở rộng) | Giải thích thực tế |
 |---|---|---|
-| SEN | Độ nhạy | Xoay lái theo độ, hoặc điều khiển trò chơi / trình điều khiển tự động. Không phải độ nhạy bỏ phiếu USB. |
-| FF / FFB | Phản hồi lực | Cường độ FFB tối đa cơ sở. Mô-men xoắn cuối cùng cũng phụ thuộc vào đầu ra trò chơi và bộ sửa đổi. |
-| FFS | Force Feedback Scaling | Chọn hành vi tuyến tính (`LIN`) hoặc đỉnh (`PEA`). Không giống như cường độ FF. |
-| LIN | Linear | Bảo tồn mối quan hệ yêu cầu-mô-men xoắn tuyến tính hơn, có khả năng với đầu ra tối đa giảm. |
-| PEA | Peak | Cho phép hành vi đầu ra đỉnh trên các cơ sở được hỗ trợ. |
-| NDP | Damper tự nhiên | Thêm sức đề kháng phụ thuộc vào tốc độ, kiểm soát chuyển động và dao động. Quá nhiều cảm thấy chậm. |
-| NFR | Ma sát tự nhiên | Thêm sức đề kháng tương đối liên tục độc lập với chi tiết trò chơi. Quá nhiều mặt nạ chi tiết và thêm mệt mỏi. [F11] |
-| NIN | Quán tính tự nhiên | Mô phỏng khối lượng lái / quán tính bổ sung, thường hữu ích với bánh xe nhẹ hơn. |
-| INT | FFB Nội suy | Mịn trò chơi thô / ồn ào FFB. Giá trị cao hơn làm giảm độ khắc nghiệt nhưng có thể làm giảm tính tức thời. |
-| FEI | Cường độ hiệu ứng lực | Thay đổi cường độ / độ sắc nét của hiệu ứng lực trò chơi. Không giới hạn mô-men xoắn chính. |
-| FOR | Force | Cân các hiệu ứng lực không đổi của trò chơi. Giữ đường cơ sở trừ khi hướng dẫn cụ thể của trò chơi yêu cầu thay đổi. |
-| SPR | Spring | Cân hiệu ứng lò xo theo yêu cầu của trò chơi. Nó không phải lúc nào cũng tạo ra trung tâm tự động. |
-| DPR | Damper | Cân hiệu ứng giảm xóc theo yêu cầu của trò chơi. Nó khác với NDP tạo cơ sở. |
-| BRF | Lực phanh | Đặt lực tế bào tải cần thiết cho đầu vào phanh tối đa trên bàn đạp được hỗ trợ. |
-| BLI | Chỉ báo mức phanh | Ngưỡng cho rung động bàn đạp / bánh xe được hỗ trợ; hành vi điều khiển trò chơi có thể khác nhau. |
-| SHO | Shock / Vibration Strength | Điều khiển động cơ rung được hỗ trợ, không phải động cơ FFB chính của cơ sở. |
-| MPS | Chức năng chuyển đổi đa vị trí | Chọn cách chuyển đổi đa vị trí được hỗ trợ báo cáo đầu vào. |
-Tự động / Cụ thể trò chơi Cho phép trò chơi / phần mềm chọn hành vi. Ý nghĩa phụ thuộc vào cài đặt gốc.
-| ENC | Bộ mã hóa | MPS gửi một đầu vào theo chiều kim đồng hồ và một ngược chiều kim đồng hồ. |
-| CONST | Constant | MPS giữ một trạng thái nút riêng biệt cho mỗi vị trí. |
-| PULSE | Pulse | MPS gửi một đầu vào vị trí cụ thể ngắn gọn khi di chuyển. |
-| AP | Analogue Paddles | Chọn chức năng tương tự-paddle được hỗ trợ. |
-| CbP | Clutch Bite Point | Cả hai mái chèo hợp tác như điều khiển ly hợp để bắt đầu lặp lại. |
-| CH | Clutch / Handbrake | Một paddle tương tự là ly hợp; cái còn lại là phanh tay. |
-| bt / BT | Phanh / ga | Má chèo tương tự trở thành phanh và ga. |
-| AnA | Mappable Analogue Axes | Phơi bày mái chèo như các trục bổ sung được hỗ trợ. |
+| SEN | Sensitivity | Góc quay của tay lái (độ), hoặc được điều khiển tự động bởi game/driver. Không phải là polling sensitivity (độ nhạy cập nhật USB). |
+| FF / FFB | Force Feedback | Cường độ FFB tối đa của base. Lực xoắn thực tế cuối cùng còn phụ thuộc vào game xuất ra và các modifiers. |
+| FFS | Force Feedback Scaling | Chọn hành vi dạng tuyến tính (`LIN`) hoặc đỉnh (`PEA`). Không giống với cường độ FF. |
+| LIN | Linear | Duy trì mối quan hệ yêu cầu-lực (request-to-torque) tuyến tính hơn, nhưng lực tối đa có thể bị giảm lại. |
+| PEA | Peak | Cho phép hành vi đầu ra chạm đỉnh (peak) trên các base hỗ trợ. |
+| NDP | Natural Damper | Thêm kháng lực phụ thuộc vào tốc độ, kiểm soát chuyển động và dao động (oscillation). Thiết lập quá cao sẽ cảm thấy tay lái bị chậm/nặng. |
+| NFR | Natural Friction | Thêm kháng lực tương đối không đổi bất kể chi tiết trong game. Thiết lập quá cao làm mất chi tiết và gây mỏi tay. [F11] |
+| NIN | Natural Inertia | Mô phỏng khối lượng lái/quán tính bổ sung, thường rất hữu ích với những wheel có trọng lượng nhẹ. |
+| INT | FFB Interpolation | Làm mịn các tín hiệu FFB giật/nhiễu từ game. Giá trị cao làm giảm sự thô ráp nhưng có thể làm giảm tính tức thời. |
+| FEI | Force Effect Intensity | Làm thay đổi độ gắt/sắc nét (intensity/sharpness) của hiệu ứng lực trong game. Không phải là bộ giới hạn lực chính. |
+| FOR | Force | Nhân bản (scale) hiệu ứng constant-force từ game. Giữ nguyên giá trị trừ khi hướng dẫn của game yêu cầu thay đổi. |
+| SPR | Spring | Nhân bản (scale) hiệu ứng spring (lò xo) từ game. Không phải lúc nào cũng tạo ra hiệu ứng tự động trả thẳng tâm (auto-centering). |
+| DPR | Damper | Nhân bản (scale) hiệu ứng damper từ game. Khác biệt với hiệu ứng NDP được tạo bởi base. |
+| BRF | Brake Force | Thiết lập mức lực vật lý lên load-cell cần thiết để đạt tín hiệu phanh tối đa trên bàn đạp hỗ trợ. |
+| BLI | Brake Level Indicator | Ngưỡng (threshold) cho cơ chế rung bàn đạp/wheel được hỗ trợ; hành vi do game điều khiển có thể khác. |
+| SHO | Shock / Vibration Strength | Điều khiển mô-tơ rung tích hợp (nếu có hỗ trợ), không phải điều khiển mô-tơ FFB chính của base. |
+| MPS | Multi-Position Switch Function | Lựa chọn cách công tắc MPS (hỗ trợ) sẽ gửi tín hiệu đầu vào. |
+| AUTO | Automatic / Game Specific | Để game/phần mềm chọn cách hoạt động. Ý nghĩa phụ thuộc vào thiết lập cha (parent setting). |
+| ENC | Encoder | Công tắc MPS xuất một input khi quay theo chiều kim đồng hồ, và một input khác khi quay ngược chiều. |
+| CONST | Constant | Công tắc MPS gửi duy trì (hold) một trạng thái nút khác nhau cho từng vị trí. |
+| PULSE | Pulse | Công tắc MPS gửi một input cụ thể cực nhanh (pulse) cho từng vị trí khi di chuyển. |
+| AP | Analogue Paddles | Chọn các chức năng hoạt động của analogue-paddle có hỗ trợ. |
+| CbP | Clutch Bite Point | Cả 2 paddle phối hợp làm điều khiển ly hợp cho khả năng xuất phát ổn định, lặp lại cao. |
+| CH | Clutch / Handbrake | Một paddle analog đóng vai trò ly hợp; paddle kia đóng vai trò phanh tay. |
+| bt / BT | Brake / Throttle | Analogue paddles đóng vai trò chân phanh và chân ga. |
+| AnA | Mappable Analogue Axes | Mở rộng paddle như là các trục có thể gán phím riêng lẻ. |
 
-## Điều khoản chung của FFB và Sim-Racing
+## Thuật ngữ FFB và Sim-Racing chung
 
-| Thuật ngữ / Viết tắt | Định nghĩa và giải thích khách hàng | Bằng chứng |
+| Thuật ngữ / Viết tắt | Định nghĩa và Giải thích cho Khách hàng | Bằng chứng |
 |---|---|---|
-| Trục | Đầu vào liên tục như tay lái, van tiết lưu, phanh, ly hợp hoặc phanh tay. | USB / Thông thường |
-| Ánh xạ nút | Chuyển từ điều khiển vật lý sang lệnh trò chơi. Nó không thay đổi giấy phép hoặc firmware. | Thông thường |
-| Clipping | FFB đạt đến mức tối đa được cấu hình, do đó các lực mạnh hơn sẽ mất sự khác biệt. Giảm / tái cân bằng trong trò chơi để bảo vệ chi tiết. | Chung |
-| Damping | Kháng chủ yếu liên quan đến tốc độ chuyển động. Nó ổn định chuyển động; quá nhiều che giấu chi tiết nhanh. | Control-system / Common |
-| Ma sát | Kháng chuyển động đối lập, bao gồm cả chuyển động chậm. Trong điều chỉnh Fanatec, xem NFR. | Control-system/Common |
-| Quán tính | Khả năng chống thay đổi tốc độ quay do khối lượng hiệu quả. Trong điều chỉnh, xem NIN. | Hệ thống điều khiển / Phổ biến |
-| Dao động | Chuyển động bánh xe qua lại không mong muốn. FFB hung hăng, độ trễ, giảm xóc thấp hoặc hành vi trò chơi có thể đóng góp. | Chính thức / Phổ biến [F12] |
-| Tăng | Hệ số nhân sức mạnh FFB trong trò chơi / phần mềm. Tăng cao có thể gây cắt. | Phổ biến |
-| Lực tối thiểu | Cài đặt trò chơi làm tăng FFB trung tâm yếu. Dư thừa có thể gây ra dao động trên cơ sở DD. | Chung [F12] |
-| Tuyến tính | Mô-men xoắn đầu ra tỷ lệ thuận với lực yêu cầu. Nhiều tuyến tính hơn không có nghĩa là mạnh hơn. | Thông thường |
-Độ trễ Độ trễ trên trò chơi, USB, firmware, động cơ và phản ứng của trình điều khiển. Tiêu chuẩn
-| Tốc độ thăm dò / báo cáo | Tần suất trao đổi báo cáo đầu vào. Nó không phải là độ trễ hoàn chỉnh từ đầu đến cuối. | USB / Thông thường |
-| USB HID | Universal Serial Bus Human Interface Lớp thiết bị cho các điều khiển như trục / nút. | Tiêu chuẩn [S1] |
-| USB PID | USB Physical Interface Mô hình thiết bị cho hiệu ứng FFB; không liên quan đến số nhận dạng sản phẩm. | Standard [S2] |
-| RPM | Số vòng quay mỗi phút. Từ xa RPM động cơ thường điều khiển RevLED. | Tiêu chuẩn |
-| Understeer | Lốp trước thiếu độ bám cho lượt yêu cầu. Đại diện FFB phụ thuộc vào vật lý / thiết kế trò chơi. | Motorsport / Thông thường |
-| Oversteer | Lốp sau mất độ bám bên so với phía trước, xoay xe nhiều hơn yêu cầu. | Motorsport / Thông thường |
-| Hiệu ứng đường phố | Kết cấu, vết sưng, lề đường, hoặc hiệu ứng rung động; vật lý có nguồn gốc hoặc đóng hộp tùy thuộc vào trò chơi. | Phổ biến |
-| Khóa mềm | Lực phần mềm gần giới hạn lái của xe mô phỏng, không phải là dừng trục vật lý. | Thông thường |
-| Khóa lái / Xoay | Tổng góc lái theo độ. Phối hợp Fanatec SEN và khóa lái trò chơi. | Thông thường |
-| Sim Rig | Lắp đặt hoàn chỉnh: buồng lái, ghế ngồi, điều khiển, màn hình/VR, PC/console, và các phụ kiện. | Thông dụng |
-Bảng điều khiển từ xa Hiển thị được điều khiển bởi dữ liệu trò chơi, thường thông qua Ứng dụng Fanatec hoặc SimHub. Phổ biến
+| Axis | Tín hiệu đầu vào liên tục như tay lái, bướm ga, chân phanh, ly hợp, hoặc phanh tay. | USB/Common |
+| Button Mapping | Việc gán chức năng từ nút bấm vật lý thành lệnh trong game. Nó không thay đổi tính cấp phép hay firmware. | Common |
+| Clipping | FFB đạt đến mức tối đa được cấu hình, vì vậy các lực mạnh hơn bị mất đi điểm nhấn. Hạ/Cân bằng lại gain trong game để giữ lại các chi tiết. | Common |
+| Damping | Kháng lực chủ yếu liên quan tới tốc độ chuyển động. Giúp làm mượt sự di chuyển; đặt quá mức che lấp các chi tiết xử lý nhanh. | Control-system/Common |
+| Friction | Kháng lực chống lại sự di chuyển, bao gồm di chuyển chậm. Trong tinh chỉnh Fanatec, xem mục NFR. | Control-system/Common |
+| Inertia | Sự phản kháng tới sự thay đổi tốc độ quay vì khối lượng hiệu dụng. Trong tinh chỉnh, xem mục NIN. | Control-system/Common |
+| Oscillation | Dao động qua lại không mong muốn ở tay lái. FFB quá mạnh, có độ trễ, damping quá thấp, hay do cơ chế game đều có thể gây ra hiện tượng này. | Official/Common [F12] |
+| Gain | Bộ nhân cường độ FFB trong game/phần mềm. Mức Gain quá cao có thể gây clipping. | Common |
+| Minimum Force | Cài đặt trong game giúp tăng FFB ở vùng giữa/tâm (center). Mức cao quá có thể gây oscillation trên các mẫu DD. | Common [F12] |
+| Linearity | Cách mô-men xoắn phản ứng theo tỉ lệ tuyến tính của lực yêu cầu. Lực chạy tuyến tính hơn không có nghĩa là mạnh hơn. | Common |
+| Latency | Độ trễ giữa game, tín hiệu USB, firmware, mô-tơ, và driver hồi đáp. | Standard |
+| Polling / Report Rate | Tần suất mà các báo cáo dữ liệu đầu vào được trao đổi. Nó không phải là toàn bộ độ trễ end-to-end. | USB/Common |
+| USB HID | Universal Serial Bus Human Interface Device class dành cho điều khiển như các trục (axes)/nút bấm (buttons). | Standard [S1] |
+| USB PID | USB Physical Interface Device model dành cho các hiệu ứng FFB; không liên quan đến Product ID (PID). | Standard [S2] |
+| RPM | Số vòng quay mỗi phút (Revolutions per minute). Telemetry RPM của động cơ thường dùng để điểu khiển RevLEDs. | Standard |
+| Understeer | Lốp trước bị thiếu độ bám so với lượt đánh lái yêu cầu. Sự thể hiện qua FFB sẽ dựa trên thiết kế/hệ vật lý của game. | Motorsport/Common |
+| Oversteer | Lốp sau trượt (mất độ bám) nhanh hơn so với lốp trước, khiến xe bị quay (rotate) gắt hơn mức yêu cầu. | Motorsport/Common |
+| Road Effects | Bề mặt, ổ gà, lề đường (kerb) hoặc các hiệu ứng rung lắc; có thể được tính bằng vật lý hay từ các file vạch sẵn (canned effect) tùy vào game. | Common |
+| Soft Lock | Lực ngáng ảo được thiết lập gần giới hạn lái góc quay thực tế của xe trong game, đây không phải điểm kết thúc vòng quay vật lý (physical shaft stop). | Common |
+| Steering Lock / Rotation | Tổng góc lái tối đa tính bằng độ. Hãy điều chỉnh Fanatec SEN và thiết lập steering lock của game để có thông số trùng khớp. | Common |
+| Sim Rig | Thiết lập đầy đủ: khung đua (cockpit), ghế, điều khiển, màn hình/VR, thiết bị (PC/Console), và các phụ kiện khác. | Common |
+| Telemetry Dashboard | Bảng hiển thị điều khiển từ dữ liệu game, thông thường qua Fanatec App hoặc SimHub. | Common |
 
-## Điều khoản khắc phục sự cố
+## Thuật ngữ Khắc phục sự cố
 
-| Thuật ngữ | Định nghĩa và từ ngữ an toàn cho khách hàng |
+| Thuật ngữ | Định nghĩa và Diễn đạt An toàn với Khách hàng |
 |---|---|
-| Không phát hiện | Máy chủ không nhận ra thiết bị. Kiểm tra nguồn, đường dẫn USB, chế độ, cáp, cổng và Trình quản lý thiết bị trước khi giả định lỗi firmware. |
-| Phát hiện nhưng không hoạt động trong trò chơi | Trình điều khiển thấy thiết bị, nhưng ánh xạ / chế độ / hỗ trợ trò chơi có thể bị thiếu. Kiểm tra đầu vào, FFB, đèn LED và từ xa riêng biệt. |
-| Không có FFB | Các đầu vào có thể hoạt động trong khi động cơ không hoạt động. Kiểm tra FFB trò chơi, chế độ, cài đặt FF, firmware, trạng thái mô-men xoắn / an toàn và tiêu điểm trò chơi. |
-| Mất FFB | FFB làm việc sau đó dừng lại. Ghi kích hoạt, nhiệt độ, sự kiện USB, trạng thái phiên, và liệu đầu vào vẫn còn. |
-Ngắt kết nối bánh xe Bánh xe có thể tháo rời mất liên lạc trong khi đế vẫn được cấp nguồn. Kiểm tra chỗ ngồi, ghép nối QR, kiểm tra liên lạc được phê duyệt, phần sụn và phát.
-H-pattern gear đọc sai. Xác nhận Shifter 1, chế độ H, cáp, và hiệu chuẩn.
-| Đầu vào Jitter / Spiking | Trục thay đổi mà không có chuyển động dự định. Nguyên nhân có thể bao gồm tiếng ồn / hao mòn cảm biến, nối đất, cáp, hiệu chuẩn hoặc cơ học. |
-EMI - Nhiễu điện từ | Tiếng ồn điện được ghép vào USB / cảm biến / cáp. Tái tạo chống lại định tuyến, nối đất, tải và các cổng thay thế. |
-| Ground Loop | Đường dẫn hiện tại của thiết bị nối đất không mong muốn gây ra tiếng ồn / ngắt kết nối. Không bao giờ loại bỏ đất bảo vệ như một cách giải quyết. |
-| Power Cycle | Kiểm soát tắt máy, chờ, khởi động lại. Nó không phải là rút phích cắm trong firmware flash. |
-| Re-enumeration | Thiết bị USB ngắt kết nối và xuất hiện trở lại, có thể ở chế độ/định danh khác. |
-| Firmware Mismatch | Các thành phần chạy tổ hợp phiên bản không mong muốn. Sử dụng hướng dẫn gói chính thức hiện hành. |
-| Recovery Mode | Bootloader/update state được sử dụng để khôi phục firmware. Thực hiện theo các bước chính thức của mô hình chính xác. |
-Yêu cầu bồi thường không chính thức rằng thiết bị không thể sử dụng được sau khi cập nhật. Kiểm tra phục hồi, phát hiện và cấp nguồn trước khi tuyên bố thiệt hại vĩnh viễn.
-|RMA - Ủy quyền trả lại hàng hóa | Quy trình trả lại / sửa chữa được phê duyệt. Cung cấp nối tiếp, bằng chứng mua hàng, phiên bản, nhật ký, bằng chứng và các bước tái tạo. |
-| DOA — Chết khi đến | Nhãn lỗi cài đặt đầu tiên không chính thức. Hoàn thành kiểm tra an toàn tối thiểu trước khi sử dụng nó trong trường hợp. |
-| Các bước tái tạo | Trình tự ngắn đáng tin cậy gây ra sự cố, bao gồm trạng thái, kết nối, chế độ, phiên bản, trò chơi và kết quả. |
-| Kết quả mong đợi | Hành vi được hỗ trợ bởi tài liệu hướng dẫn sử dụng / sản phẩm hiện tại. |
-| Kết quả thực tế | Điều khách hàng trực tiếp quan sát, tách biệt với nguyên nhân giả định. |
-| Cách khắc phục | Phương pháp an toàn tạm thời khôi phục việc sử dụng mà không tuyên bố nguyên nhân gốc rễ là cố định. |
-| Nguyên nhân gốc rễ | Đã xác minh lý do thất bại. Triệu chứng, tương quan hoặc khởi động lại thành công một mình không phải là bằng chứng. |
+| Not Detected | Máy chủ không nhận dạng được thiết bị. Kiểm tra lại nguồn điện, cáp USB, chế độ, cổng kết nối, và Device Manager (trên Windows) trước khi nghi ngờ hỏng firmware. |
+| Detected but Not Working in Game | Trình điều khiển (driver) nhận thiết bị, nhưng các bản map/cài đặt tương thích của game có thể đã bị thiếu. Tách biệt riêng các khâu test input, FFB, LED, và telemetry. |
+| No FFB | Tín hiệu vào (Input) có thể vẫn hoạt động dù mô-tơ mất FFB. Kiểm tra trong game, các cài đặt FFB, FF của thiết bị, tình trạng firmware, trạng thái low-torque/an toàn, và xem màn hình game có được focus không. |
+| FFB Loss | FFB hoạt động được rồi ngừng. Lưu lại thao tác nào làm lỗi xảy ra (trigger), nhiệt độ, cổng kết nối USB, tình trạng phiên đua, và xác nhận coi Input (trục tay lái) còn tác dụng không. |
+| Wheel Disconnect | Wheel tháo rời liên tục mất tín hiệu dù base vẫn có điện. Xác nhận khả năng khớp nối, nhận diện QR, kiểm tra cổng chân tiếp xúc (contact pin), firmware, và mức độ lỏng (play). |
+| Mis-shift | Số dạng cổng chữ H (H-pattern) đọc sai. Xác nhận cắm vào cổng Shifter 1, chế độ hộp số H mode, kiểm tra dây cắm, và căn chỉnh lại. |
+| Input Jitter / Spiking | Tín hiệu Trục (axis) nhảy loạn xạ dù không tác động vật lý. Các nguyên nhân có thể do kẹt/rơ, nhiễu/kéo dãn cáp cảm biến, đường nối mass, hay vấn đề bộ phận cơ học. |
+| EMI — Electromagnetic Interference | Nhiễu tín hiệu điện cộng hưởng vào USB/cảm biến/dây điện. Việc chẩn đoán sẽ dựa vào đường đi của dây, cách nối mass, công suất tải, và thử đổi các cổng khác. |
+| Ground Loop | Đường dây rò điện không mong muốn chạy xuyên qua nối đất làm ngắt kết nối. Tuyệt đối không gỡ dây nối đất bảo vệ đi vì nghĩ đây là cách giải quyết. |
+| Power Cycle | Đóng tắt hoàn toàn một cách có kiểm soát, chờ một chút rồi bật lại. Không phải là rút giắc nguồn trong khi đang nâng cấp Firmware. |
+| Re-enumeration | Gỡ kết nối thiết bị USB rồi nhận lại, có thể bằng mode/ID nhận dạng khác. |
+| Firmware Mismatch | Các thành phần đang dùng lẫn lộn bản firmware không tương thích. Hãy dùng theo hướng dẫn hiện tại của các bản cập nhật chính thức. |
+| Recovery Mode | Trạng thái bootloader/update dùng để khôi phục lại (restore) phần sụn. Thao tác đúng theo bước chính thức từ từng bản phần cứng đó. |
+| Bricked | Một thuật ngữ không chính thức diễn đạt việc thiết bị sau khi update bị hư hỏng không dùng được nữa. Phải kiểm tra tính năng khôi phục (recovery), mức độ nhận dạng, và điện đóm (power) trước khi chẩn đoán hỏng vĩnh viễn. |
+| RMA — Return Merchandise Authorization | Quy trình trả lại/sửa chữa thiết bị được hãng phê duyệt. Cung cấp rõ Serial, biên lai mua bán (proof), số series thiết bị, thông tin logs, bằng chứng, và các bước mô tả tái hiện sự cố. |
+| DOA — Dead on Arrival | Một nhãn đánh giá không chính thức dùng khi thiết bị gặp lỗi hỏng hóc ngay lập tức khi khui thùng setup (first-setup failure). Vẫn cần rà soát qua các bước kiểm tra an toàn tối thiểu (minimum safe checks) trước khi dùng thuật ngữ này lên ticket hỗ trợ. |
+| Reproduction Steps | Trình tự ngắn và đáng tin cậy mô tả cách khiến lỗi xảy ra, kể ra trạng thái, thiết bị, dây cắm kết nối, mode (chế độ), thông số firmware, phần mềm game, và kết quả lỗi. |
+| Expected Result | Cách hoạt động phải tuân thủ đúng như phần Sách hướng dẫn / Tài liệu mô tả của sản phẩm hiện tại. |
+| Actual Result | Hiện tượng được khách hàng báo lại đúng như lúc nhìn thấy trên mặt báo, không dựa theo kết luận bị ngộ nhận (assumed cause). |
+| Workaround | Biện pháp bảo đảm tính hoạt động an toàn tạm thời nhưng bản chất chưa loại trừ hoàn toàn nguyên nhân gốc (root cause). |
+| Root Cause | Nguyên do gây hỏng hóc đã được xác nhận. Triệu chứng, các mối liên kết, hoặc khởi động lại (reboot) thành công đơn lẻ không dùng làm bằng chứng kết luận. |
 
-## Chỉ mục nhanh viết tắt
+## Bảng tra cứu nhanh Từ viết tắt
 
 | Viết tắt | Mở rộng | Viết tắt | Mở rộng |
 |---|---|---|---|
-| AnA | Trục tương tự Mappable | AP | Mái chèo tương tự |
-BLI Chỉ báo mức phanh BRF Lực phanh
-| BT / bt | Phanh / ga | CbP | Điểm cắn ly hợp |
-| CH | Ly hợp / Phanh tay | CONST | Hằng số |
-CS | ClubSport | DD | Lái xe trực tiếp |
-| DOA | Chết khi đến | DPR | Damper |
-| EMI | Nhiễu điện từ | ENC | Bộ mã hóa |
-| FEI | Cường độ hiệu ứng lực | FF / FFB | Phản hồi lực |
+| AnA | Mappable Analogue Axes | AP | Analogue Paddles |
+| BLI | Brake Level Indicator | BRF | Brake Force |
+| BT / bt | Brake / Throttle | CbP | Clutch Bite Point |
+| CH | Clutch / Handbrake | CONST | Constant |
+| CS | ClubSport | DD | Direct Drive |
+| DOA | Dead on Arrival | DPR | Damper |
+| EMI | Electromagnetic Interference | ENC | Encoder |
+| FEI | Force Effect Intensity | FF / FFB | Force Feedback |
 | FFS | Force Feedback Scaling | FW | Firmware |
-| HID | Thiết bị giao diện con người | INT | Nội suy FFB |
-| LC | Load Cell | LIN | Tuyến tính |
-| MPS | Công tắc đa vị trí | NDP | Bộ giảm chấn tự nhiên |
-| NFR | Ma sát tự nhiên | NIN | Quán tính tự nhiên
-| Nm | Newton-mét | OLED | Diode phát sáng hữu cơ |
-PEA | Peak | PID | Thiết bị giao diện vật lý |
-PS PlayStation QR Phát hành nhanh
-| R2R | Ready2Race | RMA | Ủy quyền trả lại hàng hóa
-RPM | Số vòng quay mỗi phút | SEN | Độ nhạy |
-| SHO | Sức mạnh sốc / rung | SPR | Mùa xuân |
+| HID | Human Interface Device | INT | FFB Interpolation |
+| LC | Load Cell | LIN | Linear |
+| MPS | Multi-Position Switch | NDP | Natural Damper |
+| NFR | Natural Friction | NIN | Natural Inertia |
+| Nm | Newton-metre | OLED | Organic Light-Emitting Diode |
+| PEA | Peak | PID | Physical Interface Device |
+| PS | PlayStation | QR | Quick Release |
+| R2R | Ready2Race | RMA | Return Merchandise Authorization |
+| RPM | Revolutions per minute | SEN | Sensitivity |
+| SHO | Shock / Vibration Strength | SPR | Spring |
 | SQ | Sequential | USB | Universal Serial Bus |
 
-## Ngôn ngữ khách hàng được đề xuất
+## Ngôn ngữ Khách hàng được Khuyến nghị
 
-Tránh | Thích | Lý do |
+| Tránh | Ưu tiên | Lý do |
 |---|---|---|
-| “Bánh xe của bạn không tương thích” | “Xác nhận cơ sở chính xác, bánh xe / trung tâm, QR, nền tảng và đường dẫn kết nối” | “Bánh xe” không rõ ràng; khả năng tương thích là sự kết hợp cụ thể. |
-| “Biến lực thành 8 Nm” | “Đặt giá trị FFB được ghi lại; cơ sở / QR xác định mô-men xoắn có sẵn” | Cài đặt Phần trăm và mô-men xoắn vật lý khác nhau. |
-| “Tương thích Xbox nằm trong cơ sở” | “Cấp phép Xbox nằm trong vô lăng Fanatec hoặc trung tâm được cấp phép” | Ngăn chặn mua hàng sai. [F2] |
-| “Tương thích PlayStation nằm trong bánh xe” | “Cấp phép PlayStation nằm trong cơ sở bánh xe Fanatec” | Ngăn chặn mua hàng sai. [F2] |
-| “QR2 Lite luôn giới hạn mô-men xoắn” | “Hỗ trợ QR2 Lite phụ thuộc vào bánh xe chính xác và phê duyệt firmware hiện tại” | Sản phẩm đã chọn thay đổi. [F4] |
-| “Đèn LED bị hỏng” | “Đèn LED có vượt qua bài kiểm tra Ứng dụng không, và trò chơi / nền tảng này có cung cấp từ xa không?"” | Tách phần cứng khỏi hỗ trợ trò chơi. [F7] |
-| “Cập nhật đã đóng gạch nó” | “Thiết bị không được phát hiện sau khi cập nhật; kiểm tra trạng thái phục hồi / bộ nạp khởi động” | Tránh khẳng định thiệt hại vĩnh viễn. |
+| "Wheel của bạn không tương thích." | "Vui lòng xác nhận chính xác base, wheel/hub, QR, nền tảng (platform), và kết nối (connection path)." | "Wheel" là từ dễ gây hiểu lầm; mức tương thích cụ thể cho từng loại. |
+| "Vặn lực xoắn tới 8 Nm đi." | "Set thông số FFB theo hướng dẫn; base/QR sẽ tự điều chỉnh giới hạn mô-men xoắn cho bạn." | Các chỉ số thông số phần trăm (%) và lực kéo vật lý tính bằng mô men xoắn sẽ khác nhau. |
+| "Tính năng tương thích Xbox nằm ở base." | "Hệ phần cứng cấp phép cho nền tảng Xbox nằm trong Fanatec steering wheel hoặc bộ hub có bản quyền (licensed hub)." | Đề phòng mua sai thông tin dẫn tới cắm sai. [F2] |
+| "Tính năng tương thích PlayStation nằm ở wheel." | "Bản quyền cấp phép PlayStation nằm trong Fanatec wheel base." | Đề phòng mua sai thiết bị dẫn tới cắm nhầm. [F2] |
+| "Loại ngàm QR2 Lite lúc nào cũng giảm/giới hạn lực kéo." | "Mức hỗ trợ của QR2 Lite sẽ bị phục thuộc vô sự phê duyệt thông qua thông số bánh lái (wheel) cùng phiên bản firmware hiện tại." | Các sản phẩm nhất định sẽ có sự thay đổi khác biệt. [F4] |
+| "Bóng đèn LEDs bị hư rồi." | "Các dải LED có sáng lên không khi Test (thử) bằng Fanatec App, và tựa game/nền tảng này có hỗ trợ cấp tín hiệu telemetry không?" | Phân chia khu vực giới hạn khả năng hoạt động trên phần cứng từ thiết bị (hardware) tránh liên lụy sang game. [F7] |
+| "Cập nhật khiến máy thành cục gạch (bricked)." | "Thiết bị không được phát hiện sau khi hoàn tất update; hãy rà soát tính khôi phục (recovery)/chế độ (bootloader)." | Tránh đưa ra kết luận nhanh dẫn tới hiểu lầm rủi ro hư hỏng (permanent damage) khó gỡ. |
 
 ## Tài liệu tham khảo
 
-# # Nguồn Fanatec chính thức
+### Nguồn chính thức từ Fanatec
 
-- ** [F1] ** [Sơ đồ hệ sinh thái Fanatec] (https://help.fanatec.com/hc/de/articles/43786297099281-Fanatec-Ecosystem-Diagramm) - mối quan hệ thể loại.
-- ** [F2] ** [Giải thích khả năng tương thích nền tảng] (https://www.fanatec.com/us-en/platforms) - nhãn tương thích và địa điểm cấp phép.
-- ** [F3] ** [Fanatec so sánh trung tâm tay lái] (https://www.fanatec.com/jp/en/explorer/products/steering-wheel/fanatec-hubs-a-comparison/) - mục đích trung tâm và sự khác biệt.
-- ** [F4] ** [QR2 Lite cập nhật mô-men xoắn] (https://www.fanatec.com/eu/en/explorer/products/steering-wheel/qr2-lite-torque-limit-lifted/) và [Hướng dẫn chuyển đổi QR2] (https://help.fanatec.com/hc/en-us/articles/30011253510289-Which-products-can-be-converted-to-QR2) - Các biến thể QR và cảnh báo hiện tại.
-- ** [F5] ** [Thông số Menu điều chỉnh] (https://help.fanatec.com/hc/en-us/articles/43901256649233-In-the-Tuning-Menu-of-your-wheel-base-you-can-adjust-a-variety-of-parameters) - đặt tên và chế độ.
-- ** [F6] ** [Tải tế bào, Hall và bàn đạp được trang bị thủy lực] (https://www.fanatec.com/us/en/explorer/products/pedals/difference-load-cell-hall-sensor-and-hydraulic-pedals/) - cảm biến bàn đạp.
-- ** [F7] ** [Kích hoạt RevLED và FlagLED] (https://help.fanatec.com/hc/en-us/articles/30312122625553-How-do-I-activate-the-RevLEDs-or-flag-LEDs-on-my-wheel) và [Hướng dẫn FlagLED] (https://www.fanatec.com/au/en/explorer/products/steering-wheel/understanding-fanatec-steering-wheel-flagleds/) - phụ thuộc trò chơi / nền tảng.
-- ** [F8] ** [Hướng dẫn ClubSport Shifter SQ V1.5] (https://www.fanatec.com/us/en/explorer/products/shifters/guide-to-fanatecs-clubsport-shifter-sq-v15/) và [hướng dẫn cổng shifter] (https://help.fanatec.com/hc/en-us/articles/45597346898449-Which-shifter-port-should-I-use-on-my-Fanatec-wheel-base) - chế độ, hiệu chuẩn, cổng.
-- ** [F9] ** [Hướng dẫn bộ chuyển đổi USB ClubSport] (https://www.fanatec.com/ca/en/explorer/products/handbrakes/guide-to-fanatecs-clubsport-usb-adapter/) - chế độ sử dụng và bộ chuyển đổi độc lập.
-- ** [F10] ** [Hướng dẫn về Driver và Firmware] (https://assets.fanatec.com/fanatec-pwa/image/upload/downloads-prod/pdfs/Driver-Firmware-Instructions-Manual-EN_Web_02_MO.pdf) - thuật ngữ cập nhật.
-- ** [F11] ** [Giải thích ma sát tự nhiên] (https://www.fanatec.com/us/en/explorer/products/racing-wheels-wheel-bases/nfr-natural-friction-tuning-menu/) - Hành vi NFR.
-- ** [F12] ** [Hướng dẫn dao động bánh xe] (https://help.fanatec.com/hc/en-us/articles/30312108300177-Why-is-my-steering-wheel-oscillating-or-shaking) - dao động và cài đặt.
-- ** [F13] ** [Hướng dẫn cơ sở bánh xe CSL DD] (https://www.fanatec.com/au/en/explorer/products/racing-wheels-wheel-bases/fanatec-csl-dd-wheel-base/) - Cấu hình 5 Nm và 8 Nm.
-- ** [F14] ** [So sánh Podium DD1 và DD2] (https://www.fanatec.com/us/en/explorer/products/racing-wheels-wheel-bases/podium-dd1-vs-dd2-differences/) - thế hệ Podium trước, mô-men xoắn cực đại, tính năng và hỗ trợ nền tảng.
-- ** [F15] ** [Cập nhật mô-men xoắn ClubSport DD và DD +] (https://www.fanatec.com/us/en/explorer/products/racing-wheels-wheel-bases/more-torque-same-hardware/) và [Trang sản phẩm ClubSport DD +] (https://www.fanatec.com/us/en/p/wheel-bases/cs_dd%2B_us/clubsport-dd-plus-eu) - số liệu mô-men xoắn giữ 15 Nm và 18 Nm hiện tại và yêu cầu phần mềm.
-- ** [F16] ** [So sánh Podium DD, DD1 và DD2] (https://www.fanatec.com/ca/en/explorer/products/racing-wheels-wheel-bases/fanatec-podium-dd-vs-dd1-vs-dd2-key-differences/) - Kiến trúc Podium DD hiện tại, giữ mô-men xoắn và vượt qua đỉnh.
-- ** [F17] ** [Câu hỏi thường gặp về tay lái Fanatec] (https://help.fanatec.com/hc/en-us/articles/43802514108433-Steering-Wheel-FAQ) - Mặc định QR2 và ngày ngừng QR1.
-- ** [F18] ** [FullForce đến trên CSL DD và Gran Turismo DD Pro] (https://www.fanatec.com/us/en/explorer/products/racing-wheels-wheel-bases/fullforce-arrives-on-csl-dd-and-gran-turismo-dd-pro/) - Tháng 6 2026 FullForce mở rộng và bối cảnh kiến trúc thế hệ hiện tại.
-- **[F19]** [CSL có nghĩa là gì?](https://help.fanatec.com/hc/de/articles/30312787274641-What-does-CSL-mean) - Định nghĩa chính thức của chữ viết tắt CSL là ClubSport Light và phân loại cấp nhập cảnh.
+- **[F1]** [Sơ đồ Hệ sinh thái Fanatec](https://help.fanatec.com/hc/de/articles/43786297099281-Fanatec-Ecosystem-Diagramm) — các mối liên hệ danh mục.
+- **[F2]** [Giải thích tính tương thích nền tảng](https://www.fanatec.com/us-en/platforms) — nhãn tính tương thích và vị trí cấp phép.
+- **[F3]** [So sánh các hub steering wheel của Fanatec](https://www.fanatec.com/jp/en/explorer/products/steering-wheel/fanatec-hubs-a-comparison/) — công dụng hub và điểm khác biệt.
+- **[F4]** [Cập nhật mô-men xoắn của QR2 Lite](https://www.fanatec.com/eu/en/explorer/products/steering-wheel/qr2-lite-torque-limit-lifted/) và [Hướng dẫn chuyển đổi QR2](https://help.fanatec.com/hc/en-us/articles/30011253510289-Which-products-can-be-converted-to-QR2) — Các biến thể QR và những cảnh báo hiện tại.
+- **[F5]** [Tham số Tuning Menu](https://help.fanatec.com/hc/en-us/articles/43901256649233-In-the-Tuning-Menu-of-your-wheel-base-you-can-adjust-a-variety-of-parameters) — tên gọi cài đặt và chế độ.
+- **[F6]** [Bàn đạp trang bị load cell, Hall, và thủy lực](https://www.fanatec.com/us/en/explorer/products/pedals/difference-load-cell-hall-sensor-and-hydraulic-pedals/) — các loại cảm biến bàn đạp.
+- **[F7]** [Kích hoạt RevLED và FlagLED](https://help.fanatec.com/hc/en-us/articles/30312122625553-How-do-I-activate-the-RevLEDs-or-flag-LEDs-on-my-wheel) và [Hướng dẫn FlagLED](https://www.fanatec.com/au/en/explorer/products/steering-wheel/understanding-fanatec-steering-wheel-flagleds/) — các sự phụ thuộc của game/nền tảng.
+- **[F8]** [Hướng dẫn ClubSport Shifter SQ V1.5](https://www.fanatec.com/us/en/explorer/products/shifters/guide-to-fanatecs-clubsport-shifter-sq-v15/) và [hướng dẫn cổng shifter-port](https://help.fanatec.com/hc/en-us/articles/45597346898449-Which-shifter-port-should-I-use-on-my-Fanatec-wheel-base) — các chế độ, căn chỉnh, cổng.
+- **[F9]** [Hướng dẫn ClubSport USB Adapter](https://www.fanatec.com/ca/en/explorer/products/handbrakes/guide-to-fanatecs-clubsport-usb-adapter/) — cách sử dụng standalone (riêng biệt) và chế độ adapter.
+- **[F10]** [Sách Hướng dẫn Driver và Firmware](https://assets.fanatec.com/fanatec-pwa/image/upload/downloads-prod/pdfs/Driver-Firmware-Instructions-Manual-EN_Web_02_MO.pdf) — thuật ngữ về update.
+- **[F11]** [Giải thích Natural Friction](https://www.fanatec.com/us/en/explorer/products/racing-wheels-wheel-bases/nfr-natural-friction-tuning-menu/) — cơ chế của NFR.
+- **[F12]** [Hướng dẫn về hiện tượng dao động vô lăng (oscillation)](https://help.fanatec.com/hc/en-us/articles/30312108300177-Why-is-my-steering-wheel-oscillating-or-shaking) — hiện tượng dao động và các thiết lập.
+- **[F13]** [Hướng dẫn CSL DD Wheel Base](https://www.fanatec.com/au/en/explorer/products/racing-wheels-wheel-bases/fanatec-csl-dd-wheel-base/) — các cấu hình 5 Nm và 8 Nm.
+- **[F14]** [So sánh Podium DD1 và DD2](https://www.fanatec.com/us/en/explorer/products/racing-wheels-wheel-bases/podium-dd1-vs-dd2-differences/) — Podium thế hệ trước, mô-men xoắn đỉnh (peak torque), tính năng, và tương thích nền tảng.
+- **[F15]** [Cập nhật mô-men xoắn ClubSport DD và DD+](https://www.fanatec.com/us/en/explorer/products/racing-wheels-wheel-bases/more-torque-same-hardware/) và [Trang sản phẩm ClubSport DD+](https://www.fanatec.com/us/en/p/wheel-bases/cs_dd%2B_us/clubsport-dd-plus-eu) — thông số mô-men xoắn duy trì (holding-torque) 15 Nm và 18 Nm hiện hành cùng yêu cầu về firmware.
+- **[F16]** [So sánh Podium DD, DD1, và DD2](https://www.fanatec.com/ca/en/explorer/products/racing-wheels-wheel-bases/fanatec-podium-dd-vs-dd1-vs-dd2-key-differences/) — kiến trúc Podium DD hiện tại, mô-men xoắn duy trì (holding torque), và mức vọt qua đỉnh (peak overshoot).
+- **[F17]** [Fanatec Steering Wheel FAQ](https://help.fanatec.com/hc/en-us/articles/43802514108433-Steering-Wheel-FAQ) — mặc định QR2 và ngày ngưng sản xuất QR1.
+- **[F18]** [FullForce chính thức ra mắt trên CSL DD và Gran Turismo DD Pro](https://www.fanatec.com/us/en/explorer/products/racing-wheels-wheel-bases/fullforce-arrives-on-csl-dd-and-gran-turismo-dd-pro/) — đợt triển khai FullForce vào tháng 6 năm 2026 và kiến trúc thế hệ mới nhất.
+- **[F19]** [CSL có nghĩa là gì?](https://help.fanatec.com/hc/de/articles/30312787274641-What-does-CSL-mean) — Định nghĩa chính thức của từ viết tắt CSL là ClubSport Light cùng cách xếp loại dòng cơ bản.
 
 ### Nguồn tiêu chuẩn
 
-- ** [S1] ** [Thông số kỹ thuật và công cụ USB-IF HID] (https://www.usb.org/hid) - Thuật ngữ đầu vào USB.
-- ** [S2] ** [USB PID Class 1.0] (https://www.usb.org/sites/default/files/documents/pid1_01.pdf) - Mô hình USB FFB.
+- **[S1]** [Công cụ và đặc tả USB-IF HID](https://www.usb.org/hid) — các thuật ngữ USB input.
+- **[S2]** [USB PID Class 1.0](https://www.usb.org/sites/default/files/documents/pid1_01.pdf) — mô hình USB FFB.
 
-### Đọc cộng đồng bổ sung
+### Tài liệu bổ sung từ cộng đồng
 
-Những hỗ trợ này trên tàu nhưng không có thẩm quyền cho các quyết định tương thích hoặc an toàn hiện tại.
+Những tài liệu này hỗ trợ cho việc làm quen nhưng không thể dùng làm nguồn xác thực cho các quyết định về sự tương thích hay độ an toàn hiện hành.
 
-- [OC Racing: Fanatec ecosystem giải thích] (https://ocracing.com/guides/fanatec-ecosystem-explained-for-dummies/)
-- [Sim Racing Setups: Fanatec hệ sinh thái giải thích] (https://simracingsetup.com/product-guides/fanatec-ecosystem-explained/)
-- [Chỉ số nghiên cứu phát triển nội bộ](./README.md)
-- [Sổ đăng ký nguồn hệ sinh thái và tiền tệ](./references.md)
+- [OC Racing: Giải thích về Hệ sinh thái Fanatec](https://ocracing.com/guides/fanatec-ecosystem-explained-for-dummies/)
+- [Sim Racing Setups: Giải thích Hệ sinh thái Fanatec](https://simracingsetup.com/product-guides/fanatec-ecosystem-explained/)
+- [Chỉ mục nghiên cứu dành cho nhà phát triển nội bộ](./README.md)
+- [Sổ đăng ký nguồn hệ sinh thái và ghi chú tính hiện hành](./references.md)
 
-## Các bước tiếp theo có thể thực hiện
+## Các Bước Hành động Tiếp theo
 
-1. Sử dụng từ vựng này trong các kịch bản hỗ trợ, mẫu vé, Câu hỏi thường gặp và thông số kỹ thuật.
-2. Giữ ma trận tương thích SKU riêng biệt; một bảng thuật ngữ không được sao chép dữ liệu tương thích thay đổi nhanh.
-3. Kiểm tra lại khả năng tương thích chính thức, QR, App và Tuning Menu nguồn trước khi phát hành chính.
-4. Ghi lại từ ngữ của khách hàng dưới dạng bí danh chỉ sau khi ánh xạ nó đến một thuật ngữ thành phần chính xác.
+1. Sử dụng bộ từ vựng này vào trong các kịch bản trả lời (support scripts), các mẫu biểu mẫu ticket (ticket templates), FAQs, và chi tiết đặc tả kĩ thuật (specifications).
+2. Hãy tách riêng các ma trận về tính tương thích SKU; bảng thuật ngữ không nên sao chép các số liệu tương thích thay đổi liên tục.
+3. Kiểm tra lại thông tin trên trang chính thức về cấu hình độ tương thích, QR, ứng dụng Fanatec App, và Tuning Menu trước những đợt xuất bản lớn.
+4. Ghi lại các cách dùng từ mà khách hàng hay xài dưới dạng bí danh (alias) chỉ sau khi bạn đã quy chiếu nó đúng vào một thuật ngữ cấu thành xác thực (exact component term).

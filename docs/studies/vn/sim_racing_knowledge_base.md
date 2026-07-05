@@ -1409,19 +1409,47 @@ Tài liệu này được tổng hợp và diễn giải lại từ các file Ma
 | File nguồn | Nội dung chính được dùng |
 |---|---|
 | `README.md` | Thứ tự đọc, mô hình bằng chứng, quy tắc an toàn/phạm vi |
-| `sim_racing.md` | Hệ sinh thái, component map, FFB overview, communication, firmware, safety |
-| `wheel_base.md` | Wheel base, motor control, FFB path, safety, state machine, diagnostics |
-| `wheel_rim.md` | Steering rim, QR link, input scanning, display/LED, rim-to-base communication |
-| `pedals.md` | Sensor pedal, load cell, Hall, potentiometer, ADC, calibration, USB/RJ12 |
-| `add_ons.md` | Shifter, handbrake, sensor paradigms, firmware loop |
+| `sim_racing_research.md` | Hệ sinh thái, component map, tổng quan FFB, truyền thông, firmware, an toàn |
+| `wheel_base.md` | Wheel base, motor control, đường truyền FFB, an toàn, state machine, diagnostics |
+| `wheel_rim.md` | Steering rim, liên kết QR, quét input, display/LED, giao tiếp rim-với-base |
+| `pedals.md` | Cảm biến pedal, load cell, Hall, potentiometer, ADC, hiệu chỉnh (calibration), USB/RJ12 |
+| `add_ons.md` | Shifter, handbrake, nguyên lý cảm biến, vòng lặp firmware |
 | `accessories.md` | Quick release, dashboard, button box, telemetry display |
-| `cockpits.md` | Rigidity, cockpit flex, pedal deck, DD torque dynamics |
-| `tools.md` | USB/HID/PID references, SimHub, OpenFFBoard, measurement tools |
-| `repos.md` | Public/community repos as implementation evidence, not official vendor specs |
+| `cockpits.md` | Độ cứng, độ uốn (flex) của cockpit, pedal deck, độ động lực học của DD torque |
+| `tools.md` | Các tài liệu tham khảo USB/HID/PID, SimHub, OpenFFBoard, công cụ đo kiểm |
+| `repos.md` | Các repository mã nguồn mở/cộng đồng làm bằng chứng triển khai, không phải các thông số kỹ thuật chính thức của nhà sản xuất |
+| `glossary.md` | Thuật ngữ khách hàng, nhãn platform, các dòng model, và các từ viết tắt |
+| `references.md` | Phân loại nguồn hệ sinh thái, xung đột về tính cập nhật, và kiểm tra chéo chính thức |
+
+Các nguồn hệ sinh thái bên ngoài được sử dụng cho lần cập nhật ngày 2026-07-02:
+
+- [Fanatec Ecosystem Diagram](https://help.fanatec.com/hc/de/articles/43786297099281-Fanatec-Ecosystem-Diagramm) — hình ảnh tham khảo chính thức.
+- [Fanatec Wheel Bases FAQ](https://help.fanatec.com/hc/en-us/articles/43766204938257-Wheel-Bases-A-FAQ) — các phân khúc hiện tại và quy tắc kết nối.
+- [Fanatec platform compatibility](https://www.fanatec.com/us-en/platforms) — sở hữu license nền tảng.
+- [OC Racing ecosystem guide, 2026-06-07](https://ocracing.com/guides/fanatec-ecosystem-explained-for-dummies/) — mô hình nhập môn cho cộng đồng hiện tại.
+- [Sim Racing Setups ecosystem guide, 2026-01-13](https://simracingsetup.com/product-guides/fanatec-ecosystem-explained/) — giải thích hệ thống dạng module hướng tới người mua; các tuyên bố torque/flagship hiện tại cần thông tin kiểm tra chéo chính thức mới hơn.
+
+### 20.1 Lần cập nhật giải thích và minh họa ngày 2026-07-05
+
+Bản sửa đổi này đã mở rộng các phần chỉ có văn bản và ít hình ảnh trực quan — đáng chú ý nhất là §5.4 (servo motor / FOC) và §11 (cảm biến) — với lời giải thích bổ sung, sơ đồ Mermaid và hình minh họa SVG vẽ tay. Không có thông tin nào trong phần văn bản giải thích bổ sung này là cụ thể cho từng nhà sản xuất hoặc sản phẩm; nó mô tả các nguyên lý điều khiển motor và cảm biến nói chung (FOC, cấu tạo PMSM, cầu Wheatstone, cảm biến Hall-effect, quadrature encoding) nhất quán với các tiêu chuẩn và tài liệu tham khảo đã được trích dẫn trong `sim_racing_research.md`, cụ thể là:
+
+- [Infineon PMSM FOC reference](https://documentation.infineon.com/aurixtc3xx/docs/kbv1711616051757) — luồng chuyển đổi Clarke/Park, lấy mẫu dòng điện.
+- [TI sensored FOC library guide](https://software-dl.ti.com/msp430/esd/MSPM0-SDK/2_04_00_06/docs/english/middleware/motor_control_pmsm_sensored_foc/doc_guide/doc_guide-srcs/Sensored_FOC_Motor_Control_Library.html) — cấu trúc điều khiển sensored FOC.
+
+Các hình minh họa mới được thêm vào trong đợt cập nhật này (các sơ đồ gốc được tạo ra cho tài liệu này, không lấy từ bất kỳ nhà sản xuất nào):
+
+| File | Mục đích |
+|---|---|
+| `servo_motor_cross_section.svg` | Mặt cắt ngang PMSM 12-slot/8-pole được đơn giản hóa — stator, cuộn dây, khe hở không khí, các cực rotor, trục |
+| `load_cell_wheatstone_bridge.svg` | Các strain gauge dạng dầm hẫng cộng với toàn bộ cầu Wheatstone mà chúng tạo thành |
+| `hall_effect_sensor.svg` | Sự bố trí nam châm/cảm biến không tiếp xúc và đường cong đầu ra so với vị trí điển hình |
+| `potentiometer_and_encoder.svg` | So sánh trực quan con trượt potentiometer với đĩa incremental encoder có sóng vuông quadrature A/B |
+
+Phần này, và ghi chú này, tồn tại để người đọc có thể nhận biết phần nào của tài liệu được xây dựng dựa trên một tham chiếu bên ngoài và phần nào là tài liệu giải thích hoặc hình minh họa gốc.
 
 ---
 
-## Phụ lục A: Một ví dụ luồng input pedal
+## Phụ lục A: Ví dụ luồng input pedal
 
 ```mermaid
 sequenceDiagram
@@ -1434,15 +1462,15 @@ sequenceDiagram
     participant Game as Game
 
     Driver->>Pedal: Đạp phanh
-    Pedal->>LC: Tạo lực nén
+    Pedal->>LC: Áp dụng lực nén
     LC->>ADC: Tín hiệu vi sai rất nhỏ
     ADC->>MCU: Giá trị số
     MCU->>MCU: Tare / Filter / Calibration
     MCU->>Base: Report qua USB/RJ12
-    Base->>Game: Brake axis value
+    Base->>Game: Giá trị trục phanh (Brake axis value)
 ```
 
-## Phụ lục B: Một ví dụ luồng FFB
+## Phụ lục B: Ví dụ luồng FFB
 
 ```mermaid
 sequenceDiagram
@@ -1453,12 +1481,12 @@ sequenceDiagram
     participant Motor as Motor Control
     participant User as Tay người lái
 
-    Game->>DriverAPI: Tính lực lái ảo
+    Game->>DriverAPI: Tính toán lực lái ảo
     DriverAPI->>Base: Gửi FFB effect/report
     Base->>Base: Parse + effect mixing
-    Base->>Arb: Torque request
-    Arb->>Arb: Limit torque/current/slew/thermal/freshness
-    Arb->>Motor: Bounded torque command
+    Base->>Arb: Yêu cầu torque
+    Arb->>Arb: Giới hạn torque/current/slew/thermal/freshness
+    Arb->>Motor: Lệnh torque đã được giới hạn
     Motor->>Motor: Current control + PWM
     Motor->>User: Torque vật lý ở vô lăng
 ```
@@ -1478,5 +1506,5 @@ Rotational:   T = J × α
 
 ---
 
-**Kết luận ngắn:**
-Muốn hiểu sim racing, hãy nhìn nó như một hệ thống cơ-điện-điều khiển thời gian thực. Game tạo sự kiện vật lý ảo; driver và USB truyền lệnh; wheel base giới hạn và biến lệnh thành dòng motor; motor tạo torque; cockpit giữ lực; cảm biến và firmware đưa trạng thái người lái trở lại game. Nắm được force, torque, sensor, USB/HID/PID, FFB path và safety là đủ nền tảng để bắt đầu học sâu hơn.
+**Kết luận ngắn:**  
+Để hiểu sim racing, hãy xem nó như một hệ thống cơ-điện-điều khiển thời gian thực. Game tạo ra các sự kiện vật lý ảo; driver và USB truyền lệnh; wheel base giới hạn và chuyển lệnh thành dòng motor; motor tạo torque; cockpit giữ vững các lực; cảm biến và firmware gửi trạng thái của người lái trở lại game. Nắm được lực, torque, cảm biến, USB/HID/PID, đường truyền FFB, và an toàn sẽ cung cấp cho bạn nền tảng cần thiết để tìm hiểu sâu hơn.

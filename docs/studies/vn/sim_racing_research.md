@@ -1,760 +1,729 @@
-#Hệ sinh thái Sim Racing hiện đại: Cơ sở tri thức nhúng
+# Hệ sinh thái Sim Racing hiện đại: Cơ sở tri thức nhúng
 
-| Tài liệu | Phiên bản | Ngày | Đối tượng
+| Tài liệu | Phiên bản | Ngày | Đối tượng |
 |---|---|---|---|
-| Modern Sim Racing Ecosystem: Embedded Knowledge Base | 1.4 | 2026-07-02 | Fresher/junior trong lĩnh vực đua xe sim, mid level trong hệ thống nhúng |
+| Modern Sim Racing Ecosystem: Embedded Knowledge Base | 1.4 | 2026-07-02 | Fresher/junior trong lĩnh vực sim racing, mid level trong hệ thống nhúng |
 
-> **Tin tức:**
-> Phạm vi: Chỉ thông tin công cộng và kiến trúc tham chiếu. Không có kỹ thuật đảo ngược firmware độc quyền. Ưu tiên bằng chứng: cơ quan tiêu chuẩn; hướng dẫn sử dụng / hỗ trợ nhà sản xuất; tài liệu tham khảo bán dẫn; triển khai mở công khai; bằng sáng chế. MCU, bus, định dạng gói, tỷ lệ kiểm soát và cơ chế bảo mật dành riêng cho thương hiệu vẫn chưa được biết trừ khi tài liệu công khai xác định rõ ràng chúng.
+> **Tin tức (Informative):**
+> Phạm vi: Chỉ bao gồm thông tin công cộng và kiến trúc tham chiếu. Không đảo ngược (reverse engineering) firmware độc quyền. Ưu tiên bằng chứng: các tổ chức tiêu chuẩn; hướng dẫn/hỗ trợ từ nhà sản xuất; tài liệu tham khảo bán dẫn; các triển khai mở công khai; bằng sáng chế. Các vi điều khiển (MCU), bus, định dạng gói, tốc độ điều khiển, và các cơ chế bảo mật đặc thù của thương hiệu vẫn được coi là chưa biết (unknown) trừ khi tài liệu công khai xác định rõ.
 
 ## Nhật ký thay đổi tài liệu
 
 | Phiên bản | Ngày | Thay đổi |
 |---|---|---|
 | 1.0 | 2026-07-01 | Dự thảo nghiên cứu ban đầu. |
-| 1.1 | 2026-07-01 | Tái cấu trúc cho luồng sư phạm, quy ước ngôn ngữ quy phạm ứng dụng và sơ đồ cập nhật. |
-| 1.2 | 2026-07-01 | Các khái niệm nền tảng được hợp nhất, các loại ổ đĩa và thiết lập an toàn từ basic.md. |
-| 1.3 | 2026-07-01 | Đã thêm đường dẫn đọc của nhà phát triển và mô hình liên kết tham chiếu rõ ràng cho tài liệu nghiên cứu. |
-| 1.4 | 2026-07-02 | Đã thêm các cấp Fanatec hiện tại, quyền sở hữu nền tảng, chuyển đổi QR2, hướng dẫn đường dẫn kết nối và ghi chú tiền tệ nguồn. |
+| 1.1 | 2026-07-01 | Tái cấu trúc cho luồng hướng dẫn, áp dụng quy ước ngôn ngữ quy phạm và cập nhật sơ đồ. |
+| 1.2 | 2026-07-01 | Hợp nhất các khái niệm nền tảng, các loại truyền động, và an toàn thiết lập từ basic.md. |
+| 1.3 | 2026-07-01 | Thêm đường dẫn đọc cho nhà phát triển và mô hình liên kết tham chiếu rõ ràng cho các tài liệu nghiên cứu. |
+| 1.4 | 2026-07-02 | Thêm các phân khúc Fanatec hiện tại, quyền sở hữu giấy phép nền tảng, chuyển đổi QR2, hướng dẫn đường dẫn kết nối, và ghi chú về tính cập nhật của nguồn. |
 
-## Điều hướng kiến trúc hệ thống
+## Điều hướng Kiến trúc Hệ thống
 
-Tài liệu bao quát này đóng vai trò là gốc của cơ sở kiến thức đua xe mô phỏng. Để lặn sâu vào các hệ thống con cụ thể, hãy tham khảo các tài liệu được kết nối với nhau sau:
+Tài liệu bao quát này đóng vai trò là gốc của cơ sở kiến thức sim racing. Để đi sâu vào các hệ thống con cụ thể, hãy tham khảo các tài liệu được liên kết dưới đây:
 
-| Hệ thống con | Tài liệu | Tiêu điểm chính |
+| Hệ thống con | Tài liệu | Trọng tâm chính |
 |---|---|---|
-| ** Cơ sở bánh xe ** | [`wheel_base.md`] (./wheel_base.md) | Điều khiển động cơ, giai đoạn FFB, trung tâm USB tập trung |
-| ** Phản hồi lực (người giải thích) ** | [`force_feedback_explained.md`] (./force_feedback_explained.md) Giải thích FFB hợp nhất: lý thuyết lực, động cơ servo, chuỗi tín hiệu, lực / rung cảm thấy, độ trung thực, điều chỉnh, an toàn |
-| ** Vành lái ** | [`wheel_rim.md`](./wheel_rim.md) | Firmware bánh xe nhúng, đầu vào, màn hình tích hợp, SPI |
-| ** Bàn đạp ** | [`pedals.md`] (./pedals.md) | Tải ô, ADC, RJ12 ủy nhiệm |
-| **Add-Ons** | [`add_ons.md`](./add_ons.md) | Shifters (H-pattern/sequential) và handbrakes |
-| **Phụ kiện** | [`accessories.md`](./accessories.md) | Bản phát hành nhanh, bảng điều khiển độc lập, hộp nút |
-| ** Buồng lái ** | [`cockpits.md`](./cockpits.md) | Độ cứng cơ khí và các thành phần cấu trúc |
-| **Tools** | [`tools.md`](./tools.md) | Tiêu chuẩn, công cụ máy chủ, công cụ firmware, đo lường và xác nhận |
-| **Repositories** | [`repos.md`](./repos.md) | Giới hạn bằng chứng và phát hiện thực hiện cộng đồng |
-| **Glossary** | [`glossary.md`](./glossary.md) | Thuật ngữ khách hàng, nhãn tương thích, họ mô hình và chữ viết tắt |
-| **Sổ đăng ký nguồn ** | [`references.md`](./references.md) | Phân loại nguồn hệ sinh thái, ngày xem xét và xung đột tiền tệ đã biết |
+| **Đế vô lăng (Wheel Base)** | [`wheel_base.md`](./wheel_base.md) | Điều khiển động cơ, các giai đoạn FFB, hub USB tập trung |
+| **Phản hồi lực (Giải thích)** | [`force_feedback_explained.md`](./force_feedback_explained.md) | Giải thích FFB hợp nhất: lý thuyết lực, động cơ servo, chuỗi tín hiệu, lực/rung động cảm nhận, độ chân thực, tinh chỉnh, an toàn |
+| **Vô lăng (Steering Rim)** | [`wheel_rim.md`](./wheel_rim.md) | Firmware vô lăng nhúng, đầu vào, màn hình tích hợp, SPI |
+| **Bàn đạp (Pedals)** | [`pedals.md`](./pedals.md) | Load cells, ADC, proxy RJ12 |
+| **Phụ kiện thêm (Add-Ons)** | [`add_ons.md`](./add_ons.md) | Cần số (H-pattern/tuần tự) và phanh tay |
+| **Phụ kiện (Accessories)** | [`accessories.md`](./accessories.md) | Ngàm tháo lắp nhanh (QR), dashboard độc lập, button boxes |
+| **Buồng lái (Cockpits)** | [`cockpits.md`](./cockpits.md) | Độ cứng cơ học và các thành phần cấu trúc |
+| **Công cụ (Tools)** | [`tools.md`](./tools.md) | Tiêu chuẩn, công cụ máy chủ, công cụ firmware, đo lường và xác thực |
+| **Kho lưu trữ (Repositories)** | [`repos.md`](./repos.md) | Khám phá các triển khai cộng đồng công khai và giới hạn bằng chứng |
+| **Bảng thuật ngữ (Glossary)** | [`glossary.md`](./glossary.md) | Thuật ngữ khách hàng, nhãn tương thích, các dòng mô hình và từ viết tắt |
+| **Sổ đăng ký nguồn** | [`references.md`](./references.md) | Phân loại nguồn hệ sinh thái, ngày đánh giá và các xung đột tính cập nhật đã biết |
 
-## Đường dẫn đọc dành cho nhà phát triển
+## Đường dẫn đọc cho Nhà phát triển
 
-Sử dụng đường dẫn này khi giới thiệu một lập trình viên nhúng:
+Sử dụng đường dẫn này khi hướng dẫn cho một nhà phát triển nhúng mới:
 
-1. Đọc tệp này để biết quyền sở hữu hệ thống và từ vựng an toàn.
-2. Đọc [wheel_base.md] (./wheel_base.md) trước bất kỳ công việc FFB, điều khiển động cơ, cập nhật hoặc USB / PID nào.
-3. Đọc [wheel_rim.md] (./wheel_rim.md) trước bất kỳ công việc QR, hiển thị, LED hoặc nút bánh xe nào.
-4. Đọc [pedals.md](./pedals.md), [add_ons.md](./add_ons.md), và [accessories.md](./accessories.md) cho các nút đầu vào ngoại vi.
-5. Đọc [cockpits.md] (./cockpits.md) trước khi diễn giải dữ liệu kiểm tra lực, mô-men xoắn hoặc tải trọng bàn đạp.
-6. Sử dụng [tools.md](./tools.md) và [repos.md](./repos.md) để tham khảo xác nhận và ví dụ thực hiện công khai.
+1. Đọc tài liệu này để nắm được quyền sở hữu hệ thống và từ vựng về an toàn.
+2. Đọc [`wheel_base.md`](./wheel_base.md) trước bất kỳ công việc nào liên quan đến FFB, điều khiển động cơ, cập nhật hoặc USB/PID.
+3. Đọc [`wheel_rim.md`](./wheel_rim.md) trước bất kỳ công việc nào liên quan đến QR, màn hình, LED hoặc nút trên vô lăng.
+4. Đọc [`pedals.md`](./pedals.md), [`add_ons.md`](./add_ons.md), và [`accessories.md`](./accessories.md) cho các node đầu vào ngoại vi.
+5. Đọc [`cockpits.md`](./cockpits.md) trước khi phân tích dữ liệu kiểm tra lực, mô-men xoắn, hoặc tải bàn đạp.
+6. Sử dụng [`tools.md`](./tools.md) và [`repos.md`](./repos.md) làm tài liệu tham khảo để xác thực và các ví dụ triển khai công khai.
 
 ---
 
-## 1. Tổng quan hệ thống
+## 1. Tổng quan Hệ thống
 
-Phần này xác định phạm vi và ranh giới của hệ sinh thái đua xe mô phỏng. Nó giải thích mối quan hệ cấp cao giữa vật chủ, đế bánh xe và các thiết bị ngoại vi của nó.
+Phần này xác định phạm vi và ranh giới của hệ sinh thái sim racing. Nó giải thích mối quan hệ cấp cao giữa máy chủ (host), đế vô lăng (wheel base) và các thiết bị ngoại vi của nó.
 
-Một hệ sinh thái đua xe sim là một hệ thống người-máy hai chiều. Hệ thống sẽ định tuyến tay lái và điều khiển người lái đến máy chủ. Cơ sở bánh xe sẽ chấp nhận các lệnh haptic và tạo ra mô-men xoắn trục bị chặn. Hệ thống có thể tổng hợp tất cả các phụ kiện thông qua đế bánh xe hoặc nó có thể hỗ trợ các thiết bị ngoại vi USB độc lập.
+Một hệ sinh thái sim racing là một hệ thống hai chiều giữa người và máy. Hệ thống **phải** định tuyến các thao tác lái và điều khiển của người lái đến máy chủ. Đế vô lăng **phải** tiếp nhận các lệnh haptic và tạo ra mô-men xoắn trục trong giới hạn. Hệ thống có thể tổng hợp tất cả các phụ kiện qua đế vô lăng, hoặc hỗ trợ các thiết bị ngoại vi USB độc lập.
 
-1.1. Thành phần
+### 1.1. Các Thành phần
 
 Bảng dưới đây mô tả các thành phần chính trong hệ sinh thái và vai trò firmware điển hình của chúng.
 
 | Thành phần | Mục đích | Giao diện điển hình | Vai trò Firmware |
 |---|---|---|---|
-| PC | Game, driver, configuration, update | USB, network | Host driver/service and updater; open-source Linux kernel drivers (e.g., hid-fanatecff) exist for FFB support |
-| Bảng điều khiển | Nền tảng trò chơi / phụ kiện được điều khiển | Đường dẫn USB được cấp phép | Tích hợp được phê duyệt; Giấy phép Xbox nằm trong bánh xe / trung tâm được cấp phép, trong khi giấy phép PlayStation nằm trong cơ sở được cấp phép |
-Cơ sở bánh xe Thiết bị truyền động và trung tâm hệ thống Haptic USB cộng với xe buýt nội bộ / ngoại vi HID / PID, FFB, điều khiển động cơ, an toàn
-| Vô lăng | Điều khiển, chỉ báo và trung tâm | Liên hệ QR, liên kết nhà cung cấp có dây / không dây hoặc USB tùy thuộc vào hệ sinh thái | Quét, phát hiện, hiển thị, nhận dạng; một bánh xe / trung tâm Fanatec được cấp phép Xbox có thể cung cấp khả năng tương thích với nền tảng Xbox |
-| Vành bánh xe | Vòng cơ khí trần gắn vào trung tâm | Bu lông cơ khí | Không có (Thụ động) |
-| Phát hành nhanh | Khớp nối mô-men xoắn cơ học; nguồn / dữ liệu tùy chọn | Danh bạ hoặc hệ thống không dây / quy nạp | Sự hiện diện, bắt tay, giải trình tự nguồn |
-| Động cơ | Tạo mô-men xoắn vật lý | Biến tần ba pha | Điều khiển và bảo vệ dòng điện / mô-men xoắn |
-| Bộ mã hóa | Góc trục / rôto | SPI, SSI, BiSS-C, ABZ, Sin / Cos | Thu nhận, hiệu lực, hiệu chuẩn |
-Bàn đạp ga, phanh, ly hợp Cổng cơ sở (ví dụ: RJ12) hoặc USB ADC, bộ lọc, hiệu chuẩn, báo cáo; có thể được ủy quyền thông qua cơ sở để hỗ trợ bảng điều khiển
-| Shifter | Gear hoặc các sự kiện tuần tự | Cổng cơ sở (ví dụ: RJ12) hoặc USB | Phân loại và giải mã |
-| Phanh tay | Đầu vào phanh liên tục | Cổng cơ sở (ví dụ: RJ12) hoặc USB | ADC, hiệu chuẩn, báo cáo |
-| Bảng điều khiển | Hiển thị từ xa / trạng thái | USB, nối tiếp, Ethernet / Wi-Fi | Hiển thị và giám sát liên kết |
-| Hộp nút | Điều khiển phụ | USB HID | Quét ma trận/mã hóa |
-| Load cell | Force-to-signal transducer | Amplifier và ADC | Tare, span, lọc, chẩn đoán |
-| Nguồn điện | Nguồn DC bị cô lập | Đầu nối DC | Màn hình cơ sở trạng thái bus |
-Buồng lái Khung gầm kết cấu Cơ khí Thân cứng thụ động
+| PC | Game, driver, cấu hình, cập nhật | USB, network | Host driver/dịch vụ và trình cập nhật; có các driver kernel Linux mã nguồn mở (như hid-fanatecff) hỗ trợ FFB |
+| Bảng điều khiển (Console) | Nền tảng game/phụ kiện có kiểm soát | Đường dẫn USB được cấp phép | Tích hợp được phê duyệt; giấy phép Xbox nằm trong vô lăng/hub được cấp phép, trong khi giấy phép PlayStation nằm ở đế vô lăng |
+| Đế vô lăng | Thiết bị truyền động haptic và hub hệ thống | USB kèm theo các bus nội bộ/ngoại vi | HID/PID, FFB, điều khiển động cơ, an toàn |
+| Vô lăng | Điều khiển, đèn báo, và hub | Các tiếp điểm QR, kết nối có dây/không dây tùy hệ sinh thái, hoặc USB | Quét, chống dội (debounce), màn hình, danh tính; một vô lăng/hub được Fanatec cấp phép Xbox có thể cung cấp khả năng tương thích nền tảng Xbox |
+| Vành vô lăng (Rim) | Vòng cơ học trần gắn vào hub | Bắt ốc cơ học | Không có (Thụ động) |
+| Ngàm tháo lắp nhanh (QR) | Khớp nối mô-men xoắn cơ học; tùy chọn nguồn/dữ liệu | Các tiếp điểm hoặc hệ thống không dây/cảm ứng | Hiện diện, bắt tay, tuần tự hóa nguồn |
+| Động cơ | Tạo mô-men xoắn vật lý | Biến tần ba pha (Three-phase inverter) | Điều khiển dòng/mô-men xoắn và bảo vệ |
+| Bộ mã hóa (Encoder) | Góc của trục/rotor | SPI, SSI, BiSS-C, ABZ, Sin/Cos | Thu thập, tính hợp lệ, hiệu chuẩn |
+| Bàn đạp (Pedals) | Ga, phanh, côn | Cổng trên đế (như RJ12) hoặc USB | ADC, lọc, hiệu chuẩn, báo cáo; có thể được proxy qua đế để hỗ trợ console |
+| Cần số (Shifter) | Sang số (chữ H hoặc tuần tự) | Cổng trên đế (như RJ12) hoặc USB | Phân loại và chống dội |
+| Phanh tay (Handbrake) | Đầu vào phanh liên tục | Cổng trên đế (như RJ12) hoặc USB | ADC, hiệu chuẩn, báo cáo |
+| Dashboard | Màn hình telemetry/trạng thái | USB, serial, Ethernet/Wi-Fi | Hiển thị và theo dõi liên kết |
+| Button box | Điều khiển phụ | USB HID | Quét ma trận/bộ mã hóa |
+| Load cell | Chuyển đổi lực thành tín hiệu | Bộ khuếch đại và ADC | Tare, span, lọc, chẩn đoán |
+| Nguồn điện | Nguồn DC cách ly | Đầu nối DC | Đế giám sát trạng thái bus |
+| Buồng lái (Cockpit) | Khung lắp ráp kết cấu | Cơ học | Khối rắn thụ động |
 
-**Hình 1-1: Tổng quan hệ sinh thái hệ thống **
+**Hình 1-1: Tổng quan Hệ sinh thái Hệ thống**
 
-```nàng tiên cá
-Sơ đồ TD
-Trò chơi [Trò chơi] <--> Driver [Trình điều khiển hệ điều hành / Dịch vụ nhà cung cấp]
-Trình điều khiển <--> |USB HID / PID + giao diện nhà cung cấp tùy chọn | Base
-Console[Console] <-->|đường dẫn phụ kiện được cấp phép| Base
-PSU [Cung cấp DC cách ly] -> Cơ sở
-cơ sở tiểu đồ thị [Cơ sở bánh xe]
-USB [USB] <--> Chính [MCU chính]
-Chính <--> FFB [Động cơ FFB]
-FFB -> Arb [Arbiter mô-men xoắn / an toàn]
-Arb -> Điều khiển [Điều khiển động cơ]
-Bộ mã hóa -> Kiểm soát
-Hiện tại [Current Sense] -> Kiểm soát
-Điều khiển -> Cổng [Trình điều khiển cổng / Biến tần] -> Động cơ
-Lỗi [Đường dẫn lỗi phần cứng] -->|tắt| Cổng
-Chính <--> Cổng [Cổng ngoại vi]
-kết thúc
-Động cơ --- QR [Phát hành nhanh] --- Tay lái [Tay lái]
-Tay lái --- Vành [Vành bánh xe trần]
-Tay lái -> Nút [Nút / Mái chèo / Bộ mã hóa / Hiển thị]
-Tay lái <-->|SPI / dữ liệu có dây hoặc không dây| Chính
-Bàn đạp -> Cổng cơ sở RJ12 hoặc USB | Cổng
-HPattern [H-pattern Shifter] -> Cổng cơ sở RJ12 hoặc USB | Cổng
-Sequential [Sequential Shifter] -> Cổng cơ sở RJ12 hoặc USB | Cổng
-Phanh tay -> Cổng cơ sở RJ12 hoặc USB | Cổng
-Dash[Dashboard] -->|USB/network| Trình điều khiển
-Hộp [Hộp nút] -> |USB HID | Trình điều khiển
+```mermaid
+flowchart TD
+    Game[Game] <--> Driver[OS Driver / Vendor Service]
+    Driver <-->|USB HID/PID + optional vendor interface| Base
+    Console[Console] <-->|licensed accessory path| Base
+    PSU[Isolated DC Supply] --> Base
+    subgraph Base[Wheel Base]
+      USB[USB] <--> Main[Main MCU]
+      Main <--> FFB[FFB Engine]
+      FFB --> Arb[Torque/Safety Arbiter]
+      Arb --> Control[Motor Control]
+      Encoder --> Control
+      Current[Current Sense] --> Control
+      Control --> Gate[Gate Driver / Inverter] --> Motor
+      Fault[Hardware Fault Path] -->|disable| Gate
+      Main <--> Ports[Peripheral Ports]
+    end
+    Motor --- QR[Quick Release] --- SteeringWheel[Steering Wheel]
+    SteeringWheel --- Rim[Bare Wheel Rim]
+    SteeringWheel --> Buttons[Buttons / Paddles / Encoders / Display]
+    SteeringWheel <-->|SPI/wired or wireless data| Main
+    Pedals -->|base port RJ12 or USB| Ports
+    HPattern[H-pattern Shifter] -->|base port RJ12 or USB| Ports
+    Sequential[Sequential Shifter] -->|base port RJ12 or USB| Ports
+    Handbrake -->|base port RJ12 or USB| Ports
+    Dash[Dashboard] -->|USB/network| Driver
+    Box[Button Box] -->|USB HID| Driver
 ```
 
-### 1.2. Hệ sinh thái Fanatec như một ví dụ công cộng
+### 1.2. Hệ sinh thái Fanatec như một ví dụ Công khai
 
-Hệ sinh thái công cộng của Fanatec có tính mô đun cao, được thiết kế để người dùng có thể kết hợp và kết hợp các thành phần (đế bánh xe, vô lăng, bàn đạp) và nâng cấp từng bước. Sản phẩm sử dụng rộng rãi ba tầng:
-- **CSL (ClubSport Light) **: Cấp nhập cảnh, thân thiện với ngân sách, thường sử dụng các thành phần nhựa và kim loại cơ bản.
-- **ClubSport**: Tầng dành cho những người đam mê thể thao tầm trung, sử dụng vật liệu cao cấp như nhôm và sợi carbon với các thiết bị điện tử tiên tiến hơn.
-- ** Podium **: Cấp hàng đầu, cấp chuyên nghiệp, được thiết kế cho mô-men xoắn tối đa, độ bền và tùy biến sử dụng vật liệu cấp công nghiệp.
+Hệ sinh thái công khai của Fanatec có tính module cao, được thiết kế để người dùng có thể kết hợp các thành phần (đế vô lăng, vô lăng, bàn đạp) và nâng cấp từng phần. Sản phẩm chủ yếu theo ba phân khúc:
+- **CSL (ClubSport Light)**: Phân khúc nhập môn, thân thiện với ngân sách, thường sử dụng nhựa và kim loại cơ bản.
+- **ClubSport**: Phân khúc tầm trung dành cho những người đam mê, sử dụng vật liệu cao cấp như nhôm, sợi carbon với thiết bị điện tử tiên tiến hơn.
+- **Podium**: Phân khúc cao cấp nhất, chuẩn chuyên nghiệp, thiết kế để đạt mô-men xoắn, độ bền và khả năng tùy chỉnh tối đa, sử dụng vật liệu chuẩn công nghiệp.
 
-Nhãn cấp giúp điều hướng nhưng không chứng minh rằng hai sản phẩm tương thích về điện, cơ học hoặc nền tảng.
+Nhãn phân khúc giúp điều hướng nhưng không chứng minh rằng hai sản phẩm tương thích về mặt điện, cơ học, hay nền tảng.
 
-Đế bánh xe là trung tâm hệ thống trung tâm để thiết lập bảng điều khiển. Bàn đạp, cần số và phanh tay tương thích kết nối với đế, cho thấy một đường dẫn USB được cấp phép đến bảng điều khiển. Trên PC, các thiết bị ngoại vi được hỗ trợ thay vào đó có thể hoạt động như các thiết bị USB độc lập. Gói Ready2Race là gói mua, không phải là tiêu chuẩn giao diện mới.
+Đế vô lăng là hub trung tâm của hệ thống cho cấu hình console. Các bàn đạp, cần số, và phanh tay tương thích được kết nối với đế, qua đó xuất ra một đường dẫn USB duy nhất được cấp phép tới console. Trên PC, các thiết bị ngoại vi được hỗ trợ có thể hoạt động độc lập qua USB. Gói "Ready2Race" chỉ là một gói bán hàng, không phải tiêu chuẩn giao diện mới.
 
 ![Fanatec Ecosystem](../assets/fanatec_ecosystem.jpg)
-![Sản phẩm Fanatec](../assets/fanatec_products.jpg)
+![Fanatec Products](../assets/fanatec_products.jpg)
 
-| Nền tảng | Vị trí giấy phép Fanatec | Quy tắc thực hành |
+| Nền tảng | Vị trí Giấy phép Fanatec | Quy tắc Thực tế |
 |---|---|---|
-| Windows PC | Không yêu cầu chip bảo mật bảng điều khiển | Xác minh phiên bản Windows, hỗ trợ trò chơi, trình điều khiển / Ứng dụng và đường dẫn kết nối của từng thiết bị. |
-| Xbox | Tay lái hoặc trung tâm được cấp phép của Xbox | Bánh xe / trung tâm được cấp phép cho phép các thiết bị ngoại vi cơ sở và kết nối cơ sở tương thích trên Xbox. |
-Bánh xe tương thích và các thiết bị ngoại vi được kết nối cơ sở kế thừa hỗ trợ PlayStation thông qua cơ sở đó.
+| Windows PC | Không yêu cầu chip bảo mật console | Xác minh phiên bản Windows, hỗ trợ của game, driver/App, và đường dẫn kết nối của từng thiết bị. |
+| Xbox | Vô lăng hoặc hub được cấp phép Xbox | Vô lăng/hub được cấp phép kích hoạt đế tương thích và các thiết bị kết nối vào đế trên Xbox. |
+| PlayStation | Đế vô lăng được cấp phép PlayStation | Vô lăng và các thiết bị ngoại vi kết nối vào đế tương thích thừa hưởng hỗ trợ PlayStation thông qua đế đó. |
 
-*Lưu ý: Kết hợp cơ sở bánh xe được cấp phép PlayStation với vô lăng được cấp phép Xbox thường tạo ra một thiết lập tương thích chéo hoạt động trên PlayStation, Xbox và PC. *
+*Lưu ý: Kết hợp đế vô lăng PlayStation với vô lăng Xbox thường tạo ra hệ thống tương thích chéo, hoạt động được trên PlayStation, Xbox, và PC.*
 
-Kể từ ngày 2026-02-16, Fanatec tuyên bố rằng bánh xe và đế được mua thông qua cửa hàng của họ sử dụng QR2 theo mặc định và QR1 đã ngừng hoạt động. Phần cứng QR1 cũ vẫn có liên quan, nhưng các thế hệ Base-Side và Wheel-Side phải phù hợp và hỗ trợ nâng cấp là dành riêng cho mô hình.
+Tính đến 2026-02-16, Fanatec tuyên bố các vô lăng và đế mua từ cửa hàng của họ mặc định sử dụng QR2, và QR1 đã bị ngừng sản xuất. Phần cứng QR1 cũ vẫn khả dụng, nhưng thế hệ giữa Base-Side và Wheel-Side phải khớp nhau, và hỗ trợ nâng cấp phụ thuộc vào từng mẫu.
 
-1.3. Các loại ổ đĩa
+### 1.3. Các loại Truyền động (Drive Types)
 
-Cơ sở bánh xe đua Sim thường được phân loại theo hệ thống phân phối mô-men xoắn cơ học của chúng:
+Các đế vô lăng sim racing thường được phân loại theo cơ chế cung cấp mô-men xoắn cơ học:
 
-- ** Cơ sở điều khiển bánh răng: ** Cơ chế chi phí thấp nhưng giới thiệu phản ứng cơ học.
-- ** Cơ sở điều khiển đai: ** Cung cấp giao hàng mượt mà hơn nhưng giới thiệu tuân thủ / kéo dài cơ học.
-- ** Cơ sở truyền động trực tiếp: ** Trục động cơ kết nối trực tiếp với vành lái. Cung cấp lỗi truyền thấp nhất và yêu cầu cân nhắc mô-men xoắn và an toàn cao nhất.
+- **Dẫn động bánh răng (Gear-driven):** Cơ chế chi phí thấp nhưng gây ra độ trễ (backlash) cơ học.
+- **Dẫn động bằng dây curoa (Belt-driven):** Mang lại sự mượt mà hơn nhưng gây ra độ co giãn cơ học.
+- **Truyền động trực tiếp (Direct-drive):** Trục động cơ kết nối trực tiếp với vành vô lăng. Cung cấp sai số truyền động thấp nhất và đòi hỏi các cân nhắc cao nhất về mô-men xoắn và an toàn.
 
-1.4. Ranh giới Firmware
+### 1.4. Ranh giới Firmware
 
-Phần mềm sẽ thiết lập ranh giới sở hữu độc lập cho các đầu nối, miền nguồn, bộ mô tả USB, chế độ nền tảng và giới hạn mô-men xoắn. Phần mềm sẽ xác minh danh tính, định tuyến, thời gian, hiệu chuẩn và cập nhật khả năng tương thích trước khi cho phép vận hành.
+Firmware **phải** thiết lập ranh giới sở hữu độc lập cho các kết nối, vùng năng lượng, mô tả USB, chế độ nền tảng, và giới hạn mô-men xoắn. Firmware **phải** xác minh danh tính, định tuyến, thời gian, hiệu chuẩn và tính tương thích cập nhật trước khi cho phép hoạt động.
 
-### 1.5. Các yếu tố hình thức và phong cách lái xe
+### 1.5. Kích thước và Phong cách Lái
 
-Thiết bị ngoại vi thường được thiết kế riêng cho các kiểu lái mô phỏng cụ thể:
-- ** Công thức: ** Vô lăng hình chữ nhật / bướm được tối ưu hóa để xoay giới hạn.
-- ** GT: ** Tay lái hình chữ D hoặc tròn với bộ nút mở rộng.
-- ** Rally & Drift: ** Vành bánh xe tròn hoàn hảo ưu tiên xoay nhanh, trượt góc.
+Thiết bị ngoại vi thường được thiết kế cho các phong cách lái cụ thể:
+- **Formula:** Vô lăng hình chữ nhật/bướm tối ưu cho góc quay hẹp.
+- **GT:** Vô lăng hình chữ D hoặc tròn với nhiều nút bấm.
+- **Rally & Drift:** Vô lăng tròn hoàn hảo ưu tiên quay vòng nhanh và góc trượt.
 
-## 2. Nguyên tắc cơ bản vật lý và cơ khí
+## 2. Nguyên tắc Cơ bản về Vật lý và Cơ học
 
-Phần này bao gồm các nguyên tắc vật lý cơ bản của phần cứng đua xe sim, tập trung vào mô-men xoắn, động lực học chuyển động và cảm biến. Nó thu hẹp khoảng cách giữa thiết kế cơ khí và điều khiển hệ thống nhúng.
+Phần này đề cập đến các nguyên tắc vật lý cơ bản của phần cứng sim racing, tập trung vào mô-men xoắn, động lực học chuyển động, và cảm biến. Nó là cầu nối giữa thiết kế cơ học và điều khiển hệ thống nhúng.
 
-- ** Mô-men xoắn (N · m) ** là sản phẩm của lực tiếp tuyến và bán kính. Vành lái lớn hơn làm giảm lực tay cần thiết ở mô-men xoắn trục bằng nhau.
-- ** quán tính ** chống lại gia tốc góc.
-- ** Damping ** chống lại vận tốc.
-- ** Friction ** chống lại chuyển động.
-- ** Cogging ** là gợn mô-men xoắn từ tính phụ thuộc vào vị trí vốn có của thiết kế động cơ.
+- **Mô-men xoắn (N·m)** là tích của lực tiếp tuyến và bán kính. Vành vô lăng lớn hơn làm giảm lực tay yêu cầu với cùng mô-men xoắn trục.
+- **Quán tính (Inertia)** cản trở gia tốc góc.
+- **Độ hãm (Damping)** cản trở vận tốc.
+- **Ma sát (Friction)** cản trở chuyển động.
+- **Cogging** là hiện tượng gợn mô-men xoắn từ tính phụ thuộc vào vị trí, vốn có trong thiết kế động cơ.
 
-## 3. Phân tích sản phẩm
+## 3. Phân rã Sản phẩm
 
-Phần này phân tách hệ thống tổng thể thành các hệ thống con chức năng cụ thể. Nó xác định các khả năng phần cứng và trách nhiệm firmware cho mỗi mô-đun.
+Phần này chia nhỏ toàn bộ hệ thống thành các hệ thống con chức năng. Nó xác định khả năng phần cứng và trách nhiệm firmware của mỗi module.
 
-3.1. Ma trận hệ thống con
+### 3.1. Ma trận Hệ thống con
 
-Ma trận hệ thống con phác thảo sự phân bổ trách nhiệm trên các mô-đun phần cứng riêng biệt.
-
-| Hệ thống con | Lớp phần cứng / MCU | Trách nhiệm firmware | Giao tiếp | Nguồn / Cập nhật |
+| Hệ thống con | Phần cứng / Dòng MCU | Trách nhiệm Firmware | Giao tiếp | Nguồn / Cập nhật |
 |---|---|---|---|---|
-| Đế bánh xe | MCU chính; động cơ tùy chọn MCU / ASIC; bộ mã hóa; biến tần; NVM | USB, FFB, tập hợp đầu vào, an toàn, hiệu chuẩn | USB; SPI / UART / CAN bên trong | DC bên ngoài; Bộ nạp khởi động / phục hồi USB
-| Tay lái | MCU công suất thấp, bộ mở rộng GPIO, cảm biến Hall, đèn LED / LCD | Quét, giải mã, giải mã bộ mã hóa, hiển thị, nhận dạng, mở khóa FFB | QR liên kết có dây (SPI thường bị giả mạo bởi trình giả lập), không dây hoặc USB | QR / quy nạp / USB / pin; pass-through / USB / OTA |
-| Bàn đạp | Cảm biến (Potentiometers, hiệu ứng Hall), tế bào tải AFE, ADC, MCU tùy chọn | Lấy mẫu, lọc, hiệu chuẩn, HID | Cổng cơ sở analog / kỹ thuật số (RJ12) hoặc USB | Base / USB; không có hoặc cập nhật USB |
-| H-pattern shifter | Hai trục Hall / mảng chuyển đổi, MCU tùy chọn | Ngưỡng cổng, trễ, từ chối trạng thái không thể | Analog, GPIO, bus kỹ thuật số, USB | Base / USB |
-| Bộ chuyển đổi tuần tự | Hai công tắc hoặc sắp xếp Hall | Giải phóng, ngữ nghĩa cạnh / xung | GPIO, analog, bus, USB | Base / USB |
-| Phanh tay | Potentiometer / Hall / load cell, MCU tùy chọn | Bộ lọc, hiệu chuẩn phạm vi, phát hiện mở / ngắn | Analog, bus kỹ thuật số, USB | Base / USB |
-Bảng điều khiển | MCU / MPU, LCD / OLED, trình điều khiển LED | Giải mã từ xa, hiển thị, giám sát | USB, UART / CAN, Ethernet / Wi-Fi | USB / phụ trợ; USB / OTA |
-| Hộp nút | MCU USB công suất thấp, ma trận / bộ mở rộng | Quét, giải mã, mô tả | USB HID | USB; bộ nạp khởi động |
-| Bảng điện | Bảo vệ, DC bus, buck / LDO, cảm giác, biến tần | Trình tự, giám sát, chính sách tái sinh | ADC / GPIO cho bộ điều khiển | DC cách ly bên ngoài
-| Bộ điều khiển động cơ | Real-time MCU/DSP/ASIC, ADC/timers | Encoder/current acquisition and bounded PWM | SPI/CAN/PWM from main MCU | Logic and DC bus; base-bundled update |
-| Giao diện USB | Tích hợp / bên ngoài PHY, ESD | Sơ yếu lý lịch, báo cáo, vòng đời điểm cuối | Điều khiển USB / ngắt; giao diện nhà cung cấp tùy chọn | Cơ sở tự cấp nguồn với cảm biến VBUS |
+| Đế vô lăng | Main MCU; optional motor MCU/ASIC; encoder; inverter; NVM | USB, FFB, tổng hợp đầu vào, an toàn, hiệu chuẩn | USB; SPI/UART/CAN nội bộ | DC ngoài; USB bootloader/phục hồi |
+| Vô lăng | Low-power MCU, GPIO expanders, cảm biến Hall, LED/LCD | Quét, chống dội, giải mã encoder, màn hình, danh tính, mở khóa FFB | Liên kết dây QR (SPI thường bị giả lập), không dây, hoặc USB | QR/cảm ứng/USB/pin; pass-through/USB/OTA |
+| Bàn đạp | Cảm biến (Potentiometer, Hall), load-cell AFE, ADC, MCU tùy chọn | Lấy mẫu, lọc, hiệu chuẩn, HID | Cổng analog/digital (RJ12) hoặc USB | Đế/USB; không cập nhật hoặc qua USB |
+| Cần số H | Mảng công tắc/Hall 2 trục, MCU tùy chọn | Ngưỡng vào số, độ trễ, loại bỏ trạng thái lỗi | Analog, GPIO, digital bus, USB | Đế/USB |
+| Cần số tuần tự | Hai công tắc hoặc Hall | Chống dội, nhận dạng cạnh/xung | GPIO, analog, bus, USB | Đế/USB |
+| Phanh tay | Potentiometer/Hall/load cell, MCU tùy chọn | Lọc, hiệu chuẩn phạm vi, phát hiện mở/chập mạch | Analog, digital bus, USB | Đế/USB |
+| Dashboard | MCU/MPU, LCD/OLED, LED drivers | Giải mã telemetry, hiển thị, watchdog | USB, UART/CAN, Ethernet/Wi-Fi | USB/phụ trợ; USB/OTA |
+| Button box | Low-power USB MCU, ma trận/expanders | Quét, chống dội, descriptors | USB HID | USB; bootloader |
+| Power board | Bảo vệ, DC bus, buck/LDO, cảm biến, inverter | Tuần tự hóa, giám sát, chính sách tái tạo năng lượng | ADC/GPIO đến vi điều khiển | DC cách ly ngoài |
+| Motor controller | Real-time MCU/DSP/ASIC, ADC/timers | Thu thập encoder/dòng và PWM bị giới hạn | SPI/CAN/PWM từ Main MCU | Logic và DC bus; cập nhật gói cùng đế |
+| Giao diện USB | PHY tích hợp/ngoài, ESD | Liệt kê thiết bị, báo cáo, vòng đời điểm cuối | USB control/interrupt; giao diện phụ trợ | Đế tự cấp nguồn cảm biến VBUS |
 
-**Hình 3-1: Đường dẫn dữ liệu lõi cơ sở bánh xe **
+**Hình 3-1: Đường dẫn Dữ liệu Cốt lõi của Đế Vô lăng**
 
-```nàng tiên cá
-Lưu đồ LR
-Máy chủ <-->|USB| Main[Base System MCU]
-Chính -> FFB -> Mô-men xoắn [Torque Arbiter]
-Mô-men xoắn -> MotorCtl [Motor MCU / ASIC]
-Bộ mã hóa -> MotorCtl
-Shunts -> ADC -> MotorCtl
-MotorCtl -> PWM -> Cầu -> Động cơ
+```mermaid
+flowchart LR
+    Host <-->|USB| Main[Base System MCU]
+    Main --> FFB --> Torque[Torque Arbiter]
+    Torque --> MotorCtl[Motor MCU / ASIC]
+    Encoder --> MotorCtl
+    Shunts --> ADC --> MotorCtl
+    MotorCtl --> PWM --> Bridge --> Motor
 ```
 
-**Hình 3-2: Đường dẫn dữ liệu cảm biến bàn đạp và tương tự **
+**Hình 3-2: Đường dẫn Dữ liệu Bàn đạp và Cảm biến Analog**
 
-```nàng tiên cá
-Lưu đồ LR
-Lực -> LoadCell -> INA [Bộ khuếch đại công cụ] -> ADC
-Du lịch [Hall / Potentiometer] -> ADC
-ADC -> Cal [Hiệu chuẩn + Lọc] -> Liên kết [Liên kết cơ sở / USB HID]
+```mermaid
+flowchart LR
+    Force --> LoadCell --> INA[Instrumentation Amplifier] --> ADC
+    Travel[Hall / Potentiometer] --> ADC
+    ADC --> Cal[Calibration + Filtering] --> Link[Base Link / USB HID]
 ```
 
-**Hình 3-3: Đường dẫn dữ liệu tay lái **
+**Hình 3-3: Đường dẫn Dữ liệu Vô lăng**
 
-```nàng tiên cá
-Lưu đồ LR
-Đầu vào [Nút / Paddles / Bộ mã hóa] -> WheelMCU
-WheelMCU -> Hiển thị [Đèn LED / Màn hình]
-WheelMCU <-->|SPI / dữ liệu khung + sức khỏe| BaseMCU
-QR [Cơ QR] --- Trục
+```mermaid
+flowchart LR
+    Inputs[Buttons / Paddles / Encoders] --> WheelMCU
+    WheelMCU --> Display[LEDs / Display]
+    WheelMCU <-->|SPI / framed data + health| BaseMCU
+    QR[Mechanical QR] --- Shaft
 ```
 
-### 3.2. Nhận dạng thành phần và sức khỏe
+### 3.2. Danh tính và Sức khỏe Thành phần
 
-Firmware sẽ xử lý từng thành phần thông minh như một nút phiên bản. Mỗi nút sẽ báo cáo danh tính, khả năng, trạng thái khởi động, trạng thái ứng dụng, tình trạng sức khỏe và trạng thái phục hồi. Firmware sẽ thực hiện xử lý lỗi cho các cảm biến thụ động, bao gồm lỗi cáp, đường ray ngoài giới hạn, giới hạn phạm vi và kiểm tra tính hợp lý của tín hiệu.
+Firmware **phải** xử lý mỗi thành phần thông minh như một node có phiên bản. Mỗi node **phải** báo cáo danh tính, khả năng, trạng thái khởi động, trạng thái ứng dụng, sức khỏe, và trạng thái phục hồi. Firmware **phải** xử lý lỗi cho cảm biến thụ động (ví dụ lỗi cáp đứt, chập mạch, ngoài giới hạn, và kiểm tra tính hợp lý của tín hiệu).
 
-## 4. Tổng quan về phản hồi của lực lượng
+## 4. Tổng quan Phản hồi Lực (Force Feedback)
 
-Phần này mô tả cơ sở lý thuyết của phản hồi lực (FFB). Nó theo dõi cách các sự kiện vật lý ảo được dịch thành mô-men xoắn trục vật lý.
+Phần này mô tả lý thuyết của phản hồi lực (FFB). Nó theo dõi quá trình chuyển đổi các sự kiện vật lý ảo thành mô-men xoắn vật lý trên trục.
 
-Phản hồi lực chuyển đổi các hiệu ứng vật lý được xác định theo mô phỏng thành mô-men xoắn trục bị chặn trong khi quay trở lại vị trí lái và điều khiển mô phỏng.
+Phản hồi lực chuyển đổi các hiệu ứng vật lý từ mô phỏng thành mô-men xoắn vật lý giới hạn, đồng thời trả lại vị trí vô lăng và thao tác cho mô phỏng.
 
-### 4.1. Các giai đoạn phản hồi
+### 4.1. Các Giai đoạn Phản hồi
 
-Các giai đoạn sau đây mô tả con đường từ game engine đến mô-men xoắn vật lý.
-
-Giai đoạn | Trách nhiệm |
+| Giai đoạn | Trách nhiệm |
 |---|---|
-| Game | Tính toán lực lái ảo và các sự kiện vật lý |
-| API / Driver | Express hiệu ứng thông qua hợp đồng hệ điều hành được hỗ trợ |
-| USB Transport | Cung cấp và xác nhận báo cáo |
-| Trình quản lý PID | Phân bổ hiệu ứng; duy trì thời lượng, phong bì, điều kiện và trạng thái bắt đầu / dừng |
-| FFB Mixer | Kết hợp các hiệu ứng hoạt động và áp dụng các bộ lọc được cấu hình |
-| Torque Arbiter | Enforce gain, maximum torque, slew rate, thermal derating, enable state, và freshness limits |
-| Điều khiển động cơ | Theo dõi mô-men xoắn và nhu cầu hiện tại bắt nguồn từ phản hồi |
-Giai đoạn năng lượng Tạo mô-men xoắn vật lý bằng cách sử dụng động cơ
-| An toàn | Phát hiện lỗi phần cứng và chủ động loại bỏ mô-men xoắn
+| Game | Tính toán lực ảo và sự kiện vật lý |
+| API / Driver | Thể hiện hiệu ứng qua hợp đồng hệ điều hành |
+| USB Transport | Giao nhận và xác minh báo cáo |
+| Trình quản lý PID | Phân bổ hiệu ứng; duy trì thời lượng, cấu hình đường cong, điều kiện, và trạng thái |
+| FFB Mixer | Trộn các hiệu ứng đang hoạt động và áp dụng bộ lọc |
+| Torque Arbiter | Thực thi độ lợi, giới hạn mô-men xoắn, slew rate, giảm tải nhiệt, trạng thái bật, và tính thời gian |
+| Điều khiển Motor | Theo dõi dòng/mô-men yêu cầu từ FFB |
+| Power Stage | Sinh ra mô-men xoắn vật lý bằng motor |
+| An toàn | Phát hiện lỗi phần cứng và chủ động vô hiệu hóa mô-men xoắn |
 
-** Hình 4-1: Đường ống phản hồi lực **
+**Hình 4-1: Đường ống Phản hồi Lực (Force Feedback Pipeline)**
 
-```nàng tiên cá
-Lưu đồ LR
-Trò chơi --> API [OS API / Nhà cung cấp SDK] --> USB --> Phân tích cú pháp
-Phân tích cú pháp --> Effects[Effect State / Mixer] --> Arbiter[Torque Arbiter]
-Arbiter -> Control [Kiểm soát hiện tại] -> Inverter -> Motor -> Driver [Driver Hands]
-Bộ mã hóa -> Kiểm soát
-Cảm biến [Hiện tại / Điện áp / Nhiệt độ / Độ tươi] -> Arbiter
-Lỗi [Lỗi phần cứng] -> |tắt | Biến tần
+```mermaid
+flowchart LR
+    Game --> API[OS API / Vendor SDK] --> USB --> Parser
+    Parser --> Effects[Effect State / Mixer] --> Arbiter[Torque Arbiter]
+    Arbiter --> Control[Current Control] --> Inverter --> Motor --> Driver[Driver Hands]
+    Encoder --> Control
+    Sensors[Current/Voltage/Temperature/Freshness] --> Arbiter
+    Faults[Hardware Faults] -->|disable| Inverter
 ```
 
-** Hình 4-2: Đường dẫn dữ liệu Phản hồi Lực lượng Hợp lý (FFB) **
+**Hình 4-2: Đường dẫn Dữ liệu Logic Phản hồi Lực (FFB)**
 
-```nàng tiên cá
-đồ thị LR
-A[Vật lý trò chơi] --> B[Trình điều khiển/API]
-B -> C [Máy trộn hiệu ứng]
-C -> D [Bộ lọc]
-D -> E [Trọng tài mô-men xoắn]
-E -> F [Kiểm soát hiện tại]
-F -> G [Động cơ]
+```mermaid
+graph LR
+    A[Game Physics] --> B[Driver/API]
+    B --> C[Effect Mixer]
+    C --> D[Filters]
+    D --> E[Torque Arbiter]
+    E --> F[Current Control]
+    F --> G[Motor]
 ```
 
-### 4.2. Ràng buộc firmware FFB
+### 4.2. Ràng buộc Firmware FFB
 
-Firmware sẽ xác nhận và lên lịch cho tất cả các hiệu ứng đến. Máy trộn FFB sẽ kết hợp các hiệu ứng mà không bị tràn số học. Hệ thống sẽ áp dụng tất cả các giới hạn an toàn và công suất sau giai đoạn trộn. Nếu liên kết máy chủ bị lỗi, hệ thống sẽ thực hiện phân rã mô-men xoắn rõ ràng và vô hiệu hóa chính sách. Firmware sẽ không cho phép bất kỳ lệnh phần mềm nào vượt qua giới hạn vật lý hoặc nhiệt. Cắt xảy ra khi mô-men xoắn yêu cầu vượt quá giới hạn hoạt động, khiến các lực lớn khác nhau sụp đổ đến cùng một mức tối đa và chi tiết bị mất.
+Firmware **phải** xác thực và lập lịch toàn bộ các hiệu ứng gửi tới. FFB mixer **phải** kết hợp các hiệu ứng mà không bị tràn số (arithmetic overflow). Hệ thống **phải** áp dụng toàn bộ giới hạn an toàn và công suất sau giai đoạn trộn. Nếu liên kết với máy chủ (host) bị trễ, hệ thống **phải** kích hoạt phân rã (decay) mô-men xoắn và tự vô hiệu hóa. Firmware **không được** cho phép bất kỳ lệnh phần mềm nào vượt qua giới hạn vật lý/nhiệt. Clipping xảy ra khi mô-men xoắn yêu cầu vượt quá giới hạn, khiến lực quá lớn bị cào bằng ở mức tối đa và mất chi tiết.
 
-## 5. Kiến trúc phần cứng
+## 5. Kiến trúc Phần cứng
 
-Phần này nêu chi tiết các thành phần phần cứng bên trong của đế bánh xe trực tiếp. Nó chỉ định vòng điều khiển vật lý và các biện pháp bảo vệ điện tử cần thiết.
+Phần này trình bày cấu trúc phần cứng của một đế vô lăng truyền động trực tiếp. Nó định nghĩa vòng lặp điều khiển vật lý và các lớp an toàn điện tử cần thiết.
 
-# 5.1. Kiến trúc cơ sở ổ đĩa trực tiếp
+### 5.1. Kiến trúc Đế truyền động Trực tiếp (Direct-Drive Base)
 
-Kiến trúc cơ sở bánh xe cốt lõi được tách thành miền quản lý hệ thống và miền điều khiển động cơ thời gian thực. Các cơ sở truyền động trực tiếp thường sử dụng động cơ BLDC / PMSM ba pha với phản hồi bộ mã hóa, cảm biến dòng pha, Điều chế độ rộng xung (PWM), trình điều khiển cổng và biến tần.
+Cốt lõi của đế vô lăng được chia thành phân vùng quản lý hệ thống và phân vùng điều khiển động cơ thời gian thực. Đế DD thường sử dụng động cơ BLDC/PMSM ba pha với phản hồi encoder, cảm biến dòng pha, Điều chế độ rộng xung (PWM), gate driver, và inverter.
 
-Động cơ là một PMSM ba pha - một stato thép vết thương xung quanh một rôto nam châm vĩnh cửu trên trục lái - và biến tần là giai đoạn nguồn sáu MOSFET tổng hợp dòng điện ba pha của nó từ bus DC:
+Động cơ là PMSM ba pha (stator thép có cuộn dây quay quanh một rotor nam châm vĩnh cửu gắn ở trục lái) — và inverter (bộ biến tần) là khối công suất với sáu MOSFET để tổng hợp các dòng điện ba pha từ bus DC:
 
-! [Phần cắt ngang động cơ servo trực tiếp] (./servo_motor_cross_section.svg)
+![Direct-drive servo motor cross-section](../assets/servo_motor_cross_section.svg)
 
-![Biến tần ba pha điều khiển động cơ](../assets/three_phase_inverter.svg)
+![Three-phase inverter driving the motor](../assets/three_phase_inverter.svg)
 
-Ba nửa cầu của biến tần mỗi bộ đặt điện áp của một pha bằng PWM; hai công tắc trong một chân không bao giờ được bật cùng nhau (thời gian chết ngăn chặn một bus DC ngắn) và các shunt phía thấp trả về phép đo dòng pha mà vòng lặp FOC cần.
+Ba bán cầu của inverter sẽ quyết định điện áp của mỗi pha qua PWM; hai công tắc trên cùng một pha không bao giờ được bật cùng lúc (dead-time để tránh chập bus DC), và các shunt phía thấp đo lường dòng pha phục vụ vòng lặp FOC.
 
-** Hình 5-1: Sơ đồ khối kiến trúc phần cứng **
+**Hình 5-1: Sơ đồ Khối Kiến trúc Phần cứng**
 
-```nàng tiên cá
-Sơ đồ TD
-USBConn [USB + ESD] -> PHY -> Chính [MCU chính]
-Chính <--> NVM [Flash / EEPROM]
-Chính <--> Periph [Liên kết bánh xe / bàn đạp / Shifter]
-Chính --> Nhu cầu [Nhu cầu mô-men xoắn giới hạn]
-Nhu cầu --> MotorMCU [Motor MCU / ASIC]
-Bộ mã hóa [Absolute / Incremental Encoder] -> MotorMCU
-Shunts [Giai đoạn / DC hiện tại] -> AFE [Bộ khuếch đại + Bộ lọc] -> ADC
-ADC -> MotorMCU
-MotorMCU -> Hẹn giờ [PWM bổ sung + Thời gian chết]
-Hẹn giờ -> Cổng [Trình điều khiển cổng] -> Cầu [Cầu MOSFET 3 pha] -> PMSM
-DC [Đầu vào DC] -> Bảo vệ [Bảo vệ / Inrush / DC Bus] -> Cầu
-Bảo vệ -> Rails [Logic Rails]
-Nhiệt [Động cơ / FET / PCB Nhiệt độ] -> Chính
-HWTrip [Comparator / Gate Fault / E-stop] -> | vô hiệu hóa không đồng bộ | Gate
+```mermaid
+flowchart TD
+    USBConn[USB + ESD] --> PHY --> Main[Main MCU]
+    Main <--> NVM[Flash / EEPROM]
+    Main <--> Periph[Wheel / Pedal / Shifter Links]
+    Main --> Demand[Bounded Torque Demand]
+    Demand --> MotorMCU[Motor MCU / ASIC]
+    Encoder[Absolute / Incremental Encoder] --> MotorMCU
+    Shunts[Phase/DC Current] --> AFE[Amplifier + Filter] --> ADC
+    ADC --> MotorMCU
+    MotorMCU --> Timer[Complementary PWM + Dead Time]
+    Timer --> Gate[Gate Driver] --> Bridge[3-Phase MOSFET Bridge] --> PMSM
+    DC[DC Input] --> Protect[Protection / Inrush / DC Bus] --> Bridge
+    Protect --> Rails[Logic Rails]
+    Thermal[Motor/FET/PCB Temperature] --> Main
+    HWTrip[Comparator / Gate Fault / E-stop] -->|asynchronous disable| Gate
 ```
 
-| Chặn | Trách nhiệm | Yêu cầu firmware |
+| Khối | Trách nhiệm | Yêu cầu Firmware |
 |---|---|---|
-| Main MCU | Host / ngoại vi giao thức và chính sách hệ thống | Shall enforce scheduling and version compatibility |
-| Motor MCU / ASIC | Đường dẫn dòng điện / mô-men xoắn thời gian thực | Đáp ứng thời hạn xác định và phản hồi lỗi |
-| PMSM/BLDC | Thiết bị truyền động mô-men xoắn | Hoạt động trong các thông số động cơ và giới hạn nhiệt |
-Bộ mã hóa Phản hồi góc / tốc độ Sẽ xác nhận CRC, trạng thái, quấn, hướng, bù và thời gian chờ
-| Cảm biến dòng điện | Phản hồi dòng điện pha / DC | Hiệu chỉnh độ lệch, độ lợi, độ bão hòa và căn chỉnh với cửa sổ mẫu PWM |
-Bộ hẹn giờ nâng cao Bộ kích hoạt PWM và ADC Sẽ tạo ra các đầu ra bổ sung với hỗ trợ đầu vào thời gian chết và ngắt
-| Trình điều khiển / biến tần cổng | Chuyển DC thành ba pha | Mặc định tắt; sẽ phản hồi ngay lập tức các lỗi phần cứng |
-| NVM | Firmware, hiệu chuẩn, hồ sơ, hồ sơ lỗi | Sẽ đảm bảo ghi nguyên tử và hỗ trợ cân bằng hao mòn |
+| Main MCU | Giao thức Host/ngoại vi và chính sách hệ thống | **Phải** thực thi lập lịch và khả năng tương thích phiên bản |
+| Motor MCU/ASIC | Đường dẫn dòng điện/mô-men xoắn thời gian thực | **Phải** đáp ứng thời hạn chính xác và xử lý lỗi |
+| PMSM/BLDC | Bộ truyền động mô-men xoắn | **Phải** vận hành trong giới hạn thông số động cơ và nhiệt |
+| Encoder | Phản hồi góc/tốc độ | **Phải** xác thực CRC, trạng thái, wrap, hướng, bù, và timeout |
+| Cảm biến dòng | Phản hồi dòng pha/DC | **Phải** hiệu chuẩn độ lệch, độ lợi, bão hòa, và căn chỉnh với cửa sổ lấy mẫu PWM |
+| Advanced timer | PWM và kích hoạt ADC | **Phải** tạo tín hiệu bù trừ với dead time và có ngắt bảo vệ |
+| Gate driver/inverter| Chuyển mạch DC thành 3 pha | **Phải** mặc định Tắt; **phải** phản hồi lập tức trước lỗi phần cứng |
+| NVM | Firmware, hiệu chuẩn, profile, nhật ký lỗi | **Phải** đảm bảo ghi nguyên tử (atomic) và wear levelling |
 
-### 5.2. Kiểm soát thiết kế tên miền
+### 5.2. Thiết kế Miền Điều khiển
 
-Hệ thống có thể sử dụng một MCU duy nhất hoặc một kiến trúc phân chia (Main MCU + Motor MCU / ASIC).
+Hệ thống có thể sử dụng một MCU duy nhất hoặc kiến trúc tách biệt (Main MCU + Motor MCU/ASIC). 
 
-Điều khiển hướng trường (FOC) biến đổi góc rôto và các phép đo dòng điện để điều chỉnh dòng sản xuất mô-men xoắn. Phần sụn phải đảm bảo độ chính xác cao và thời gian PWM / ADC được đồng bộ hóa. Đầu vào quá dòng và ngắt ở cấp phần cứng sẽ ghi đè lên điều khiển phần mềm. Phần sụn sẽ kích hoạt đồng bộ ADC trong cửa sổ giữa PWM hợp lệ và sẽ hiệu chỉnh các hiệu chỉnh cảm giác dòng điện trong quá trình khởi tạo.
+Điều khiển hướng trường (FOC) biến đổi đo lường góc rotor và dòng điện để điều chỉnh dòng sinh mô-men xoắn. Firmware **phải** đảm bảo độ chính xác cao và đồng bộ hóa giữa PWM và ADC. Các lỗi phần cứng như quá dòng và tín hiệu ngắt (break) **phải** ghi đè các lệnh phần mềm. Firmware **phải** kích hoạt ADC một cách đồng bộ trong khoảng giữa hợp lệ của PWM và **phải** hiệu chỉnh các giá trị lệch (offset) của cảm biến dòng điện trong quá trình khởi tạo.
 
-! [PWM tàu sân bay, chu kỳ làm việc, và điểm mẫu ADC] (./foc_pwm_timing.svg)
+![PWM carrier, duty cycle, and the ADC sample point](../assets/foc_pwm_timing.svg)
 
-"Cửa sổ giữa PWM hợp lệ" là chi tiết thời gian chính: một sóng mang hình tam giác được so sánh với lệnh nhiệm vụ của mỗi pha tạo ra tín hiệu cổng và các mẫu ADC hiện tại ở đỉnh sóng mang - điểm giữa yên tĩnh của thời gian chuyển mạch - do đó việc đọc không bị hỏng do nhiễu cạnh chuyển mạch. Thu phóng thời gian chết hiển thị khoảng cách ngắn cả hai ngăn chặn bắn xuyên qua mỗi lần chuyển đổi.
+"Khoảng giữa PWM hợp lệ" là chi tiết thời gian quan trọng: sóng mang tam giác (carrier) so sánh với chu kỳ (duty) của mỗi pha để tạo ra tín hiệu điều khiển cổng, và ADC lấy mẫu ở đỉnh sóng mang — điểm tĩnh giữa chu kỳ chuyển mạch — để tránh nhiễu từ các quá trình chuyển mạch. Thu phóng "dead-time" hiển thị khoảng trống khi cả hai khóa đều tắt để ngăn chặn hiện tượng bắn chéo (shoot-through).
 
-## 6. Tương tác phần cứng
+## 6. Tương tác Phần cứng
 
-Phần này phác thảo cách firmware tương tác với các thiết bị ngoại vi phần cứng cụ thể. Nó xác định ánh xạ giữa các giao diện điện và các tính năng vi điều khiển.
+Phần này phác thảo cách firmware tương tác với các ngoại vi phần cứng cụ thể. Nó định nghĩa ánh xạ giữa giao diện điện tử và vi điều khiển.
 
-### 6.1. Giao diện ngoại vi
+### 6.1. Giao diện Ngoại vi
 
-Firmware sẽ cấu hình và quản lý các thiết bị ngoại vi MCU để giao tiếp an toàn với phần cứng bên ngoài.
+Firmware **phải** cấu hình và quản lý các giao diện MCU để giao tiếp an toàn với phần cứng ngoài.
 
-| Kết nối | Thiết bị ngoại vi MCU | Yêu cầu firmware |
+| Kết nối | Vi điều khiển | Yêu cầu Firmware |
 |---|---|---|
-| Encoder | SPI/SSI/BiSS-C/ABZ, timer, DMA | Shall verify deadline, CRC, wrap, direction, and timeout |
-| Bộ khuếch đại dòng điện | ADC, bộ kích hoạt PWM, DMA | Sẽ xác minh cửa sổ lấy mẫu, độ lệch, độ lợi và độ bão hòa |
-| MCU PWM đến cổng | Hẹn giờ nâng cao, phá vỡ GPIO | Định cấu hình thời gian chết, thiết lập lại an toàn và phá vỡ độ trễ |
-| Cổng lỗi đến MCU | Ngắt đầu vào, GPIO | Sẽ thực hiện tắt phần cứng đầu tiên và chốt bản ghi lỗi |
-| Rim đến cơ sở | CAN / SPI / UART / radio | Sẽ xử lý cắm nóng, phục hồi ESD, trình tự nguồn và thời gian chờ |
-| Bàn đạp đến ADC / bus | ADC / SPI / I2C | Xác minh các điều kiện mở / ngắn, giới hạn tham chiếu và hiệu chuẩn |
-| Nút tới GPIO | GPIO, hẹn giờ | Áp dụng debounce và từ chối ghosting |
-| Hiển thị cho SPI | SPI, DMA | Ngân sách băng thông để ngăn chặn đảo ngược ưu tiên |
-| Đèn LED | Hẹn giờ, bus nối tiếp | Giới hạn dòng điện và duy trì tốc độ làm mới |
-| USB tới máy chủ | Thiết bị USB | Sẽ quản lý VBUS, thiết lập lại, tạm dừng và vòng đời điểm cuối |
-| NVM để MCU | QSPI / SPI / I2C | Sẽ thực hiện mặc San lấp mặt bằng, nguyên tử, và schema xác nhận |
+| Encoder | SPI/SSI/BiSS-C/ABZ, timer, DMA | **Phải** kiểm tra deadline, CRC, wrap, hướng, timeout |
+| Mạch khuếch đại dòng | ADC, PWM trigger, DMA | **Phải** kiểm tra cửa sổ lấy mẫu, độ lệch, độ lợi, bão hòa |
+| MCU PWM đến gate | Advanced timer, break GPIO | **Phải** cấu hình dead time, khởi động an toàn, độ trễ ngắt |
+| Gate fault đến MCU | Break input, GPIO | **Phải** ưu tiên tắt phần cứng trước, sau đó lưu trạng thái lỗi |
+| Rim đến Base | CAN/SPI/UART/radio | **Phải** xử lý cắm nóng (hot-plug), ESD, cấp nguồn, timeout |
+| Pedals đến ADC/bus | ADC/SPI/I2C | **Phải** kiểm tra hở mạch/ngắn mạch, giới hạn tham chiếu, hiệu chuẩn |
+| Buttons đến GPIO | GPIO, timer | **Phải** chống dội (debounce) và chặn tín hiệu ảo |
+| Display đến SPI | SPI, DMA | **Phải** phân bổ băng thông tránh đảo ngược độ ưu tiên |
+| LEDs | Timer, serial bus | **Phải** giới hạn dòng và duy trì tốc độ làm mới |
+| USB tới host | USB device | **Phải** quản lý VBUS, reset, suspend, và vòng đời endpoint |
+| NVM tới MCU | QSPI/SPI/I2C | **Phải** có wear levelling, ghi nguyên tử, và xác thực schema |
 
-**Hình 6-1: Định tuyến ngoại vi phần cứng **
+**Hình 6-1: Định tuyến Ngoại vi Phần cứng**
 
-```nàng tiên cá
-đồ thị TD
-Bộ mã hóa -->|SPI/SSI/BiSS-C/ABZ| MCU
-Shunts -> Amp -> |ADC | MCU
-MCU -> | PWM | Cổng -> Động cơ
-Cổng -->|FAULT/BREAK| MCU
-Vành <-->|có dây/không dây| MCU
-Bàn đạp -->|ADC/digital| MCU
-Nút -->|GPIO| MCU
-MCU -->|SPI + DMA| Hiển thị
-MCU -->|PWM/SPI/I2C| Đèn LED
-Máy chủ <-->|USB| MCU
-EStop -> ức chế cổng phần cứng | Cổng
+```mermaid
+graph TD
+    Encoder -->|SPI/SSI/BiSS-C/ABZ| MCU
+    Shunts --> Amp -->|ADC| MCU
+    MCU -->|PWM| Gate --> Motor
+    Gate -->|FAULT/BREAK| MCU
+    Rim <-->|wired/wireless| MCU
+    Pedals -->|ADC/digital| MCU
+    Buttons -->|GPIO| MCU
+    MCU -->|SPI + DMA| Display
+    MCU -->|PWM/SPI/I2C| LEDs
+    Host <-->|USB| MCU
+    EStop -->|hardware gate inhibit| Gate
 ```
 
-### 6.2. Pin và quản lý nhà nước
+### 6.2. Quản lý Chân và Trạng thái
 
-Đầu ra cho phép cổng sẽ mặc định ở trạng thái không hoạt động trong quá trình thiết lập lại, thực thi bộ nạp khởi động, khôi phục và trong khi các chân không được định cấu hình. Hệ thống sẽ bảo vệ đường ray điện ngoại vi để phụ kiện bên ngoài bị hỏng không thể làm sập đường ray điều khiển chính.
+Đầu ra bật (enable) gate **phải** mặc định ở trạng thái Tắt (inactive) khi reset, khi chạy bootloader, khi recovery, và khi chân chưa được cấu hình. Hệ thống **phải** bảo vệ đường điện ngoại vi để thiết bị cắm ngoài hỏng không kéo sập đường điều khiển chính.
 
-## 7. Kiến trúc truyền thông
+## 7. Kiến trúc Giao tiếp
 
-Phần này xác định các liên kết truyền thông bên trong và bên ngoài. Nó chỉ định các giao thức vận chuyển, khả năng và yêu cầu toàn vẹn dữ liệu.
+Phần này định nghĩa các kết nối trong và ngoài hệ thống. Nó quy định các giao thức truyền tải, khả năng, và tính toàn vẹn dữ liệu.
 
-7.1. Đặc điểm liên kết
+### 7.1. Đặc tính Liên kết
 
-Các liên kết sau đây xác định cách các mô-đun trao đổi dữ liệu.
-
-| Giao diện | Vai trò điển hình | Tô pô | Mô tả |
+| Giao diện | Vai trò Điển hình | Topology | Mô tả |
 |---|---|---|---|
-| USB 2.0 FS HID | Máy chủ đến thiết bị | Máy chủ/thiết bị | Tiêu chuẩn, tự mô tả; xử lý các trục, nút và FFB |
-| USB HS | Hiển thị/dữ liệu nhà cung cấp | Máy chủ/thiết bị | Băng thông cao; tăng độ phức tạp ngăn xếp |
-| SPI | MCU để ASIC / mã hóa / hiển thị | Bộ điều khiển / ngoại vi | MHz tốc độ; DMA thân thiện; nhạy cảm với EMI |
-| UART | Debug/boot/simple accessory | Peer framing | Universal; yêu cầu địa chỉ phần mềm và frameing |
-| CAN / CAN-FD | Mô-đun phân tán | Đa bộ điều khiển | Bus mạnh vi sai; có giao thức trên cao |
-| I2C | EEPROM/cảm biến/mở rộng | Bộ điều khiển/mục tiêu | Hai dây; nhạy cảm với khóa bus và điện dung |
-| RS-485 | Phụ kiện có cáp | Giao thức được xác định | Vi phân; yêu cầu khung và trọng tài |
-| Ethernet | Dash/service | Mạng gói tin | Công cụ chuẩn; ngăn xếp và độ trễ biến đổi |
-| BLE | Vành/cấu hình không dây | Trung tâm/ngoại vi | Không dây; tùy thuộc vào giới hạn RF và độ trễ |
-| Wi-Fi | Bảng điều khiển / từ xa | Mạng IP | Thông lượng cao; phát sinh gánh nặng điện và an ninh |
+| USB 2.0 FS HID | Host tới device | Host/device | Tiêu chuẩn, tự mô tả; truyền trục, nút bấm, FFB |
+| USB HS | Màn hình/dữ liệu NSX | Host/device | Băng thông cao; ngăn xếp phức tạp |
+| SPI | MCU tới ASIC/encoder/màn hình | Master/slave | Tốc độ MHz; hỗ trợ DMA; dễ bị nhiễu EMI |
+| UART | Debug/boot/phụ kiện đơn giản | Peer framing | Thông dụng; cần phần mềm định dạng frame |
+| CAN / CAN-FD | Modules phân tán | Multi-master | Mạng vi sai ổn định; có overhead giao thức |
+| I2C | EEPROM/cảm biến | Master/slave | 2 dây; dễ bị treo bus |
+| RS-485 | Phụ kiện có dây | Tùy giao thức | Vi sai; cần định dạng frame |
+| Ethernet | Dash/dịch vụ | Packet network | Chuẩn hóa; có độ trễ thay đổi |
+| BLE | Rim/cấu hình không dây | Master/slave | Không dây; bị giới hạn bởi RF và độ trễ |
+| Wi-Fi | Bảng điều khiển telemetry | IP network | Băng thông cao; tiêu thụ điện lớn và phức tạp bảo mật |
 
-### 7.2. Giao tiếp nền tảng máy chủ
+### 7.2. Giao tiếp với Nền tảng Host
 
-Chiến lược truyền thông dựa trên ** Wheel Base hoạt động như một USB Hub tập trung **, với hành vi thích ứng với mô hình bảo mật của nền tảng máy chủ:
+Chiến lược giao tiếp coi **Đế Vô lăng là một USB Hub trung tâm**, với hành vi tự thích ứng theo mô hình bảo mật của nền tảng host:
 
 #### 7.2.1. PC (Windows/Linux)
-Hệ thống sẽ hiển thị các điểm cuối USB tiêu chuẩn để xử lý phản hồi và đầu vào vật lý. Hệ thống sẽ sử dụng ** USB HID ** (Thiết bị giao diện con người) để báo cáo các điều khiển (trục lái, vị trí bàn đạp, nhấn nút) và có thể sử dụng ** USB PID ** (Thiết bị giao diện vật lý) để nhận các hiệu ứng vật lý Force Feedback (FFB) từ công cụ trò chơi. Trình điều khiển nguồn mở (ví dụ: `hid-fanatecff` cho Linux) hoặc phần mềm nhà cung cấp có thể tự do tương tác với giao thức mở này.
+Hệ thống **phải** mở các endpoint USB tiêu chuẩn để nhận dữ liệu đầu vào và đầu ra lực vật lý. Hệ thống **phải** dùng **USB HID** (Thiết bị Giao diện Người dùng) để báo cáo các thao tác (trục, nút bấm), và có thể dùng **USB PID** (Thiết bị Giao diện Vật lý) để nhận các tín hiệu FFB từ engine game. Các driver nguồn mở (như `hid-fanatecff` cho Linux) hoặc phần mềm từ nhà sản xuất có thể dễ dàng tương tác qua giao thức mở này.
 
-** Hình 7-1: Cấu trúc liên kết mô tả USB (PC) **
+**Hình 7-1: Topology của USB Descriptor (PC)**
 
-```nàng tiên cá
-Sơ đồ TD
-Desc[USB/HID/PID Descriptors] --> Enum[Enumeration]
-Enum --> IN[Ngắt IN: trục/nút]
-Enum --> OUT[Gián đoạn OUT hoặc SET_REPORT: hiệu ứng]
-Enum --> Feature[Feature: capabilities/config]
-Enum --> Nhà cung cấp [Giao diện nhà cung cấp tùy chọn]
+```mermaid
+flowchart TD
+    Desc[USB/HID/PID Descriptors] --> Enum[Enumeration]
+    Enum --> IN[Interrupt IN: axes/buttons]
+    Enum --> OUT[Interrupt OUT or SET_REPORT: effects]
+    Enum --> Feature[Feature: capabilities/config]
+    Enum --> Vendor[Optional vendor interface]
 ```
 
-#### 7.2.2. Bảng điều khiển (PlayStation & Xbox)
-Bảng điều khiển sử dụng các đường dẫn phụ kiện được cấp phép. Hướng dẫn Fanatec công khai thiết lập nơi sở hữu khả năng tương thích, nhưng nó không xuất bản giao thức mật mã hoặc cho phép giả định thực hiện.
+#### 7.2.2. Consoles (PlayStation & Xbox)
+Console sử dụng các luồng phụ kiện được cấp phép. Tài liệu của Fanatec giải thích vị trí cấp phép, nhưng không bộc lộ thuật toán xác thực mật mã hay hướng dẫn mô phỏng cấp phép.
+- **Xbox:** Cấp phép qua vô lăng Xbox gắn với một đế vô lăng Fanatec tương thích.
+- **PlayStation:** Cấp phép ở chính đế vô lăng Fanatec được cấp phép PlayStation.
+- **Tổng hợp ngoại vi:** Bàn đạp, cần số, phanh tay Fanatec phải cắm qua đế vô lăng để được dùng trên console. Thiết bị USB độc lập sẽ không dùng được trên console.
 
-- ** Xbox: ** khả năng tương thích được cung cấp bởi một tay lái hoặc hub được cấp phép Xbox gắn vào đế bánh xe Fanatec tương thích.
-- ** PlayStation: ** khả năng tương thích được cung cấp bởi một cơ sở bánh xe Fanatec PlayStation cấp phép.
-- ** Tổng hợp ngoại vi: ** Bàn đạp, cần số và phanh tay Fanatec phải kết nối thông qua đế bánh xe để sử dụng bảng điều khiển. Thiết bị ngoại vi USB độc lập là đường dẫn PC trừ khi trang sản phẩm hiện tại nêu rõ ràng khác.
+Cấu trúc firmware **phải** thiết lập việc cấp phép nền tảng như một rào cản được phê duyệt. Firmware **không được** mô phỏng, phát minh, hay vượt qua (bypass) xác thực console.
 
-Kiến trúc firmware sẽ mô hình hóa cấp phép nền tảng như một yêu cầu sản phẩm được phê duyệt. Nó sẽ không phát minh, mô phỏng hoặc bỏ qua hành vi xác thực bảng điều khiển chưa được công bố.
+### 7.3. Cấu trúc liên kết Nội bộ
 
-# 7.3 Cấu trúc liên kết nội bộ
+**Hình 7-2: Cấu trúc liên kết Bus Nội bộ**
 
-**Hình 7-2: Cấu trúc liên kết Bus nội bộ **
-
-```nàng tiên cá
-đồ thị LR
-PC <-->|USB| Chính
-Chính <-->|SPI + IRQ| MotorCtl
-MotorCtl <-->|SPI/SSI/BiSS-C/ABZ| Bộ mã hóa
-Chính <-->|I2C| EEPROM
-Trang chủ <-->|CAN/UART/proprietary framed link| Rim
-Chính <-->|ADC/GPIO/digital bus| Phụ kiện
+```mermaid
+graph LR
+    PC <-->|USB| Main
+    Main <-->|SPI + IRQ| MotorCtl
+    MotorCtl <-->|SPI/SSI/BiSS-C/ABZ| Encoder
+    Main <-->|I2C| EEPROM
+    Main <-->|CAN/UART/proprietary framed link| Rim
+    Main <-->|ADC/GPIO/digital bus| Accessories
 ```
 
-# 7.4 Đóng khung và tính toàn vẹn
+### 7.4. Đóng khung (Framing) và Tính Toàn vẹn
 
-Mỗi liên kết được đóng khung sẽ xác định phiên bản, loại, độ dài, trình tự, tính toàn vẹn tải trọng (ví dụ: CRC) và thời gian chờ mới. Phần mềm cơ sở sẽ thực thi hàng đợi bị chặn, đàm phán tương thích và phục hồi liên kết. Chuyển DMA sẽ thực thi quyền sở hữu bộ đệm rõ ràng, thời hạn chuyển, sự gắn kết bộ đệm và xử lý lỗi.
+Mỗi kết nối **phải** định dạng rõ phiên bản, loại, độ dài, chuỗi tuần tự, kiểm tra lỗi (như CRC), và giới hạn thời gian timeout. Firmware **phải** hỗ trợ hàng đợi bị chặn, đàm phán, và khôi phục kết nối. Chuyển DMA **phải** giới hạn quyền kiểm soát bộ đệm, thời gian kết thúc, nhất quán bộ nhớ đệm (cache), và xử lý lỗi.
 
 ## 8. Kiến trúc Firmware
 
-Phần này cung cấp thiết kế cấu trúc của ứng dụng firmware. Nó bao gồm các ranh giới mô-đun, máy trạng thái và quản lý vòng đời.
+Phần này cung cấp thiết kế cấu trúc của phần mềm firmware. Nó đề cập đến các ranh giới module, máy trạng thái, và vòng đời.
 
-### 8.1. Mô-đun phần mềm
+### 8.1. Các Module Phần mềm
 
-Firmware sẽ tách trách nhiệm để đảm bảo giao diện người dùng và các lớp vận chuyển không thể can thiệp vào đường dẫn điều khiển thời gian thực.
+Firmware **phải** phân chia trách nhiệm để đảm bảo các lớp truyền dữ liệu và UI không cản trở quá trình điều khiển thời gian thực.
 
-**Hình 8-1: Kiến trúc thành phần Firmware **
+**Hình 8-1: Kiến trúc Thành phần Firmware**
 
-```nàng tiên cá
-Sơ đồ TD
-Boot [Bộ nạp khởi động được bảo vệ] -> Tự [Ứng dụng tự kiểm tra]
-subgraph Dịch vụ
-USB[USB/PID]
-FFB[Trình quản lý hiệu ứng/Mixer]
-Đầu vào [Tổng hợp đầu vào]
-Rim [Rim / Quản lý ngoại vi]
-Cài đặt[Cài đặt/Hiệu chuẩn]
-Update[Đại lý cập nhật]
-Diag [Chẩn đoán]
-An toàn[Giám sát an toàn]
-kết thúc
-biểu đồ phụ Realtime
-Arb [Arbiter mô-men xoắn] -> Động cơ [Điều khiển động cơ] -> PWM
-Bộ mã hóa -> Động cơ
-Dòng điện --> Động cơ
-kết thúc
-Tự -> Dịch vụ
-USB -> FFB -> Arb
-Rim -> Đầu vào -> USB
-Cài đặt -> FFB
-An toàn -> Arb
+```mermaid
+flowchart TD
+    Boot[Protected Bootloader] --> Self[Application Self-Test]
+    subgraph Services
+      USB[USB/PID]
+      FFB[Effect Manager/Mixer]
+      Input[Input Aggregation]
+      Rim[Rim/Peripheral Manager]
+      Settings[Settings/Calibration]
+      Update[Update Agent]
+      Diag[Diagnostics]
+      Safety[Safety Supervisor]
+    end
+    subgraph Realtime
+      Arb[Torque Arbiter] --> Motor[Motor Control] --> PWM
+      Encoder --> Motor
+      Current --> Motor
+    end
+    Self --> Services
+    USB --> FFB --> Arb
+    Rim --> Input --> USB
+    Settings --> FFB
+    Safety --> Arb
 ```
 
-# 8.2. Ràng buộc mô-đun
+### 8.2. Các Ràng buộc Module
 
-Các ràng buộc sau đây sẽ được thực thi trên kiến trúc chương trình cơ sở.
-
-| Mô đun | Yêu cầu |
+| Module | Yêu cầu |
 |---|---|
-Bộ nạp khởi động Sẽ xác minh, chọn và khôi phục hình ảnh; sẽ không bao giờ nạp năng lượng cho động cơ
-| USB/PID | Sẽ vận chuyển các mô tả và báo cáo hiệu ứng; sẽ không bao giờ ghi vào PWM |
-| FFB | Sẽ thực hiện số học bị chặn để trộn hiệu ứng |
-| Trọng tài mô-men xoắn | Sẽ là con đường phần mềm duy nhất cho nhu cầu động cơ; sẽ thực thi cho phép, giới hạn và độ tươi |
-| Điều khiển động cơ | Không phân tích lưu lượng máy chủ |
-| Bộ mã hóa / dòng điện | Phải đính kèm dấu thời gian và trạng thái cho mọi giá trị được lấy mẫu |
-| Thiết bị ngoại vi | Quản lý các sự kiện cắm nóng và trạng thái thiết bị cũ |
-| Cài đặt | Sẽ không thực hiện chặn ghi flash trong đường dẫn thời gian thực cứng |
-| Chẩn đoán | Sẽ ràng buộc bộ đếm / dấu vết; sẽ không chặn vòng lặp điều khiển |
-| Cập nhật | Sẽ tắt mô-men xoắn trong toàn bộ quá trình cập nhật |
-| An toàn | Sẽ phân loại lỗi và yêu cầu ngăn chặn; sẽ hành động cùng với bảo vệ điện nhanh |
+| Bootloader | **Phải** kiểm tra, lựa chọn, phục hồi firmware; **không bao giờ** kích hoạt motor |
+| USB/PID | **Phải** truyền tải thông số và tín hiệu FFB; **không bao giờ** được thay đổi PWM |
+| FFB | **Phải** thực hiện trộn tín hiệu mà không làm tràn số học |
+| Torque arbiter | **Phải** là kênh mềm duy nhất dẫn đến motor; **phải** kiểm soát giới hạn, sức mạnh |
+| Điều khiển Motor | **Không được** giải mã tín hiệu host |
+| Encoder/Dòng điện| **Phải** đính kèm thời gian và trạng thái mỗi khi lấy mẫu |
+| Ngoại vi | **Phải** xử lý cắm nóng và thiết bị không còn kết nối |
+| Settings | **Không được** chặn vòng lặp thời gian thực bằng việc ghi flash bộ nhớ |
+| Chẩn đoán | **Phải** giới hạn số lần đếm; **không được** chặn hệ thống điều khiển |
+| Update | **Phải** tắt mô-men xoắn toàn bộ trong quá trình nâng cấp |
+| Safety | **Phải** ngắt tín hiệu khi có lỗi; hoạt động song song với bảo vệ mạch điện cứng |
 
-# 8.3 Máy trạng thái hệ thống
+### 8.3. Máy trạng thái Hệ thống
 
-Firmware sẽ thực hiện một máy trạng thái xác định để ủy quyền mô-men xoắn. Bộ ức chế phần cứng sẽ luôn có thẩm quyền.
+Firmware **phải** triển khai máy trạng thái xác định để quản lý việc kích hoạt mô-men xoắn. Các hệ thống bảo vệ phần cứng sẽ hoạt động ưu tiên nhất mọi lúc.
 
-** Hình 8-2: Mô-men xoắn cho phép máy trạng thái **
+**Hình 8-2: Máy Trạng thái Kích hoạt Mô-men xoắn**
 
-```nàng tiên cá
-stateSơ đồ-v2
-[*] -> Đặt lại
-Đặt lại -> Khôi phục: yêu cầu hình ảnh / khôi phục không hợp lệ
-Đặt lại -> Tự kiểm tra: hình ảnh hợp lệ
-Tự kiểm tra -> SafeIdle: vượt qua
-Tự kiểm tra -> Lỗi: thất bại
-SafeIdle -> Hiệu chỉnh
-Hiệu chuẩn -> Sẵn sàng
-Sẵn sàng -> Đã bật: máy chủ hoạt động + chính sách hài lòng
-Bật -> SafeIdle: vô hiệu hóa / thời gian chờ máy chủ
-Bật -> Lỗi: lỗi nghiêm trọng
-Lỗi -> SafeIdle: ủy quyền rõ ràng + điều kiện an toàn
-Khôi phục -> Đặt lại: đã cài đặt hình ảnh đã xác minh
+```mermaid
+stateDiagram-v2
+    [*] --> Reset
+    Reset --> Recovery: invalid image / recovery request
+    Reset --> SelfTest: valid image
+    SelfTest --> SafeIdle: pass
+    SelfTest --> Fault: fail
+    SafeIdle --> Calibrating
+    Calibrating --> Ready
+    Ready --> Enabled: host active + policy satisfied
+    Enabled --> SafeIdle: disable / host timeout
+    Enabled --> Fault: critical fault
+    Fault --> SafeIdle: authorized clear + safe conditions
+    Recovery --> Reset: verified image installed
 ```
 
-## 9. Dòng dữ liệu
+## 9. Luồng Dữ liệu
 
-Phần này nêu chi tiết chuyển động từ đầu đến cuối của dữ liệu thông qua hệ thống. Nó bao gồm việc xử lý các đầu vào cảm biến, cập nhật hiệu ứng và phản hồi phần cứng.
+Phần này chi tiết đường đi của dữ liệu xuyên suốt hệ thống. Nó giải quyết đầu vào từ cảm biến, cập nhật hiệu ứng, và phản hồi phần cứng.
 
-# 9.1. Trình tự kết thúc
+### 9.1. Quá trình Đầu-Cuối
 
-Các tương tác máy chủ và vòng lặp thời gian thực nội bộ sẽ thực hiện đồng thời mà không làm rách dữ liệu.
+Sự tương tác của host và vòng điều khiển thời gian thực **phải** hoạt động đồng thời mà không bị đứt quãng dữ liệu.
 
-** Hình 9-1: Trình tự dòng dữ liệu từ đầu đến cuối **
+**Hình 9-1: Sơ đồ Luồng Dữ liệu Đầu-Cuối**
 
-```nàng tiên cá
-trình tựSơ đồ
-số tự động
-tham gia Enc như bộ mã hóa
-MC tham gia như điều khiển động cơ
-người tham gia Arb là Trọng tài mô-men xoắn
-người tham gia Chính là MCU / USB chính
-người tham gia Tổ chức như OS / Driver
-tham gia trò chơi như trò chơi
-vòng lặp Thời gian động cơ
-Enc >> MC: góc + trạng thái
-MC->>MC: mẫu hiện tại và cập nhật PWM
-kết thúc
-MC - >> Chính: góc mạch lạc / ảnh chụp sức khỏe
-Chính->>Chính: hợp nhất bàn đạp / nút / chuyển
-Main->>Host: Báo cáo đầu vào HID
-Host->>Game: điều khiển trình điều khiển
-Game->>Host: hiệu ứng tạo/cập nhật
-Máy chủ->>Chính: Báo cáo PID
-Chính->>Chính: xác nhận / cập nhật trạng thái hiệu ứng
-Main->> Arb: mô-men xoắn yêu cầu + độ tươi
-Arb->>Arb: enable/limit/derate/slew
-Arb->>MC: giới hạn nhu cầu
-alt liên kết cũ hoặc lỗi quan trọng
-Arb >> MC: kiểm soát không hoặc ngay lập tức ức chế bởi lớp lỗi
-kết thúc
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Enc as Encoder
+    participant MC as Motor Control
+    participant Arb as Torque Arbiter
+    participant Main as Main MCU/USB
+    participant Host as OS/Driver
+    participant Game as Game
+    loop Motor period
+      Enc->>MC: angle + status
+      MC->>MC: current sample and PWM update
+    end
+    MC-->>Main: coherent angle/health snapshot
+    Main->>Main: merge pedals/buttons/shifter
+    Main->>Host: HID input report
+    Host->>Game: driver controls
+    Game->>Host: effect create/update
+    Host->>Main: PID report
+    Main->>Main: validate/update effect state
+    Main->>Arb: requested torque + freshness
+    Arb->>Arb: enable/limit/derate/slew
+    Arb->>MC: bounded demand
+    alt stale link or critical fault
+      Arb->>MC: controlled zero or immediate inhibit by fault class
+    end
 ```
 
-### 9.2. Đường ống đầu vào
+### 9.2. Luồng Đầu vào (Input Pipeline)
 
-Đầu vào từ các cảm biến phải trải qua các giai đoạn xác nhận và hiệu chuẩn tiêu chuẩn trước khi được báo cáo cho máy chủ.
+Các đầu vào từ cảm biến **phải** qua quá trình xác nhận và hiệu chỉnh trước khi gửi đến host.
 
-** Hình 9-2: Đường ống xử lý đầu vào **
+**Hình 9-2: Luồng Xử lý Đầu vào**
 
-```nàng tiên cá
-Lưu đồ LR
-Raw[GPIO/ADC/Bus] --> Hợp lệ[Range/CRC/Freshness]
-Hợp lệ -> Bộ lọc [Debounce / Filter / Hyperesis]
-Bộ lọc -> Cal [Hiệu chuẩn / Caling]
-Cal --> Ảnh chụp nhanh[Ảnh chụp nguyên tử]
-Ảnh chụp -> HID [Báo cáo đầu vào USB]
+```mermaid
+flowchart LR
+    Raw[GPIO/ADC/Bus] --> Valid[Range/CRC/Freshness]
+    Valid --> Filter[Debounce/Filter/Hysteresis]
+    Filter --> Cal[Calibration/Scaling]
+    Cal --> Snapshot[Atomic Snapshot]
+    Snapshot --> HID[USB Input Report]
 ```
 
-### 9.3. Xử lý dữ liệu cổ phần
+### 9.3. Xử lý Dữ liệu Quá hạn (Stale Data)
 
-Phần mềm phải xác định và áp dụng các chính sách dữ liệu nhà nước nghiêm ngặt. Mỗi dữ liệu được truyền phải bao gồm giá trị, dấu thời gian, hiệu lực, chủ sở hữu và chính sách của nhà nước.
+Firmware **phải** định nghĩa và tuân thủ chặt chẽ chính sách quá hạn. Dữ liệu khi gửi đi **phải** kèm theo giá trị, timestamp, tính hợp lệ, nguồn gốc, và chính sách quá hạn.
 
-** Bảng 9-1: Các yếu tố tiêu chuẩn Datum **
+**Bảng 9-1: Các Tham số Dữ liệu Tiêu chuẩn**
 
-| Yếu tố | Kiểu | Mô tả |
+| Yếu tố | Loại | Mô tả |
 |---------|------|-------------|
-| `value` | Tải trọng | Giá trị số hoặc trạng thái |
-| `timestamp` | uint32 | Thời gian dữ liệu được lấy mẫu hoặc tạo ra |
-| "validity" | Boolean | Cho biết dữ liệu là đáng tin cậy hay hợp lệ |
-| `owner` | Enum | Hệ thống con khởi tạo dữ liệu |
-| `stale_policy` | Enum | Yêu cầu thao tác khi dữ liệu vượt quá thời gian chờ |
+| `value` | Payload | Giá trị số liệu hoặc trạng thái |
+| `timestamp` | uint32 | Thời gian lấy mẫu |
+| `validity` | Boolean | Xác định mức độ tin cậy của dữ liệu |
+| `owner` | Enum | Nguồn khởi phát dữ liệu |
+| `stale_policy` | Enum | Hành động khi dữ liệu quá hạn |
 
-**Bảng 9-2: Chính sách Stale theo nguồn **
+**Bảng 9-2: Chính sách Dữ liệu Quá hạn Tùy theo Nguồn**
 
-| Nguồn dữ liệu | Chính sách cổ phần |
+| Nguồn Dữ liệu | Chính sách Quá hạn |
 |---|---|
-| Mô-men xoắn / Hiệu ứng | Sẽ trải qua phân rã xác định và dừng lại; sẽ không bao giờ giữ vô thời hạn |
-| Bộ mã hóa / Dòng điện | Sẽ kích hoạt lỗi điều khiển ngay lập tức khi không hợp lệ vượt quá dung sai |
-| Nút | Sẽ xóa hoặc giữ lại dựa trên ngữ nghĩa giao thức rõ ràng |
-| Bàn đạp | Sẽ đánh dấu đầu vào là không hợp lệ hoặc quay trở lại trạng thái báo cáo an toàn được ghi lại |
-| Nhiệt độ | Áp dụng giảm tốc bảo thủ hoặc lỗi trên cảm biến không hợp lệ |
-| Từ xa vành | Sẽ xóa các điều khiển bị ngắt kết nối và dừng cập nhật màn hình |
+| Torque / Hiệu ứng | **Phải** phân rã về 0 một cách an toàn; không được duy trì vô thời hạn |
+| Encoder / Dòng điện | **Phải** kích hoạt ngắt mạch lập tức nếu dữ liệu quá hạn vượt ngưỡng |
+| Buttons | Xóa hoặc duy trì tùy theo giao thức cụ thể |
+| Bàn đạp | Gắn cờ lỗi hoặc đưa về trạng thái mặc định an toàn |
+| Nhiệt độ | Kích hoạt cảnh báo hoặc ngắt kết nối cảm biến hỏng |
+| Giao tiếp Rim | Xóa các lệnh trên vô lăng và ngừng gửi tín hiệu tới màn hình |
 
-Firmware sẽ sử dụng ảnh chụp nhanh nguyên tử hoặc bộ đệm kép giữa Interrupt Service Routines (ISR) và các tác vụ.
+Firmware **phải** sử dụng cơ chế bảo vệ lấy mẫu tuần tự, không để đứt đoạn giữa các lệnh ngắt (ISRs) và các tasks.
 
-## 10. Nhiệm vụ thời gian thực
+## 10. Các Nhiệm vụ Thời gian Thực
 
-Phần này xác định bối cảnh thực hiện và yêu cầu thời gian cho các tác vụ hệ thống. Nó đặt các mục tiêu hiệu suất cho các vòng điều khiển quan trọng.
+Phần này quy định bối cảnh thời gian cho các nhiệm vụ trong hệ thống, nhấn mạnh các mục tiêu cho vòng điều khiển quan trọng.
 
-### 10.1. Bối cảnh thực thi
+### 10.1. Mức Ưu tiên Nhiệm vụ
 
-Firmware sẽ chỉ định các ưu tiên đảm bảo vòng lặp phần cứng nhanh và các cơ chế bảo vệ ngăn chặn các tác vụ vận chuyển và nền.
+Firmware **phải** áp dụng sự ưu tiên cao nhất cho hệ thống vòng điều khiển phần cứng và bảo vệ thiết bị. Các nhiệm vụ background sẽ xếp sau.
 
-**Hình 10-1: Phân cấp ưu tiên nhiệm vụ **
+**Hình 10-1: Mức Ưu tiên Preemption (Chen ngang)**
 
-```nàng tiên cá
-Sơ đồ TD
-Break [Comparator / Gate Fault] -> P0 [Immediate Inhibit]
-ADCIRQ [ADC / PWM IRQ] -> P1 [Điều khiển động cơ]
-EncIRQ [Bộ mã hóa hoàn chỉnh / Lỗi] -> P1
-USBIRQ [USB IRQ] -> P2 [Vận chuyển giới hạn]
-BusIRQ [CAN / SPI / UART IRQ] -> P3 [Hoàn thành bộ đệm]
-Nhiệm vụ [Nhiệm vụ RTOS] -> P4 [FFB / Đầu vào / Giám sát]
-BG[Background] --> P5[Logs/NVM/UI]
+```mermaid
+flowchart TD
+    Break[Comparator/Gate Fault] --> P0[Immediate Inhibit]
+    ADCIRQ[ADC/PWM IRQ] --> P1[Motor Control]
+    EncIRQ[Encoder Complete/Fault] --> P1
+    USBIRQ[USB IRQ] --> P2[Bounded Transport]
+    BusIRQ[CAN/SPI/UART IRQ] --> P3[Buffer Completion]
+    Tasks[RTOS Tasks] --> P4[FFB/Input/Supervision]
+    BG[Background] --> P5[Logs/NVM/UI]
 ```
 
-### 10.2. Thời gian và thời hạn
+### 10.2. Tần suất Thời gian Lặp
 
-Bảng dưới đây cung cấp các mục tiêu tần số phổ biến. Tốc độ chính xác là yêu cầu thực hiện. Tốc độ vật lý trò chơi, nhịp USB, tốc độ đánh giá FFB, tốc độ vòng lặp động cơ, độ trễ từ đầu đến cuối, jitter và băng thông là các số liệu hiệu suất riêng biệt.
+Tần suất dưới đây là các tiêu chuẩn lý thuyết; thực tế do phần cứng đáp ứng.
 
-| Hoạt động | Dải tần số | Bối cảnh | Hậu quả của Miss |
+| Hoạt động | Dải tần số | Bối cảnh | Hậu quả khi Bỏ lỡ |
 |---|---|---|---|
-| Vòng hiện tại / FOC | 10-40 kHz | Hẹn giờ / ADC ISR hoặc lõi động cơ | Biến dạng mô-men xoắn, lỗi quá dòng |
-| Đọc bộ mã hóa | Tốc độ điều khiển | SPI DMA / hẹn giờ ISR | Tính toán góc Stale
-| FFB / trọng tài mô-men xoắn | 0,5-2 kHz | Nhiệm vụ ưu tiên cao Jitter, độ trễ pha trong phản hồi
-| Giao thông USB | Kết thúc nhịp | Nhiệm vụ ISR + | Báo cáo bị rơi hoặc trì hoãn |
-| Rim Link | 100–1000 Hz | DMA + task | Stale control input, delayed display |
-| Bàn đạp / Nút | 100–1000 Hz | ADC DMA / tác vụ hẹn giờ | Độ trễ đầu vào cao, tiếng ồn |
-| Giám sát an toàn | Giới hạn phần cứng + 10–1000 Hz | Phần cứng / ISR / nhiệm vụ | Tắt máy muộn |
-| Chẩn đoán / NVM | Theo yêu cầu | Nhiệm vụ ưu tiên thấp | Không được chặn thực thi điều khiển |
+| Current / Vòng FOC | 10–40 kHz | Ngắt Timer/ADC | Bóp méo mô-men xoắn, quá dòng |
+| Đọc Encoder | Bằng tốc độ FOC | Ngắt SPI DMA | Dữ liệu góc bị sai lệch |
+| FFB / Mô-men xoắn | 0.5–2 kHz | RTOS mức cao | Trễ pha, giật gián đoạn tín hiệu lực |
+| USB Transport | USB Cadence | Ngắt + Task | Rớt tín hiệu USB, mất điều khiển |
+| Rim Link | 100–1000 Hz | DMA + Task | Rớt nút bấm, màn hình giật lag |
+| Pedals / Buttons | 100–1000 Hz | ADC DMA / Timer | Giật lag khi nhả chân ga/phanh |
+| Cảnh báo an toàn | Max rate | Hardware/ISR | Cảnh báo trễ, rủi ro hỏng hóc |
+| Chẩn đoán / NVM | Không ưu tiên | Background | Tuyệt đối không cản trở FOC |
 
-# 10.3 Quy tắc thời gian thực
+### 10.3. Các Quy tắc Thời gian Thực
 
-Phần vững sẽ đo Thời gian thực hiện trường hợp tồi tệ nhất (WCET) dưới lưu lượng truy cập tối đa và tranh chấp DMA. Thời gian thực hiện ISR sẽ bị giới hạn. Phần vững sẽ cấm phân bổ bộ nhớ, xóa / ghi flash và chặn I / O trong các đường dẫn điều khiển động cơ. Hệ thống sẽ phát hiện thời gian vượt quá. Cơ quan giám sát phần cứng sẽ chỉ được phục vụ từ đường dẫn quan trọng đã được xác minh.
+Firmware **phải** đánh giá Worst-Case Execution Time (WCET) dưới điều kiện hoạt động nặng nề nhất. Các ISR phải đảm bảo phản ứng nhanh. Các hệ thống phân vùng **không được** cấp phát động (malloc), ghi flash, hay dùng blocking I/O tại tiến trình điều khiển motor. Hệ thống **phải** có cảnh báo nếu bị lấn thời gian. Watchdogs phần cứng **chỉ được** reset thông qua tiến trình an toàn đã kiểm chứng.
 
 ## 11. An toàn và Bảo mật
 
-Phần này đề cập đến việc phát hiện lỗi và bảo vệ hệ thống. Nó chỉ định các phản ứng cần thiết đối với các điều kiện nguy hiểm, thỏa hiệp hệ thống và phác thảo các giao thức thiết lập phù hợp.
+Phần này nêu rõ các cơ chế tự bảo vệ và phòng thủ phần cứng/phần mềm. Nó xác định phản hồi với các rủi ro, can thiệp bên ngoài, và quy tắc cài đặt an toàn.
 
-# 11.1. Thiết lập và yêu cầu an toàn
+### 11.1. Yêu cầu Thiết lập và An toàn
 
-Phần này xác định các yêu cầu an toàn và vận hành bắt buộc để thiết lập và thử nghiệm thiết bị đua xe mô phỏng. Tuân thủ là rất quan trọng do khả năng mô-men xoắn cao của các hệ thống truyền động trực tiếp.
+- Thiết bị **phải** được gắn cứng trước khi sử dụng.
+- Người dùng **phải** kiểm tra kết nối QR, các cáp nối, nguồn điện, nút dừng khẩn cấp trước khi chơi.
+- Bắt buộc dùng ứng dụng cấu hình và file bản cập nhật chuẩn.
+- Bắt buộc hiệu chỉnh chuẩn trung tâm vô lăng, hành trình tay lái và chân ga/phanh.
+- Lần đầu thử máy **phải** dùng mô-men xoắn thấp.
+- Người dùng **phải** kiểm tra độ phản hồi tự động trước khi sử dụng thực tế.
+- Khớp cài đặt số vòng quay tay lái với cấu hình trong game.
+- Nếu có hiện tượng bị chèn ép lực, quá tải nhiệt, tăng dao động rung lắc, **phải** điều chỉnh giảm lực.
+- Để xa thiết bị đang hoạt động khỏi quần áo, trẻ nhỏ và các vật cản.
+- **Tuyệt đối không** hack, thay thế các chip bảo mật hay bypass thiết bị.
+- Mọi sửa đổi vào motor **phải** bảo đảm độc lập vô hiệu hóa (disable) mạch cầu điện.
 
-- Thiết bị phải được gắn chắc chắn trước khi vận hành.
-- Nhân viên vận hành phải kiểm tra ống xả nhanh, dây cáp, bộ cấp điện, công tắc ngắt mô-men xoắn trước khi vận hành.
-- Nhà điều hành phải sử dụng phần mềm và quy trình cập nhật đã được phê duyệt.
-- Hệ thống phải được hiệu chỉnh về tâm lái, tầm lái, bàn đạp.
-- Hoạt động ban đầu sẽ bắt đầu ở một thiết lập mô-men xoắn thấp bằng cách sử dụng bộ lọc mặc định.
-- Người vận hành phải kiểm tra hướng động cơ, đầu vào và chức năng công tắc tắt mô-men xoắn trước khi sử dụng bình thường.
-- Người vận hành phải khớp phạm vi lái phần cứng với phạm vi lái trò chơi.
-- Người vận hành nên tăng dần mô-men xoắn và theo dõi hệ thống để cắt, dao động và nhiệt quá mức.
-- Nhân viên vận hành phải giữ tay, trẻ em, tóc, quần áo và dây cáp tránh xa các bộ phận quay.
-- Người dùng sẽ không bao giờ bỏ qua khóa liên động vật lý hoặc các tính năng bảo mật firmware.
-- Phần cứng động cơ cải tiến phải yêu cầu xác minh hướng, tỷ lệ dòng điện, mô-men xoắn giới hạn và cơ chế vô hiệu hóa cổng độc lập trước khi cấp điện.
+### 11.2. Kiểm soát Rủi ro
 
-11.2. Kiểm soát mối nguy hiểm
+Hệ thống **phải** tự bảo vệ bản thân và người sử dụng khỏi những lỗi nghiêm trọng.
 
-Hệ thống sẽ bảo vệ người dùng và phần cứng khỏi hành vi bất ngờ.
+**Bảng: Các Phản ứng khi Gặp Lỗi**
 
-** Bảng điều kiện: Phản ứng lỗi **
-
-| Điều kiện | Kích hoạt | Hành động |
+| Tình trạng | Lỗi kích hoạt | Hành động can thiệp |
 |---|---|---|
-| "Dữ liệu máy chủ cố định" HOẶC "Đã vượt quá giới hạn mô-men xoắn" | Mô-men xoắn bất ngờ | Thực hiện điều khiển bằng không hoặc ức chế ngay lập tức |
-| "Encoder polarity differs from driven polarity" | Sai hướng | Từ chối bật và chốt lỗi |
-| `Giai đoạn hiện tại > OVERCURRENT_TRIP` | Quá dòng | Phần cứng PWM vô hiệu hóa thông qua đầu vào ngắt so sánh |
-| `Inverter Temp > THERMAL_LIMIT` | Overtemperature | Áp dụng giảm nhiệt; nếu vượt quá, tắt PWM |
-| `Điện áp DC Bus> OVERVOLTAGE_TRIP` | Quá áp tái sinh | Giảm hoặc vô hiệu hóa mô-men xoắn dựa trên chính sách phanh |
-| "Encoder CRC fail" HOẶC "Timeout" | Mất bộ mã hóa | Ngay lập tức ức chế hoặc vào chế độ bị suy giảm đã được xác nhận |
-| `Signature check fail` | Cập nhật lỗi | Vẫn ở trạng thái phục hồi bị vô hiệu hóa mô-men xoắn |
-| `Watchdog timeout` | Software lockup | Trigger hardware reset; gate outputs default off |
+| `Dữ liệu host quá hạn` OR `Vượt ngưỡng lực` | Lực tăng bất thường | Giảm lực an toàn hoặc ngắt toàn bộ điện motor lập tức |
+| `Góc quay sai cực trị với tín hiệu` | Khác chiều động cơ | Ngắt lệnh bật và lưu log cảnh báo |
+| `Pha dòng điện > OVERCURRENT_TRIP` | Quá dòng | Hardware PWM vô hiệu hóa thông qua mạch comparator ngắt |
+| `Nhiệt độ mạch > THERMAL_LIMIT` | Quá nhiệt | Giảm dòng liên tục; ngắt toàn bộ PWM nếu vẫn nóng |
+| `Điện áp DC Bus > OVERVOLTAGE_TRIP` | Vượt dòng nạp xả ngược | Tiêu hao dòng ngược; ngắt điện lực FFB |
+| `Encoder sai CRC` OR `Mất kết nối` | Rớt vị trí góc | Ngắt lập tức mạch bảo vệ, hoặc giảm tốc nhẹ |
+| `Chứng thực chữ ký sai` | Firmware can thiệp | Kẹt vĩnh viễn ở bootloader, chờ cập nhật đúng |
+| `Watchdog timeout` | Treo phần mềm | Reset nóng; các cổng đầu ra trả về 0 |
 
-# 11.3. Tư thế an ninh
+### 11.3. Cơ chế Bảo mật
 
-Phần mềm cơ sở sẽ xác thực hình ảnh cập nhật sản xuất. Hệ thống sẽ xác thực tất cả các độ dài và loại gói bên ngoài. Hệ thống sẽ yêu cầu trạng thái vô hiệu hóa mô-men xoắn trước khi chấp nhận lệnh dịch vụ hoặc gỡ lỗi. Phần mềm bán lẻ sẽ vô hiệu hóa các giao diện gỡ lỗi sản xuất.
+Firmware **phải** chứng thực các file cập nhật. Nó **phải** nhận dạng các gói tin chuẩn độ dài và mã tin. Firmware yêu cầu phải tắt mô-men xoắn trước khi gửi các lệnh gỡ lỗi. Đối với máy bản lẻ, hệ thống **phải** khóa kín đường vào gỡ lỗi (JTAG, SWD).
 
-** Nền tảng được cấp phép và nhận dạng vành: ** Hướng dẫn Fanatec công khai xác nhận các vị trí cấp phép cấp sản phẩm được mô tả ở trên, không phải thuật toán xác thực nội bộ. Trình giả lập vành cộng đồng thể hiện các quan sát cho các liên kết cơ sở / vành được chọn; chúng không phải là bằng chứng về một cái bắt tay mật mã phổ quát, hợp đồng ClubSport DD / DD + hiện tại hoặc đường dẫn xác thực bảng điều khiển được phê duyệt. Xử lý nhận dạng vành, bật mô-men xoắn và cấp phép nền tảng theo các yêu cầu riêng biệt cho đến khi đặc tả giao diện được phê duyệt chứng minh khác.
+**Nền tảng được cấp phép:** Việc mô phỏng chip bảo mật console từ các bên thứ ba là hành vi ngoài quy chuẩn (như trong các emulator). Hãy coi việc chứng thực này là độc quyền của nhà sản xuất, trừ khi có thông cáo công khai.
 
-## 12. Chế độ xem kỹ thuật firmware
+## 12. Chế độ xem Kỹ thuật Firmware
 
-Phần này phác thảo các thực tiễn kỹ thuật, chiến lược thử nghiệm và các bước xác nhận cần thiết để xây dựng firmware.
+Phần này mô tả các chiến lược kiểm tra, và quy trình thử nghiệm để phát triển phần mềm nhúng.
 
-### 12.1. Yêu cầu kỹ thuật hệ thống con
+### 12.1. Yêu cầu Kỹ thuật Hệ thống con
 
-Kỹ sư phải kiểm tra hợp đồng của từng hệ thống con, chuyển trạng thái và kiểm tra trước khi tích hợp.
+Mọi hệ thống **phải** kiểm chứng bằng Unit tests, chạy giả lập, trước khi lắp đặt thực.
 
-| Hệ thống con | API và dòng chảy trạng thái | Mục tiêu thử nghiệm chính |
+| Hệ thống con | Trạng thái API | Kiểm thử |
 |---|---|---|
-| Boot/update | `reset` → `verify` → `boot/recovery` | Phần cứng không khớp, ảnh hỏng, mất điện khi flash |
-| USB/PID | "detached" → "configured" → "suspended" | Xác nhận mô tả, báo cáo mờ, đo độ trễ |
-| FFB | "idle" → "allocated" → "playing" → "stopped" | Trạng thái vòng đời, tràn số học, quấn thời gian |
-| Trọng tài mô-men xoắn | "vô hiệu hóa" → "sẵn sàng" → "bật" → "lỗi" | Giới hạn ưu tiên, logic lỗi nhiệt, phản ứng vật chủ cũ |
-| Điều khiển động cơ | "init" → "offset cal" → "ready" → "run" → "fault" | Điều khiển toán học, độ bão hòa, phần cứng trong vòng lặp (HIL) |
-| Cài đặt | "valid" → "dirty" → "commit/error" | Torn ghi, cân bằng hao mòn, dịch lược đồ |
-| An toàn | "safe" → "ready" → "enabled" → "fault" | Lỗi tiêm, kiểm tra ưu tiên nhập ngắt |
+| Boot/update | `reset` → `verify` → `boot/recovery` | Sai phiên bản, file rác, rút điện khi cài |
+| USB/PID | `detached` → `configured` → `suspended` | Gửi dữ liệu nhiễu, test băng thông trễ |
+| FFB | `idle` → `allocated` → `playing` → `stopped` | Vòng lặp liên tiếp, tính tràn số |
+| Torque arbiter | `disabled` → `ready` → `enabled` → `fault` | Chèn lực ảo, quá nhiệt, rớt host |
+| Motor control | `init` → `offset cal` → `ready` → `run` → `fault` | Hardware in Loop (HIL), tính chính xác bão hòa |
+| Settings | `valid` → `dirty` → `commit/error` | Ghi đè rác, test tuổi thọ ghi, phiên bản config |
+| Safety | `safe` → `ready` → `enabled` → `fault` | Bắn ngắt cứng xem ưu tiên tắt bảo vệ kịp không |
 
-### 12.2. Trình tự xác minh
+### 12.2. Trình tự Xác minh
 
-Sự phát triển sẽ theo một tiến trình từ các thử nghiệm cách ly đến vận hành toàn bộ công suất. Công việc mô-men xoắn đầy đủ sẽ chỉ bắt đầu sau khi bằng chứng năng lượng thấp chứng minh hệ thống có thể thực thi các giới hạn và tắt độc lập.
+Phải kiểm tra từ không tải đến toàn tải. Bắt buộc test lực điện áp cực nhỏ trước khi test FFB lớn.
 
-**Hình 12-1: Kiểm tra tiến triển **
+**Hình 12-1: Quá trình Thử nghiệm**
 
-```nàng tiên cá
-Sơ đồ TD
-Đơn vị [Kiểm tra đơn vị lưu trữ] -> Thành phần [Kiểm tra trình điều khiển / thời gian mục tiêu]
-Thành phần -> HIL [Hardware-in-the-Loop]
-HIL -> Power [Kiểm tra năng lượng thấp được bảo vệ]
-Nguồn --> Hệ thống[System/Game/Peripheral/Fault Tests]
-Hệ thống --> Ngâm [Soak / EMC / Nhiệt / Power-Cycle Tests]
+```mermaid
+flowchart TD
+    Unit[Host Unit Tests] --> Component[Target Driver/Timing Tests]
+    Component --> HIL[Hardware-in-the-Loop]
+    HIL --> Power[Guarded Low-Energy Power Tests]
+    Power --> System[System/Game/Peripheral/Fault Tests]
+    System --> Soak[Soak/EMC/Thermal/Power-Cycle Tests]
 ```
 
-Các kỹ sư phải xác minh thực tế quy mô và hướng mã hóa, thời gian ADC và cổng độc lập vô hiệu hóa trước khi kết nối nguồn điện đầy đủ.
+## 13. Danh sách Câu hỏi (Đã giải quyết và Còn mở)
 
-## 13. Câu hỏi chưa được giải quyết
+Đánh giá ngày 2026-07-05. Các mục có thể được trả lời từ cơ sở kiến thức, tiêu chuẩn công khai, hoặc bằng chứng từ cộng đồng được đánh dấu là **Đã giải quyết (Resolved)**. Các mục phụ thuộc vào yêu cầu của một sản phẩm cụ thể, thông số kỹ thuật độc quyền của nhà cung cấp, hoặc đo lường trên mục tiêu thực tế không thể được trả lời chung chung và được đánh dấu là **Mở — nhà phát triển tự điều tra**, với phương pháp cụ thể.
 
-Phần này liệt kê các yêu cầu kỹ thuật và sản phẩm phải được xác nhận trước khi thực hiện.
+### 13.1 Đã giải quyết
 
-- Nền tảng chuyển động, đầu dò xúc giác, buồng lái và phần mềm đo từ xa có nên được mở rộng thành các tài liệu riêng biệt không?
-- Mô-men xoắn, tốc độ, quán tính, quay, âm thanh và yêu cầu môi trường của sản phẩm?
-- Nền tảng PC / console được hỗ trợ và kiến trúc cấp phép được phê duyệt?
-- MCU / ASIC chính xác, bộ mã hóa, trình điều khiển cổng, cấu trúc liên kết cảm biến và xếp hạng công suất?
-- Cấu trúc liên kết điện / giao thức ngoại vi và quyền sở hữu?
-- Mô tả USB, báo cáo nhịp, khả năng hiệu ứng và giao diện nhà cung cấp?
-- Đường dẫn mô-men xoắn phần cứng và mục tiêu an toàn / quy định?
-- Cập nhật chính sách ký, rollback, cung cấp và phục hồi?
-- Khả năng tương thích hiệu chuẩn / phiên bản trên cơ sở, động cơ, vành, bàn đạp và bộ điều hợp?
-- Ngân sách và phương pháp chấp nhận độ trễ / jitter từ đầu đến cuối?
-- Giữ chẩn đoán và bán lẻ quy tắc gỡ lỗi truy cập?
+- **Có nên mở rộng các nền tảng chuyển động (motion), đầu dò xúc giác (tactile), buồng lái (cockpits), và phần mềm telemetry thành các tài liệu riêng biệt không?**
+  **Đã giải quyết (xong).** Tất cả bốn chủ đề hiện đã có tài liệu: [`motion.md`](./motion.md), [`tactile.md`](./tactile.md), [`cockpits.md`](./cockpits.md), và [`telemetry.md`](./telemetry.md), và nằm trong danh sách đọc ở [`README.md`](./README.md).
+- **USB descriptors, tần suất báo cáo (report cadence), sức chứa hiệu ứng, và giao diện nhà cung cấp (vendor interface)?**
+  **Đã giải quyết một phần (mô hình công khai đã xác minh; giá trị đặc thù của sản phẩm là Chưa rõ).** Phương thức truyền tải và mô hình hiệu ứng là công khai: USB HID cho đầu vào và USB PID Class 1.0 cho hiệu ứng lực, thường là USB 2.0 Full-Speed. Tần suất báo cáo tuân theo ngắt thời gian của endpoint; tốc độ vòng điều khiển nằm trong §10.2. Những gì thuộc về đặc thù sản phẩm là VID/PID chính xác, dung lượng bộ nhớ chứa hiệu ứng (effect-pool), và giao diện vendor — xem §13.2. Bằng chứng từ cộng đồng: driver `hid-fanatecff` liệt kê các thiết bị Fanatec qua **VID `0EB7`** (ví dụ: `0EB7:0020` cho CSL DD / DD Pro / ClubSport DD), đây là quan sát của cộng đồng chứ không phải thông số mô tả chính thức.
+- **Đường dẫn cấm mô-men xoắn (torque-inhibit path) phần cứng và các mục tiêu an toàn/quy định?**
+  **Đã giải quyết ở cấp độ kiến trúc (các mục tiêu là đặc thù sản phẩm).** Đường dẫn ức chế (inhibit path) bắt buộc được định nghĩa xuyên suốt §11 và trong [`wheel_base.md`](./wheel_base.md) §15: một chốt lỗi phần cứng độc lập được kích hoạt bởi ngắt quá dòng (comparator), lỗi gate-driver, E-stop, và watchdog, có khả năng vô hiệu hóa gate driver một cách bất đồng bộ bất kể phần mềm. Tham chiếu ngành là kiến trúc kiểu Safe-Torque-Off (STO) (như TI TIDA-01599). Phạm vi quy định *cụ thể* (ví dụ: dấu chuẩn EMC/an toàn nào áp dụng cho thị trường mục tiêu) là quyết định của nhà phát triển sản phẩm — xem §13.2.
+- **Ngân sách độ trễ/jitter từ đầu đến cuối (end-to-end latency) và các phương pháp nghiệm thu?**
+  **Đã giải quyết bằng phương pháp (mục tiêu con số là đặc thù sản phẩm).** Độ trễ có tính cộng dồn từng giai đoạn; hãy phân bổ ngân sách và đo lường độc lập cho từng giai đoạn (tick game → USB → đánh giá FFB → vòng FOC) thay vì chỉ đo từ đầu đến cuối, theo [`telemetry.md`](./telemetry.md) §6. Các tốc độ vòng lặp neo điển hình nằm trong §10.2 (FOC 10–40 kHz, FFB 0.5–2 kHz). Ngân sách cụ thể phải được đặt so với các mục tiêu độ trễ/cạnh tranh của sản phẩm và sau đó được xác nhận trên thiết bị thực.
 
-## 14. Tài liệu tham khảo
+### 13.2 Mở — để các nhà phát triển tự điều tra
 
-Phần này cung cấp trích dẫn đến các tiêu chuẩn công cộng, thiết kế tham chiếu và tài liệu của nhà sản xuất.
+Những mục này yêu cầu một thông số kỹ thuật sản phẩm cụ thể, tiêu chuẩn từ nhà cung cấp đã được phê duyệt, hoặc đo lường trên băng ghế thử nghiệm. Chúng là các thông tin kỹ thuật cần thu thập, không phải là sự kiện có sẵn để tra cứu.
 
-- [Kiến trúc vành lái] (./wheel_rim.md)
-- [Kiến trúc cơ sở bánh xe](./wheel_base.md)
-- [Công cụ và thông số kỹ thuật USB-IF HID] (https://www.usb.org/hid) - HID 1.11, bảng sử dụng, điểm vào PID.
-- [USB-IF PID Class 1.0] (https://www.usb.org/sites/default/files/documents/pid1_01.pdf) - báo cáo / mô hình HID phản hồi lực.
-- [OpenFFBoard wiki công cộng] (https://github.com/Ultrawipf/OpenFFBoard/wiki/) - mô-đun công cộng HID PID, trình điều khiển động cơ, bộ mã hóa và kiến trúc I / O.
-- [Hướng dẫn sử dụng Fanatec Podium DD1] (https://assets.fanatec.com/fanatec-pwa/image/upload/downloads-prod/pdfs/P-WB-DD1-Manual-EN_web.pdf) - các cổng tiếp xúc, phiên bản cơ sở / động cơ, cập nhật và hiệu chuẩn.
-- [Fanatec Ecosystem Diagram] (https://help.fanatec.com/hc/de/articles/43786297099281-Fanatec-Ecosystem-Diagramm) - điểm vào trực quan hệ sinh thái chính thức; không có chi tiết sơ đồ không nhìn thấy được suy ra.
-- [Fanatec Wheel Bases FAQ] (https://help.fanatec.com/hc/en-us/articles/43766204938257-Wheel-Bases-A-FAQ) - các tầng hiện tại, tập hợp ngoại vi bảng điều khiển và bối cảnh thiết bị độc lập PC.
-- [Tương thích nền tảng Fanatec] (https://www.fanatec.com/us-en/platforms) - Quy tắc cấp phép cơ sở Xbox wheel/hub và PlayStation.
-- [Câu hỏi thường gặp về tay lái Fanatec] (https://help.fanatec.com/hc/en-us/articles/43802514108433-Steering-Wheel-FAQ) - Ngày ngừng sử dụng QR2 và QR1.
-- [Đăng ký nguồn hệ sinh thái Fanatec] (./references.md) - ngày xem xét, sử dụng hướng dẫn cộng đồng và các tuyên bố cũ đã biết.
-- [Hướng dẫn cập nhật Fanatec] (https://www.fanatec.com/eu/en/explorer/products/racing-wheels-wheel-bases/update-fanatec-firmware-and-drivers/) - cập nhật cơ sở, bánh xe đã chọn, bàn đạp USB và bộ điều hợp.
-- [lshachar/Arduino_Fanatec_Wheel] (https://github.com/lshachar/Arduino_Fanatec_Wheel) - trình giả lập SPI vô lăng tùy chỉnh.
-- [StuyoP/Fanatec-Wheel-Barebone-Emulator] (https://github.com/StuyoP/Fanatec-Wheel-Barebone-Emulator) - Trình giả lập chiều dài cơ sở xương sống ATmega328p.
-- [Alexbox364/F_Interface_AL] (https://github.com/Alexbox364/F_Interface_AL) - Tay lái tùy chỉnh DIY thông qua SPI.
-- [jssting/ArduinoTec-Pedals] (https://github.com/jssting/ArduinoTec-Pedals) - Bộ điều khiển thay thế bàn đạp Fanatec ClubSport.
-- [GeekyDeaks/fanatec-pedal-emulator] (https://github.com/GeekyDeaks/fanatec-pedal-emulator) - bàn đạp USB của bên thứ ba proxy qua RJ12.
-- [StuyoP/Universal-Shifter-Interface-for-Fanatec] (https://github.com/StuyoP/Universal-Shifter-Interface-for-Fanatec) - giao diện shifter dựa trên chuyển mạch thông qua RJ12.
-- [vnmsimulation/VNM_MOTION_CONTROLLER](https://github.com/vnmsimulation/VNM_MOTION_CONTROLLER) - Bộ điều khiển phần cứng dựa trên DIY STM32.
-- [FendtXerion3800/Fanatec-Pinout] (https://github.com/FendtXerion3800/Fanatec-Pinout) - Tham chiếu pinout ổ cắm RJ12.
-- [gotzl/hid-fanatecff] (https://github.com/gotzl/hid-fanatecff) - Mô-đun trình điều khiển hạt nhân Linux để hỗ trợ Fanatec FFB.
-- [Hướng dẫn sử dụng Simucube 2] (https://simucube.com/app/uploads/2022/11/Simucube_2_User_Guide.pdf) - Điều khiển không dây, rơle USB, ghép nối, mô-men xoắn an toàn.
-- [Hướng dẫn Simucube 3] (https://docs.simucube.com/Simucube3/index.html) - dữ liệu QR không dây / tuyên bố nguồn.
-- [Hỗ trợ cơ sở bánh xe MOZA] (https://support.mozaracing.com/en/support/solutions/articles/70000627811-wheel-base-faqs) - khả năng tương thích, phục hồi, hiệu chuẩn và phát hiện.
-- [Simagic Alpha hướng dẫn sử dụng] (https://image.simagic.com/profile/upload/2022/08/16/41a7d396-805a-439e-b0da-0b81632e2511.pdf) - thiết lập công cộng / cập nhật / bối cảnh an toàn.
-- [Logitech TRUEFORCE] (https://www.logitechg.com/en-za/innovation/trueforce.html) - tuyên bố vật lý công cộng / âm thanh và xử lý.
-- [Tham khảo Infineon PMSM FOC] (https://documentation.infineon.com/aurixtc3xx/docs/kbv1711616051757) - lấy mẫu hiện tại, kích hoạt PWM, hiệu chuẩn bù đắp.
-- [TI TIDA-01599] (https://www.ti.com/tool/TIDA-01599) - kiến trúc tham chiếu STO công nghiệp được đánh giá.
-- [EP1501004A3] (https://patents.google.com/patent/EP1501004A3/en) - ngữ cảnh kiến trúc public motor/encoder/controller.
-- [Hiệu ứng Simucube FFB] (https://docs.simucube.com/TunerSoftware/wheelbases/wheelbaseeffects.html)
-- [TI cảm biến FOC] (https://software-dl.ti.com/msp430/esd/MSPM0-SDK/2_04_00_06/docs/english/middleware/motor_control_pmsm_sensored_foc/doc_guide/doc_guide-srcs/Sensored_FOC_Motor_Control_Library.html)
+- **Yêu cầu về mô-men xoắn, tốc độ, quán tính, số vòng quay, âm thanh, và môi trường của sản phẩm.**
+  *Cách điều tra:* Dẫn xuất từ phân khúc thị trường mục tiêu và tham khảo thông số đã công bố của đối thủ; chuyển đổi thành kích thước động cơ (mô-men xoắn liên tục/đỉnh, nhiệm vụ nhiệt) và xác nhận bằng máy đo (dyno/bench).
+- **Các nền tảng PC/console được hỗ trợ và kiến trúc cấp phép được phê duyệt.**
+  *Cách điều tra:* Cấp phép nền tảng mang tính hợp đồng — lấy các điều khoản chương trình cấp phép console trực tiếp từ nhà cung cấp; không được suy luận hoặc mô phỏng xác thực console (§11.3). Hỗ trợ PC có thể được xác minh bằng hệ điều hành + yêu cầu của game.
+- **Chính xác MCU/ASIC, encoder, gate driver, mô hình cảm biến (sensing topology), và công suất chịu tải.**
+  *Cách điều tra:* Lựa chọn theo các yêu cầu mô-men/vòng lặp điều khiển ở trên bằng cách dùng thiết kế tham chiếu của nhà cung cấp (ví dụ: Infineon PMSM FOC, TI sensored FOC, và thiết kế dùng TMC4671 của OpenFFBoard làm ví dụ công khai); kiểm chứng trên bo mạch khởi tạo (bring-up board).
+- **Topology điện/giao thức ngoại vi và quyền sở hữu.**
+  *Cách điều tra:* Xác định theo từng cổng; đối với đường dẫn proxy qua base, các sơ đồ chân cộng đồng (như FendtXerion Fanatec-Pinout) và giao diện tùy chỉnh (như Universal-Shifter-Interface-for-Fanatec) tồn tại làm tài liệu tham khảo, nhưng sản phẩm phải tự xác định ma trận tương thích được xác thực của riêng mình.
+- **Chính sách chữ ký cập nhật (signing policy), rollback, khởi tạo (provisioning), và phục hồi (recovery)?**
+  *Cách điều tra:* Định nghĩa Root of Trust (gốc tin cậy), kiến trúc bootloader, và quy trình chèn key trong quá trình sản xuất.
+- **Khả năng tương thích phiên bản/hiệu chuẩn giữa base, động cơ, vành (rim), bàn đạp, và các adapter?**
+  *Cách điều tra:* Tạo chính sách ma trận phiên bản trong trình cập nhật (updater) và định nghĩa thành phần nào nắm giữ quyền ưu tiên đối với hiệu chuẩn trung tâm/khoảng dao động.
+- **Lưu trữ chẩn đoán và quy tắc truy cập gỡ lỗi máy bán lẻ (retail debug-access)?**
+  *Cách điều tra:* Phân bổ dung lượng NVM cho crash logs/đếm lỗi và kiểm chứng việc firmware phát hành cho khách hàng khóa chặt cổng JTAG/SWD.
